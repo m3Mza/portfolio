@@ -1,0 +1,1046 @@
+/* Excuse the mess I am very very bad at responsive design */
+
+
+@media (max-width: 600px) {
+  .mouth-overlay-header,
+  section[ref],
+  section .mouth-overlay + div h2 {
+    font-size: 2.1rem !important;
+    line-height: 1.05;
+    font-weight: 900;
+    margin: 0.5em 0 0.2em 0;
+    letter-spacing: -0.02em;
+  }
+}
+@media (max-width: 600px) {
+  .now-playing-spotify-embed {
+    display: none !important;
+  }
+}
+@media (max-width: 600px) {
+  /* Vinyl section header: make huge */
+  .vinyl-section-header {
+    font-size: 5.5rem !important;
+    line-height: 1.05;
+    font-weight: 1000;
+    margin: 0.2em 0 0.1em 0;
+    text-align: left;
+    letter-spacing: -0.04em;
+  }
+  /* Hide vinyl section paragraph */
+  .vinyl-section-desc {
+    display: none !important;
+  }
+  /* Vinyl record: make big and offset left so half is hidden */
+  .vinyl-container {
+    width: 340px !important;
+    height: 340px !important;
+    position: relative !important;
+    left: -170px !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    overflow: visible !important;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .vinyl-record {
+    width: 768px !important;
+    height: 768px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain;
+    display: block;
+  }
+}
+@media (max-width: 600px) {
+  .horizontal-scroll-container {
+    width: 100vw;
+    height: auto;
+    min-height: 60vh;
+    overflow-x: auto;
+    overflow-y: visible;
+    position: relative;
+    background-color: var(--white);
+    margin: 0;
+    padding: 0;
+    display: block;
+  }
+  .horizontal-panels {
+    display: block;
+    width: 100vw;
+    height: auto;
+    will-change: auto;
+  }
+  .horizontal-panel {
+    width: 100vw;
+    min-height: 60vh;
+    height: auto;
+    flex-shrink: 0;
+    padding: 0.5rem 0;
+    margin: 0;
+    background-color: var(--white);
+    display: block;
+  }
+  .grid-content-section {
+    width: 100vw;
+    min-height: 60vh;
+    height: auto;
+    padding: 0;
+    margin: 0;
+    z-index: 3;
+    background-color: var(--white);
+  }
+  .grid-content-container {
+    width: 100%;
+    min-height: 60vh;
+    height: auto;
+    margin: 0;
+    display: block;
+    z-index: 3;
+  }
+  .grid-content-left {
+    width: 100vw;
+    min-height: 30vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 5;
+    background-color: var(--accent-purple);
+    padding: 1rem 0;
+  }
+  .vinyl-container {
+    position: static;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    margin: 0 auto;
+  }
+  .now-playing-spotify-embed {
+    position: static;
+    width: 95vw;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: 2.5rem;
+    margin-top: 4.5rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    z-index: 10;
+    overflow: hidden;
+    display: block;
+  }
+  .now-playing-spotify-embed iframe {
+    width: 100%;
+    height: 120px;
+  }
+  .grid-content-right {
+    width: 100vw;
+    min-height: 30vh;
+    background-color: var(--black);
+    color: var(--white);
+    padding: 1.2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.2rem;
+    z-index: 10;
+  }
+  .grid-content-right h1 {
+    font-size: 2rem;
+    line-height: 1.1;
+    margin: 0 0 0.5rem 0;
+  }
+  .grid-content-right p {
+    font-size: 1rem;
+    margin: 0;
+  }
+  .section-2-left {
+    width: 100vw !important;
+    min-height: 30vh;
+    background-color: var(--black) !important;
+    position: relative;
+    overflow: visible;
+    padding: 1rem 0;
+  }
+  .section-2-right {
+    width: 100vw !important;
+    min-height: 30vh;
+    background-color: var(--white) !important;
+    color: var(--black) !important;
+    padding: 1.2rem 1rem;
+  }
+  .section-2-right h1 {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    margin: 0 0 0.5rem 0;
+  }
+}
+
+/* responsive.css: Styles for vertical phone resolution (portrait) */
+
+@media (max-width: 768px) {
+ 
+h1 {
+    font-size: 4rem; /* Smaller main headings */      
+}
+
+h2 {
+    font-size: 1.7rem; /* Smaller secondary headings */      
+}
+
+p {
+    font-size: 1rem; /* Standard paragraph size for readability */
+     font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 1.4;  
+}
+
+.serif h1 {
+  font-size: 3rem;
+}
+
+.serif h2 {
+  font-size: 1.7rem;
+}
+
+.serif p {
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 1.8;
+}
+
+  .komparacija-header h1 {
+    font-size: 2.5rem;
+  }
+  
+  .komparacija-img {
+    width: 200px;
+    height: 280px;
+  }
+
+/* ============================== 
+   Animated Navigation Menu (Mobile) 
+   ============================== */
+
+/* Main nav header bar (fixed at top) - pointer-events: none disables interaction except for children */
+.nav-header {
+  position: fixed; /* Sticks nav to top of viewport */
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent; /* Allows background to show through */
+  z-index: 9999; /* Ensures nav is above most elements */
+  pointer-events: none; /* Only children with pointer-events: auto are clickable */
+}
+
+/* Container for nav content (logo, toggle button) - pointer-events: auto enables interaction */
+.nav-header-content {
+  padding: 0; /* Remove default padding */
+  display: flex; /* Horizontal layout */
+  justify-content: flex-start; /* Align items to left */
+  pointer-events: auto; /* Enable interaction */
+  z-index: 9999;
+}
+
+/* Hamburger/toggle button for opening nav menu - Large touch area, bold style */
+.nav-menu-toggle {
+  background: var(--accent-yellow); /* Button color */
+  color: var(--black); /* Text/icon color */
+  border: none; /* No border */
+  padding: 1rem 2rem; /* Large tap area */
+  font-size: 1rem; /* Button text size */
+  font-weight: 700; /* Bold text */
+  letter-spacing: 0.1em; /* Spaced out letters */
+  cursor: pointer; /* Pointer on hover */
+  transition: transform 0.3s ease; /* Smooth scale on hover */
+  border-bottom-right-radius: 1.5rem; /* Rounded corner for style */
+  position: relative; /* For stacking context */
+  z-index: 9999; /* Above overlay */
+  outline: none; /* Remove default outline */
+}
+
+/* Button hover effect: scale up slightly */
+.nav-menu-toggle:hover {
+  transform: scale(1.1); /* Slightly larger on hover */
+  background: var(--accent-yellow);
+}
+
+/* Button focus effect: keep background, remove outline */
+.nav-menu-toggle:focus {
+  outline: none;
+  background: var(--accent-yellow);
+}
+
+/* Spotlight Menu Overlay - Covers viewport, disables pointer events unless active */
+.nav-spotlight-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 9997;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.nav-spotlight-menu.active {
+  pointer-events: auto;
+}
+
+/* Animated yellow background for spotlight menu - Uses clip-path for reveal animation */
+.nav-spotlight-background {
+  position: fixed; /* Overlay covers viewport, fixed for circle center */
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--accent-yellow); /* Animated color */
+  pointer-events: none;
+  /*
+    Initial state: Tiny circle at nav toggle location (top left, 60px right, 24px down)
+    Adjust 24px to match your nav toggle's vertical position
+  */
+  clip-path: circle(0% at 60px 24px);
+  transition: clip-path 0.7s cubic-bezier(0.6, 0, 0.175, 1);
+  transition-delay: 0.1s;
+}
+
+/* When menu is active, background expands diagonally from top-right toward center-left */
+.nav-spotlight-menu.active .nav-spotlight-background {
+  /* Open state: Fullscreen circle expanding from nav toggle location */
+  clip-path: circle(150vmax at 60px 24px);
+  transition-delay: 0s;
+}
+
+/* Fullscreen transition for page change - Polygon covers entire viewport */
+.nav-spotlight-menu.page-transition .nav-spotlight-background {
+  clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
+  transition: clip-path 0.8s cubic-bezier(0.6, 0, 0.175, 1);
+  transition-delay: 0s;
+}
+
+/* Returning state for background animation - Match active state for smooth reverse */
+.nav-spotlight-menu.returning .nav-spotlight-background {
+  /* Returning state: Fullscreen circle for smooth reverse */
+  clip-path: circle(150vmax at 60px 24px);
+  transition: clip-path 0.6s cubic-bezier(0.6, 0, 0.175, 1);
+  transition-delay: 0s;
+}
+
+/* Container for nav links - Positioned in lower right area */
+.nav-spotlight-links {
+  position: fixed;
+  top: 50vh; /* Center vertically in viewport */
+  left: 50vw; /* Center horizontally in viewport */
+  transform: translate(-50%, -70%); /* Perfect center */
+  width: 100vw;
+  z-index: 10002; /* Above the yellow circle */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center links horizontally */
+  gap: 4rem; /* More space between links for touch */
+  pointer-events: none; /* Only enable when menu is open */
+}
+
+.nav-spotlight-menu.active .nav-spotlight-links {
+  pointer-events: auto;
+}
+
+/* Nav links - Large, bold, right-aligned, hidden by default */
+.nav-spotlight-links a {
+  color: var(--black); /* Link color */
+  text-decoration: none; /* No underline */
+  font-size: 2.5rem; /* Large text for touch */
+  font-weight: 700; /* Bold */
+  letter-spacing: -0.02em; /* Tighten spacing */
+  border-bottom: none; /* Remove underline */
+  opacity: 0; /* Hidden by default */
+  transform: translateX(50px); /* Slide in from right */
+  transition: opacity 0.2s ease, transform 0.3s ease; /* Smooth in */
+}
+
+/* Each link text is inline-block for animation */
+.nav-spotlight-links a span {
+  display: inline-block;
+}
+
+/* Staggered animation delays for each link (exit animation) */
+.nav-spotlight-links a:nth-child(1) {
+  transition-delay: 0.4s;
+}
+
+.nav-spotlight-links a:nth-child(2) {
+  transition-delay: 0.3s;
+}
+
+.nav-spotlight-links a:nth-child(3) {
+  transition-delay: 0.2s;
+}
+
+.nav-spotlight-links a:nth-child(4) {
+  transition-delay: 0.1s;
+}
+
+.nav-spotlight-links a:nth-child(5) {
+  transition-delay: 0s;
+}
+
+/* When menu is active, links become visible and slide in */
+.nav-spotlight-menu.active .nav-spotlight-links a {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition-delay: 0s;
+}
+
+/* Staggered delays for links when menu is active (entrance animation) */
+.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(1) {
+  transition-delay: 0.95s;
+}
+
+.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(2) {
+  transition-delay: 1.05s;
+}
+
+.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(3) {
+  transition-delay: 1.15s;
+}
+
+.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(4) {
+  transition-delay: 1.25s;
+}
+
+.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(5) {
+  transition-delay: 1.35s;
+}
+
+/* On hover, keep links fully visible */
+.nav-spotlight-menu.active .nav-spotlight-links:hover a {
+  opacity: 1;
+}
+
+.nav-spotlight-menu.active .nav-spotlight-links a:hover {
+  opacity: 1;
+}
+
+
+/* ============================== 
+   Hero Section (Mobile)
+   ============================== */
+
+
+   .earth-gif {
+    display: none !important;
+  }
+
+.hero-grid-section {
+  min-height: 25vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--white);
+  padding: 1.2rem;
+  margin-top: 2rem;
+}
+
+.hero-grid-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 0.5rem;
+  align-items: start;
+  min-height: 22vh;
+}
+
+/* Header spans both columns in first row */
+.hero-grid-header {
+  grid-column: 1 / 3;
+  grid-row: 1 / 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.hero-grid-header h1 {
+  color: var(--black);
+  line-height: 1.1;
+  margin: 0;
+  font-size: 6rem;
+  font-weight: 900;
+}
+
+/* Text in first column, second row */
+.hero-grid-text {
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.hero-grid-text p {
+  color: var(--black);
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Button in second column, second row */
+.hero-grid-cta {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.blog-article-button {
+  align-self: flex-start;
+  padding: 0.5rem 1rem;
+  background-color: var(--accent-yellow);
+  color: var(--black);
+  border: none;
+  border-radius: 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+
+/* ============================== 
+   Swiss Style Section (Mobile)
+   ============================== */
+
+.mouth-overlay {
+  position: absolute;
+  width: 200%;
+  height: 50%;
+  background: var(--accent-green);
+  z-index: 2;
+  will-change: transform;
+  transition: transform 0.3s ease-out;
+  margin-left: -50%;
+}
+
+.mouth-overlay.mouth-top {
+  top: 0;
+  left: 0;
+  transform-origin: 0% 100%;
+}
+
+.mouth-overlay.mouth-bottom {
+  bottom: 0;
+  left: 0;
+  transform-origin: 0% 0%;
+}
+
+
+
+/* ============================== 
+   Horizontal Scroll Sections (Mobile) 
+   ============================== */
+
+
+.horizontal-scroll-container {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden; /* Hides the horizontal overflow */
+  position: relative;
+  background-color: var(--white);
+  margin: 0; /* Remove any margin that could cause white space */
+  padding: 0; /* Remove any padding that could cause white space */
+}
+
+/* The sliding panels container - moves horizontally */
+.horizontal-panels {
+  display: flex;
+  height: 100%;
+  width: 200vw; /* ADJUST: 2 sections × 100vw each. Add more sections? Increase this (e.g., 300vw for 3 sections) */
+  will-change: transform;
+}
+
+/* Individual panel/section */
+.horizontal-panel {
+  width: 100vw;
+  height: 100vh;
+  flex-shrink: 0; 
+  padding: 0;
+  margin: 0;
+  background-color: var(--white);
+}
+
+.grid-content-section {
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
+  z-index: 3;
+  background-color: var(--white);
+}
+
+.grid-content-container {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 0;
+  z-index: 3;
+}
+
+.grid-content-left {
+  grid-column: 1 / 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 5;
+  background-color: var(--accent-purple);
+}
+
+.vinyl-container {
+.vinyl-container {
+  position: absolute;
+  top: 50%;
+  width: 44rem;
+  height: 44rem;
+   display: flex;
+   align-items: flex-end;
+   justify-content: flex-start;
+   z-index: 2;
+}
+
+.now-playing-spotify-embed {
+  position: absolute;
+  right: 2.5rem;
+  bottom: 2.5rem;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  z-index: 10;
+  width: 320px;
+  overflow: hidden;
+  z-index: 3;
+}
+
+.now-playing-spotify-embed iframe {
+  display: block;
+}
+
+.now-playing-spotify {
+  position: absolute;
+  right: 2.5rem;
+  bottom: 2.5rem;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1.2rem 0.7rem 0.7rem;
+  z-index: 10;
+  min-width: 220px;
+  max-width: 320px;
+}
+
+.now-playing-album-art {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.7rem;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+.now-playing-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  z-index: 10;
+}
+
+.now-playing-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.now-playing-artist {
+  font-size: 0.95rem;
+  color: #b3b3b3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.now-playing-spotify-logo {
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+}
+
+.vinyl-record {
+  width: 100%;
+  height: 100%;
+  animation: spin 8s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.grid-content-right {
+  grid-column: 7 / 13;
+  background-color: var(--black);
+  color: var(--white);
+  padding: 4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+  z-index: 10;
+}
+
+/* Section 2 specific styles */
+.section-2-left {
+  background-color: var(--black) !important;
+  position: relative;
+  overflow: hidden;
+  width: 50vw;
+}
+
+.section-2-right {
+  background-color: var(--white) !important;
+  color: var(--black) !important;
+}
+.section-2-right h1 {
+  font-size: clamp(3rem, 6vw, 5rem);
+  line-height: 1.1;
+  margin: 0;
+}
+
+/* Random aligned images in section 2 */
+.random-img {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+
+@media (max-width: 600px) {
+  .section-2-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 100vw;
+    height: auto;
+    background: var(--black) !important;
+    overflow: visible;
+  }
+  .random-img {
+    position: static;
+    margin: 1.2rem 0;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    transform: none;
+    z-index: 1;
+  }
+  .random-img-1,
+  .random-img-2,
+  .random-img-3,
+  .random-img-4 {
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    z-index: 1;
+  }
+}
+
+
+/* ============================== 
+   About (Mobile) 
+   ============================== */
+
+
+.about-section {
+  min-height: 60vh;
+  background-color: var(--white);
+  padding: 2.2rem 0.7rem;
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 0.7rem 0;
+  max-width: 98vw;
+  margin: 0 auto;
+  align-items: center;
+  justify-items: center;
+}
+
+.about-title {
+  grid-column: 1;
+  grid-row: 1;
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.about-title h1 {
+  font-size: 1.7rem;
+  margin: 0;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.about-image {
+  grid-column: 1;
+  grid-row: 2;
+  width: 70vw;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.about-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5rem;
+}
+
+.about-text {
+  grid-column: 1;
+  grid-row: 3;
+  display: block;
+  align-items: center;
+  text-align: center;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  padding: 0 0.3rem;
+}
+
+/* ============================== 
+   Work (Mobile) 
+   ============================== */
+
+
+.blog-section {
+  min-height: 100vh;
+  background-color: var(--white);
+  padding: 4rem 1.2rem;
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.blog-header-sticky {
+  position: sticky;
+  top: 8rem;
+  height: fit-content;
+  left: 50%;
+  transform: translateX(-50%);
+  transform: translateY(-30%);
+  text-align: center;
+  width: 100%;
+  z-index: 10;
+}
+  /* Make header static and right-aligned at top of page */
+  .blog-header-sticky {
+    position: static;
+    top: 0;
+    left: auto;
+    transform: none;
+    text-align: right;
+    width: 100%;
+    z-index: 10;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 1.2rem 1.2rem;
+  align-items: start;
+}
+
+.blog-article-image {
+  grid-column: 1 / 3;
+  .blog-article {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto auto;
+    gap: 1.2rem 1.2rem;
+    align-items: start;
+
+.blog-article-image img {
+  .blog-article-date {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    font-size: 1rem;
+    color: var(--black);
+    opacity: 0.7;
+    align-self: center;
+  }
+
+  .blog-article-image {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    width: 100%;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border-radius: 0.7rem;
+  }
+}
+
+.blog-article-description {
+  grid-column: 1 / 3;
+  grid-row: 2;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--black);
+  opacity: 0.85;
+  margin: 0;
+  text-align: left;
+}
+  .blog-article-title {
+    grid-column: 1 / 2;
+    grid-row: 3;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0;
+    line-height: 1.2;
+    align-self: center;
+  }
+
+  .blog-article-description {
+    grid-column: 2 / 3;
+    grid-row: 4;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--black);
+    opacity: 0.85;
+    margin: 0;
+    text-align: left;
+  align-self: center;
+}
+
+.blog-article-content {
+  grid-column: 2 / 3;
+  grid-row: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+/* Footer with the folders */
+
+.folders {
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  padding: 0.5rem 0 0 0;
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.folders h1 {
+  color: var(--white);
+  font-size: 1rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
+.folders .row {
+  position: relative;
+  width: 100%;
+  display: flex;
+  min-height: 120px;
+}
+
+.folders .folder {
+  position: relative;
+  flex: 1;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.folders .row:nth-child(1) .folder {
+  height: 70px;
+}
+
+.folders .row:nth-child(2) .folder {
+  height: 100px;
+}
+
+.folders .folder-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 14rem;
+  height: 100%;
+  pointer-events: none;
+}
+
+.folders .folder-preview-img {
+  position: absolute;
+  top: 50%;
+  width: 6rem;
+  height: 8rem;
+  border-radius: 0.7rem;
+  overflow: hidden;
+}
+
+.folders .folder-name h1 {
+  font-size: 0.7rem !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+  font-weight: 700 !important;
+}
+
+.folders .folder-name h1 {
+  font-size: 0.7rem;
+}
+
+@media (max-width: 600px) {
+  .folders-header {
+    font-size: 2rem !important;
+    text-align: center !important;
+    margin: 0.5rem 0 1.2rem 0 !important;
+    display: block !important;
+    font-weight: 900 !important;
+  }
+}
