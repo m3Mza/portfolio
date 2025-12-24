@@ -59,6 +59,7 @@ function Work() {
           setIsMenuActive(false)
         } else if (isInternal) {
           navigate(href)
+          return
         } else {
           window.location.href = href
         }
@@ -71,6 +72,7 @@ function Work() {
         document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
       } else if (isInternal) {
         navigate(href)
+        return
       } else {
         window.location.href = href
       }
