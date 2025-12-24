@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import "./responsive.css";
 import Lenis from "lenis";
@@ -75,6 +76,7 @@ function App() {
   const [mouthProgress, setMouthProgress] = useState(0);
   const mouthSectionRef = useRef<HTMLDivElement>(null);
   const horizontalScrollRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
@@ -137,16 +139,11 @@ function App() {
     href: string
   ) => {
     e.preventDefault();
-
-    // Only run nav animation on desktop (width >= 768px)
     const isDesktop = window.innerWidth >= 768;
-
+    const isInternal = href.startsWith("/");
     if (isDesktop) {
-      // Trigger page transition animation on desktop
       setIsPageTransition(true);
       sessionStorage.setItem("pageTransition", "true");
-
-      // Wait for animation to complete, then navigate
       setTimeout(() => {
         if (href.startsWith("http")) {
           window.open(href, "_blank");
@@ -156,17 +153,20 @@ function App() {
           sessionStorage.removeItem("pageTransition");
           setIsPageTransition(false);
           setIsMenuActive(false);
+        } else if (isInternal) {
+          navigate(href);
         } else {
           window.location.href = href;
         }
       }, 800);
     } else {
-      // On mobile, skip animation - just close menu and navigate immediately
       setIsMenuActive(false);
       if (href.startsWith("http")) {
         window.open(href, "_blank");
       } else if (href.startsWith("#")) {
         document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+      } else if (isInternal) {
+        navigate(href);
       } else {
         window.location.href = href;
       }
