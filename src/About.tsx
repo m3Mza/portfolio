@@ -6,12 +6,10 @@ import 'lenis/dist/lenis.css'
 import gsap from 'gsap'
 
 function About() {
-  const [isMenuActive, setIsMenuActive] = useState(() => {
-    return sessionStorage.getItem('pageTransition') === 'true'
-  })
-  const [isPageTransition, setIsPageTransition] = useState(() => {
-    return sessionStorage.getItem('pageTransition') === 'true'
-  })
+  const [isMenuActive, setIsMenuActive] = useState(false); // Changed
+const [isPageTransition, setIsPageTransition] = useState(() => {
+  return sessionStorage.getItem('pageTransition') === 'true'
+})
   const [isReturning, setIsReturning] = useState(false)
   const navigate = useNavigate()
 
@@ -58,6 +56,7 @@ function About() {
           setIsPageTransition(false)
           setIsMenuActive(false)
         } else if (isInternal) {
+          setIsMenuActive(false); // Close menu right before navigation
           navigate(href)
           return
         } else {
@@ -219,27 +218,40 @@ function About() {
 
   return (
     <>
+      <div className="grain-overlay"></div>
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
-          <button 
-            className="nav-menu-toggle" 
+          <button
+            className="nav-menu-toggle"
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? 'Close.' : 'Menu.'}
+            {isMenuActive ? "CLOSE" : "MENU"}
           </button>
         </div>
       </header>
 
       {/* Spotlight Menu Overlay */}
-      <nav className={`nav-spotlight-menu ${isMenuActive ? 'active' : ''} ${isPageTransition ? 'page-transition' : ''} ${isReturning ? 'returning' : ''}`}>
+      <nav
+        className={`nav-spotlight-menu ${isMenuActive ? "active" : ""} ${
+          isPageTransition ? "page-transition" : ""
+        } ${isReturning ? "returning" : ""}`}
+      >
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>Home.</a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>About.</a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>Work.</a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>Contact&#10174;</a>
+          <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
+            home
+          </a>
+          <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
+            about
+          </a>
+          <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
+            work
+          </a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
+            contact
+          </a>
         </div>
       </nav>
 
@@ -250,11 +262,32 @@ function About() {
             <img src="/mirko3.jpeg" alt="Mirko" />
           </div>
           <div className="about-title">
-            <h1><span className='serif'>a</span>bout.</h1>
+            <h1>
+              <span className="serif">a</span>bout.
+              <img
+                src="/nier.gif"
+                alt=""
+                className="earth-gif"
+                style={{
+                  display: "inline-block",
+                  width: "10.1rem",
+                  height: "10.1rem",
+                  left: "45.5rem",
+                  top: "16.5rem",
+                  position: "absolute",
+                }}
+              />
+            </h1>
           </div>
           <div className="about-text">
-            <p>I'm a <span className='colored-background-variant-2'> cook </span> turned <span className='colored-background-variant-1'>web developer</span> based in Serbia 🇷🇸. I studied at the University of Novi Sad <img src="/ns.svg" alt="" style={{display: 'inline', width: '30px', height: '30px', marginLeft: '4px', marginRight: '2px', verticalAlign: 'middle'}} /> where I earned my BSc in <span className='serif'> Software Engineering</span>. I love creating websites that look nice while still being efficient and clean in perfomance. I'm passionate about everything JavaScript<img src="/javascript-logo-svgrepo-com.svg" alt="" style={{display: 'inline', width: '30px', height: '30px', marginLeft: '4px', marginRight: '4px', verticalAlign: 'middle'}} />, but I also
-                sometimes dabble in back-end primarily using PHP frameworks<img src="/laravel-svgrepo-com.svg" alt="" style={{display: 'inline', width: '30px', height: '30px', marginLeft: '4px', marginRight: '2px', verticalAlign: 'middle'}} /><img src="/symfony-svgrepo-com.svg" alt="" style={{display: 'inline', width: '30px', height: '30px', marginRight: '4px', verticalAlign: 'middle'}} /> and Node.js<img src="/node-js-svgrepo-com.svg" alt="" style={{display: 'inline', width: '30px', height: '30px', marginLeft: '4px', marginRight: '4px', verticalAlign: 'middle'}} />.
+            <p>
+              I'm a cook turned web developer. I have a BSc in{" "}
+              <span className="serif">Software Engineering</span> which I got at
+              the University of Novi Sad, where I picked up a love for making
+              fun websites. You can contact me at{" "}
+              <span className="colored-background-variant-1">
+                mirkomimap@gmail.com
+              </span>
             </p>
           </div>
         </div>
@@ -262,28 +295,56 @@ function About() {
 
       {/* Footer with Folders */}
       <div className="folders">
-        <h2 style={{ marginLeft: '3rem', marginTop: '1rem' }}><span className="colored-background-variant-1">Everything</span> you need to know about <span className="serif">Mirko</span>, tidily packed.</h2>
+        <h1
+          style={{
+            marginLeft: "3rem",
+            marginTop: "1rem",
+            fontFamily: "Playfair Display, serif",
+            color: "var(--black)",
+          }}
+        >
+          Made by <span className="serif">m</span>irko.
+        </h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
             <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/gridSistemi.jpg" alt="Grid Systems" /></div>
-              <div className="folder-preview-img"><img src="/poster7.jpg" alt="Poster 7" /></div>  
-              <div className="folder-preview-img"><img src="/poster8.jpg" alt="Poster 8" /></div>    
+              <div className="folder-preview-img">
+                <img src="/circle1.jpg" alt="Placeholder 1" />
+              </div>
+              <div className="folder-preview-img">
+                <img src="/circle2.jpg" alt="Placeholder 2" />
+              </div>
+              <div className="folder-preview-img">
+                <img src="/circle3.jpg" alt="Placeholder 3" />
+              </div>
             </div>
             <div className="folder-wrapper">
-              <div className="folder-index"><p>01</p></div>
-              <div className="folder-name"><h1>Work</h1></div>
+              <div className="folder-index">
+                <p>01</p>
+              </div>
+              <div className="folder-name">
+                <h1>work</h1>
+              </div>
             </div>
           </div>
-          <div className="folder variant-2" data-link="https://github.com/m3Mza">
+          <div
+            className="folder variant-2"
+            data-link="https://github.com/m3Mza"
+          >
             <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/gitDark.svg" alt="GitHub Dark" /></div>
-              <div className="folder-preview-img"><img src="/gitLight.svg" alt="GitHub Light" /></div>  
-              <div className="folder-preview-img"><img src="/gitDark.svg" alt="GitHub Dark" /></div>    
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img">
+                <img src="/nier.gif" alt="GitHub" />
+              </div>
+              <div className="folder-preview-img"></div>
             </div>
             <div className="folder-wrapper">
-              <div className="folder-index"><p>02</p></div>
-              <div className="folder-name"><h1>GitHub</h1></div>
+              <div className="folder-index">
+                <p>02</p>
+              </div>
+              <div className="folder-name">
+                <h1>repo</h1>
+              </div>
             </div>
           </div>
         </div>
@@ -291,30 +352,40 @@ function About() {
         <div className="row">
           <div className="folder variant-2" data-link="/about">
             <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/mirko1.jpeg" alt="Resume 1" /></div>
-              <div className="folder-preview-img"><img src="/mirko2.jpeg" alt="Resume 2" /></div>  
-              <div className="folder-preview-img"><img src="/mirko3.jpeg" alt="Resume 3" /></div>    
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img">
+                <img src="/mirko3.jpeg" alt="Resume 3" />
+              </div>
             </div>
             <div className="folder-wrapper">
-              <div className="folder-index"><p>03</p></div>
-              <div className="folder-name"><h1>About</h1></div>
+              <div className="folder-index">
+                <p>03</p>
+              </div>
+              <div className="folder-name">
+                <h1>about</h1>
+              </div>
             </div>
           </div>
           <div className="folder variant-3" data-mailto="mirkomimap@gmail.com">
             <div className="folder-preview">
               <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>  
-              <div className="folder-preview-img"></div>    
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img"></div>
             </div>
             <div className="folder-wrapper">
-              <div className="folder-index"><p>04</p></div>
-              <div className="folder-name"><h1>Contact &#10174;</h1></div>
+              <div className="folder-index">
+                <p>04</p>
+              </div>
+              <div className="folder-name">
+                <h1>contact</h1>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </>
-  )
+  );
 }
 
 export default About

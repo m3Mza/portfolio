@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./App.css";
 import "./responsive.css";
 import Lenis from "lenis";
@@ -9,71 +9,46 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-{
-  /* Spotify Now Playing Widget */
-}
-
-// Spotify Embed - Shows a random track from your public playlist
-const SPOTIFY_PLAYLIST_ID = "2Qf7TlWILWKeQi6bGfq44F"; // Your playlist ID
-
-function NowPlayingSpotify() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchRandomTrack = async () => {
-      try {
-        // Fetch playlist embed data (public, no auth required)
-        const response = await fetch(
-          `https://open.spotify.com/embed/playlist/${SPOTIFY_PLAYLIST_ID}`
-        );
-
-        if (!response.ok) {
-          console.error("Failed to fetch playlist");
-          setIsLoading(false);
-          return;
-        }
-
-        // For public playlists, we'll use the Spotify embed widget instead
-        // This doesn't require OAuth and works for public playlists
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching Spotify data:", error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchRandomTrack();
-  }, []);
-
-  if (isLoading) {
-    return null;
-  }
-
-  return (
-    <div className="now-playing-spotify-embed">
-      <iframe
-        style={{ borderRadius: "12px" }}
-        src={`https://open.spotify.com/embed/playlist/${SPOTIFY_PLAYLIST_ID}?utm_source=generator&theme=0`}
-        width="100%"
-        height="152"
-        frameBorder="0"
-        allowFullScreen
-        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-        loading="lazy"
-      ></iframe>
-    </div>
-  );
-}
 
 function App() {
-  const [isMenuActive, setIsMenuActive] = useState(() => {
-    return sessionStorage.getItem("pageTransition") === "true";
-  });
-  const [isPageTransition, setIsPageTransition] = useState(() => {
-    return sessionStorage.getItem("pageTransition") === "true";
-  });
+
+
+ // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    });
+
+    let rafId: number;
+    function raf(time: number) {
+      lenis.raf(time);
+      rafId = requestAnimationFrame(raf);
+    }
+
+    rafId = requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+
+  
+  // Meni i nneke druge gluposti nemam pojma iskreno
+
+  const [isMenuActive, setIsMenuActive] = useState(false); // Always start with menu closed
+const [isPageTransition, setIsPageTransition] = useState(() => {
+  return sessionStorage.getItem("pageTransition") === "true";
+});
   const [isReturning, setIsReturning] = useState(false);
+  // State for mouth animation progress (0 = closed, 1 = fully open)
   const [mouthProgress, setMouthProgress] = useState(0);
+  // State to track if the mouth is in 'locked' mode (after scroll threshold)
+  const [mouthLocked, setMouthLocked] = useState(false);
+  // State for mouse-based mouth progress (used after lock)
+  const [mouseMouthProgress, setMouseMouthProgress] = useState(1);
   const mouthSectionRef = useRef<HTMLDivElement>(null);
   const horizontalScrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -104,11 +79,24 @@ function App() {
     }
   }, []);
 
-  // Mouth animation scroll effect
+  // Mouth animation scroll effect with lock and mouse interaction
   useEffect(() => {
     const handleScroll = () => {
       const section = mouthSectionRef.current;
       if (!section) return;
+
+        // Adjustable thresholds for mouth lock and close
+  // lockThreshold: when to lock the mouth (0 = top, 1 = bottom)
+  // closeThreshold: when to start closing (lower = closes earlier)
+  const lockThreshold = 0.15;
+  const closeThreshold = 1;
+
+  // Adjustable value for mouth closing scroll threshold
+  // 0 = closes as soon as section leaves viewport
+  // 0.5 = closes when 50% of section is still visible
+  // 1 = closes when section is fully visible (never closes)
+  // Example: 0.2 means closes when only 20% of the section is visible
+  const mouthCloseScrollThreshold = 0.2; // Set between 0 and 1
 
       const rect = section.getBoundingClientRect();
       const windowHeight = window.innerHeight;
@@ -116,14 +104,44 @@ function App() {
       if (rect.top <= windowHeight && rect.bottom >= 0) {
         const sectionHeight = rect.height;
         const visibleTop = Math.max(0, windowHeight - rect.top);
-        const rawProgress = (visibleTop / sectionHeight - 0.5) / 0.7;
+        const rawProgress = (visibleTop / sectionHeight - 0.8) / 0.3; // Start later (e.g., 0.7) and finish faster (e.g., /0.2)
+        // Clamp progress between 0 and 1
         const progress = Math.min(1, Math.max(0, rawProgress));
 
-        setMouthProgress(progress);
-      } else if (rect.bottom < 0) {
-        setMouthProgress(1);
-      } else {
+        if (progress >= lockThreshold && rawProgress < closeThreshold) {
+          setMouthProgress(lockThreshold);
+          setMouthLocked(true);
+        } else if (rawProgress >= closeThreshold) {
+          setMouthProgress(lockThreshold);
+          setMouthLocked(false);
+        } else {
+          setMouthProgress(progress);
+          setMouthLocked(false);
+        }
+      } else if (rect.top > windowHeight) {
         setMouthProgress(0);
+        setMouthLocked(false);
+      } else {
+        // Calculate how much of the section is visible (0 = not visible, 1 = fully visible)
+        const section = mouthSectionRef.current;
+        if (section) {
+          const rect = section.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+          const sectionHeight = rect.height;
+          // Amount of section visible in viewport
+          const visible = Math.max(0, Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0));
+          const visibleRatio = visible / sectionHeight;
+          if (visibleRatio < mouthCloseScrollThreshold) {
+            setMouthProgress(0);
+            setMouthLocked(false);
+          } else {
+            setMouthProgress(0);
+            setMouthLocked(false);
+          }
+        } else {
+          setMouthProgress(0);
+          setMouthLocked(false);
+        }
       }
     };
 
@@ -134,69 +152,87 @@ function App() {
     };
   }, []);
 
-  const handleLinkClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
-    e.preventDefault();
-    const isDesktop = window.innerWidth >= 768;
-    const isInternal = href.startsWith("/");
-    if (isDesktop) {
-      setIsPageTransition(true);
-      sessionStorage.setItem("pageTransition", "true");
-      setTimeout(() => {
-        if (href.startsWith("http")) {
-          window.open(href, "_blank");
-          sessionStorage.removeItem("pageTransition");
-        } else if (href.startsWith("#")) {
-          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-          sessionStorage.removeItem("pageTransition");
-          setIsPageTransition(false);
-          setIsMenuActive(false);
-        } else if (isInternal) {
-          navigate(href);
-          return;
-        } else {
-          window.location.href = href;
-        }
-      }, 800);
-    } else {
-      setIsMenuActive(false);
-      if (href.startsWith("http")) {
-        window.open(href, "_blank");
-      } else if (href.startsWith("#")) {
-        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  // Mouse move effect for mouth overlays after lock
+  useEffect(() => {
+    if (!mouthLocked) return;
+    const section = mouthSectionRef.current;
+    if (!section) return;
+
+    // Mouse move handler: map Y position to mouth opening (0 = closed, 1 = open)
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = section.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+      const progress = Math.min(1, Math.max(0, y / rect.height));
+      setMouseMouthProgress(progress);
+    };
+
+    // Mouse leave handler: reset to fully open when mouse leaves
+    const handleMouseLeave = () => {
+      setMouseMouthProgress(1);
+    };
+
+    section.addEventListener("mousemove", handleMouseMove);
+    section.addEventListener("mouseleave", handleMouseLeave);
+    return () => {
+      section.removeEventListener("mousemove", handleMouseMove);
+      section.removeEventListener("mouseleave", handleMouseLeave);
+    };
+  }, [mouthLocked]);
+
+
+
+// Handle link clicks with page transition
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  e.preventDefault();
+  const isDesktop = window.innerWidth >= 768;
+  const isInternal = href.startsWith('/');
+  
+  if (isDesktop) {
+    setIsPageTransition(true);
+    sessionStorage.setItem('pageTransition', 'true');
+    
+    setTimeout(() => {
+      if (href.startsWith('http')) {
+        window.open(href, '_blank');
+        sessionStorage.removeItem('pageTransition');
+        setIsPageTransition(false);
+        setIsMenuActive(false);
+      } else if (href.startsWith('#')) {
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+        sessionStorage.removeItem('pageTransition');
+        setIsPageTransition(false);
+        setIsMenuActive(false);
       } else if (isInternal) {
+        // Don't close menu here - let the new page handle it
         navigate(href);
-        return;
       } else {
         window.location.href = href;
       }
+    }, 800);
+  } else {
+    // Mobile behavior
+    setIsMenuActive(false);
+    if (href.startsWith('http')) {
+      window.open(href, '_blank');
+    } else if (href.startsWith('#')) {
+      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    } else if (isInternal) {
+      navigate(href);
+    } else {
+      window.location.href = href;
     }
-  };
-
-  // Initialize Lenis smooth scroll
-  useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    });
-
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-
-    requestAnimationFrame(raf);
-
-    return () => {
-      lenis.destroy();
-    };
-  }, []);
+  }
+};
 
   // GSAP ScrollTrigger animation for images
   useEffect(() => {
     // Wait a bit for DOM to be fully ready
+    let animation: {
+      scrollTrigger?: ScrollTrigger | null;
+      lenisKomparacija?: Lenis | null;
+    } | null;
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     const initAnimation = () => {
       gsap.registerPlugin(ScrollTrigger);
 
@@ -211,10 +247,10 @@ function App() {
       // [x, y] where x controls horizontal spacing, y controls vertical position
       // More negative Y = higher up, more positive Y = lower down
       const komparacijaFinalPosition = [
-        [-240, -5], // Image 1: far left
+        [-240, -15], // Image 1: far left
         [-120, -5], // Image 2: mid left
         [20, -5], // Image 3: mid right
-        [140, -5], // Image 4: far right
+        [140, -15], // Image 4: far right
       ];
 
       // ADJUST: Initial rotation for each image (in degrees)
@@ -322,79 +358,50 @@ function App() {
       return { scrollTrigger, lenisKomparacija };
     };
 
-    const timeout = setTimeout(() => {
-      const animation = initAnimation();
-
-      return () => {
-        if (animation) {
-          animation.scrollTrigger.kill();
-          gsap.ticker.remove((time) => {
-            animation.lenisKomparacija.raf(time * 1000);
-          });
-          animation.lenisKomparacija.destroy();
-        }
-      };
+    timeout = setTimeout(() => {
+      animation = initAnimation();
     }, 100);
 
     return () => {
       clearTimeout(timeout);
+      if (animation) {
+        if (animation.scrollTrigger) animation.scrollTrigger.kill();
+        if (animation.lenisKomparacija) animation.lenisKomparacija.destroy();
+        gsap.ticker.remove((time) => {
+          if (animation && animation.lenisKomparacija) animation.lenisKomparacija.raf(time * 1000);
+        });
+      }
     };
   }, []);
 
-  // Folder hover animation
+  // Folder hover animation (no click handler for navigation)
   useEffect(() => {
     const folders = document.querySelectorAll(".folders .folder");
     const folderWrappers = document.querySelectorAll(
       ".folders .folder-wrapper"
     );
-
     if (folders.length === 0) return;
-
     let isMobile = window.innerWidth < 1000;
-
     function setInitialPositions() {
       gsap.set(folderWrappers, { y: isMobile ? 0 : 25 });
     }
-
     setInitialPositions();
-
+    const mouseEnterHandlers: Array<{ folder: Element; mouseEnterHandler: EventListener }> = [];
+    const mouseLeaveHandlers: Array<{ folder: Element; mouseLeaveHandler: EventListener }> = [];
     folders.forEach((folder, index) => {
       const previewImages = folder.querySelectorAll(".folder-preview-img");
-
-      // Handle folder click for links
-      folder.addEventListener("click", () => {
-        const link = folder.getAttribute("data-link");
-        const mailto = folder.getAttribute("data-mailto");
-        const pdf = folder.getAttribute("data-pdf");
-
-        if (link) {
-          if (link.startsWith("http")) {
-            window.open(link, "_blank");
-          } else {
-            window.location.href = link;
-          }
-        } else if (mailto) {
-          window.location.href = `mailto:${mailto}`;
-        } else if (pdf) {
-          window.open(pdf, "_blank");
-        }
-      });
-
-      folder.addEventListener("mouseenter", () => {
+      const mouseEnterHandler = () => {
         if (isMobile) return;
-
         folders.forEach((siblingFolder) => {
           if (siblingFolder !== folder) {
             siblingFolder.classList.add("disabled");
           }
         });
-
         gsap.to(folderWrappers[index], {
           y: 0,
           duration: 0.25,
           ease: "back.out(1.7)",
         });
-
         previewImages.forEach((img, imgIndex) => {
           let rotation;
           if (imgIndex === 0) {
@@ -404,7 +411,6 @@ function App() {
           } else {
             rotation = gsap.utils.random(10, 20);
           }
-
           gsap.to(img, {
             y: "-100%",
             rotation: rotation,
@@ -413,21 +419,19 @@ function App() {
             delay: imgIndex * 0.025,
           });
         });
-      });
-
-      folder.addEventListener("mouseleave", () => {
+      };
+      folder.addEventListener("mouseenter", mouseEnterHandler);
+      mouseEnterHandlers.push({ folder, mouseEnterHandler });
+      const mouseLeaveHandler = () => {
         if (isMobile) return;
-
         folders.forEach((siblingFolder) => {
           siblingFolder.classList.remove("disabled");
         });
-
         gsap.to(folderWrappers[index], {
           y: 25,
           duration: 0.25,
           ease: "back.out(1.7)",
         });
-
         previewImages.forEach((img, imgIndex) => {
           gsap.to(img, {
             y: "0%",
@@ -437,28 +441,31 @@ function App() {
             delay: imgIndex * 0.05,
           });
         });
-      });
+      };
+      folder.addEventListener("mouseleave", mouseLeaveHandler);
+      mouseLeaveHandlers.push({ folder, mouseLeaveHandler });
     });
-
     const handleResize = () => {
       const currentBreakpoint = window.innerWidth < 1000;
       if (currentBreakpoint !== isMobile) {
         isMobile = currentBreakpoint;
         setInitialPositions();
       }
-
       folders.forEach((folder) => {
         folder.classList.remove("disabled");
       });
-
       const allPreviewImages = document.querySelectorAll(".folder-preview-img");
       gsap.set(allPreviewImages, { y: "0%", rotation: 0 });
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
+      mouseEnterHandlers.forEach(({ folder, mouseEnterHandler }) => {
+        folder.removeEventListener("mouseenter", mouseEnterHandler);
+      });
+      mouseLeaveHandlers.forEach(({ folder, mouseLeaveHandler }) => {
+        folder.removeEventListener("mouseleave", mouseLeaveHandler);
+      });
     };
   }, []);
 
@@ -472,46 +479,20 @@ function App() {
     const panels = container.querySelector(".horizontal-panels");
     if (!panels) return;
 
-    // ====================================
-    // TIMEOUT: Wait for DOM and other animations to initialize
-    // ====================================
     // ADJUST: Increase this value if animation is twitchy (try 500, 1000, or 1500)
-    // This ensures the komparacija ScrollTrigger above is fully initialized first
     const initDelay = 200;
 
     const timeoutId = setTimeout(() => {
-      // ====================================
-      // SCROLLTRIGGER SETUP
-      // ====================================
+
       const scrollTrigger = ScrollTrigger.create({
      
         trigger: container,
 
-        // ====================================
-        // START: When the animation begins
-        // ====================================
-        // ADJUST: When to start the horizontal scroll
-        // Current: 'top top' = starts when top of container hits top of viewport
-        //
-        // OTHER OPTIONS:
-        // 'top center' = starts when top of container hits center of viewport (LATER)
-        // 'top bottom' = starts when top of container hits bottom of viewport (MUCH LATER)
-        // 'top top+=200px' = starts 200px AFTER container hits top (add delay)
-        // 'top top-=200px' = starts 200px BEFORE container hits top (start earlier)
-        //
-        // FIX FOR TWITCHING: Try 'top top+=100px' to add delay after komparacija finishes
         start: "top top",
 
         // ====================================
         // END: When the animation completes
         // ====================================
-        // ADJUST: How much scroll distance = full horizontal animation
-        // Current: window.innerWidth * 1.5 = 1.5 viewport widths of scrolling
-        //
-        // FORMULA: For 2 sections, you need (sections - 1) * viewport width
-        // So for 2 sections: 1 * viewport width minimum
-        //
-        // Multiplier effect:
         // * 1.0 = FAST (minimal scrolling needed)
         // * 1.5 = MEDIUM (current setting - good balance)
         // * 2.0 = SLOW (more scrolling needed to complete animation)
@@ -521,27 +502,10 @@ function App() {
         // ====================================
         // PIN: Lock the section in place
         // ====================================
-        // true = Container stays fixed while user scrolls (creates horizontal effect)
-        // false = Container scrolls normally (no horizontal effect)
         pin: true,
-
-        // ====================================
-        // PIN SPACING: Add space after pinned section
-        // ====================================
-        // true = Adds empty space after this section so content below shows naturally
-        // false = No spacing, might cause content overlap
-        //
-        // IMPORTANT: If you have multiple pinned sections (like komparacija + this),
-        // having pinSpacing: true on BOTH can cause layout jumps and twitching
-        //
-        // FIX FOR TWITCHING: Try setting this to false and see if it helps
         pinSpacing: true,
 
-        // ====================================
-        // SCRUB: Animation smoothness
-        // ====================================
-        // ADJUST: How smooth/responsive the animation feels
-        //
+        // scrub
         // true = Instant response (can feel jerky)
         // 0.1 = Very snappy, minimal smoothing
         // 0.5 = Balanced (current - smooth but responsive)
@@ -571,8 +535,143 @@ function App() {
     };
   }, []);
 
+ // ========================================
+  // PARALLAX GALLERY TEXT OVER IMAGE ANIMATION
+  // ========================================
+  useEffect(() => {
+    const initDelay = 300;
+    
+    const timeoutId = setTimeout(() => {
+      const parallaxSection = document.querySelector('.parallax-gallery');
+      const textElement = document.querySelector('.parallax-gallery-text h3');
+      const imageElement = document.querySelector('.parallax-gallery-image img');
+      const captionElement = document.querySelector('.parallax-gallery-caption');
+      
+      if (!parallaxSection || !textElement || !imageElement || !captionElement) return;
+
+     
+      const OVERLAY_COLOR = 'rgba(255, 124, 95, 0.8)'; // Last number sets the opacity
+
+      // Create parallax effect for image (moves up slower)
+      gsap.to(imageElement, {
+        y: -150, // Moves up as you scroll down
+        ease: 'none',
+        scrollTrigger: {
+          trigger: parallaxSection,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+
+      // Create parallax effect for caption (moves down slower)
+      gsap.to(captionElement, {
+        y: 150, // Moves down slower than scroll
+        ease: 'none',
+        scrollTrigger: {
+          trigger: parallaxSection,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1,
+        }
+      });
+
+      // Animate text color with sharp color change based on image overlap
+      const colorTrigger = ScrollTrigger.create({
+        trigger: parallaxSection,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 0.5, // Smooth scrubbing
+        onUpdate: () => {
+          const textRect = textElement.getBoundingClientRect();
+          const imageRect = imageElement.getBoundingClientRect();
+          
+          // Check if there's any overlap
+          const isOverlapping = !(
+            textRect.right < imageRect.left ||
+            textRect.left > imageRect.right ||
+            textRect.bottom < imageRect.top ||
+            textRect.top > imageRect.bottom
+          );
+
+          
+          
+          if (isOverlapping) {
+            // Calculate the overlap boundaries
+            const overlapTop = Math.max(textRect.top, imageRect.top);
+            const overlapBottom = Math.min(textRect.bottom, imageRect.bottom);
+            const overlapLeft = Math.max(textRect.left, imageRect.left);
+            const overlapRight = Math.min(textRect.right, imageRect.right);
+            
+            // Calculate percentages for vertical gradient
+            const topPercent = ((overlapTop - textRect.top) / textRect.height) * 100;
+            const bottomPercent = ((overlapBottom - textRect.top) / textRect.height) * 100;
+            
+            // Calculate percentages for horizontal gradient  
+            const leftPercent = ((overlapLeft - textRect.left) / textRect.width) * 100;
+            const rightPercent = ((overlapRight - textRect.left) / textRect.width) * 100;
+            
+            // Build gradient that colors only the overlapping area with sharp transitions
+            const gradient = `
+              linear-gradient(to bottom,
+                var(--black) 0%,
+                var(--black) ${topPercent}%,
+                ${OVERLAY_COLOR} ${topPercent}%,
+                ${OVERLAY_COLOR} ${bottomPercent}%,
+                var(--black) ${bottomPercent}%,
+                var(--black) 100%
+              ),
+              linear-gradient(to right,
+                var(--black) 0%,
+                var(--black) ${leftPercent}%,
+                ${OVERLAY_COLOR} ${leftPercent}%,
+                ${OVERLAY_COLOR} ${rightPercent}%,
+                var(--black) ${rightPercent}%,
+                var(--black) 100%
+              )
+            `;
+            
+            gsap.to(textElement, { 
+              backgroundImage: gradient,
+              backgroundClip: 'text',
+              webkitBackgroundClip: 'text',
+              webkitTextFillColor: 'transparent',
+              backgroundBlendMode: 'multiply',
+              duration: 0.1,
+              ease: 'none'
+            });
+          } else {
+            // Reset to normal black text with smooth transition
+            gsap.to(textElement, { 
+              backgroundImage: 'none',
+              backgroundClip: 'unset',
+              webkitBackgroundClip: 'unset',
+              webkitTextFillColor: 'unset',
+              color: 'var(--black)',
+              duration: 0.1,
+              ease: 'none'
+            });
+          }
+        }
+      });
+
+      return () => {
+        ScrollTrigger.getAll().forEach(trigger => {
+          if (trigger.vars.trigger === parallaxSection) {
+            trigger.kill();
+          }
+        });
+      };
+    }, initDelay);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, []);
+
   return (
     <>
+      <div className="grain-overlay"></div>
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
@@ -581,7 +680,7 @@ function App() {
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "Close." : "Menu."}
+            {isMenuActive ? "CLOSE" : "MENU"}
           </button>
         </div>
       </header>
@@ -595,21 +694,22 @@ function App() {
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            Home.
+            home
           </a>
           <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            About.
+            about
           </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            Work.
+            work
           </a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
-            Contact&#10174;
+            contact
           </a>
         </div>
       </nav>
 
       {/* Hero Grid Section */}
+
       <section className="hero-grid-section">
         <div className="hero-grid-container">
           <div className="hero-grid">
@@ -617,24 +717,25 @@ function App() {
               <h1 style={{ position: "relative" }}>
                 <span className="serif">m</span>irko
                 <img
-                  src="/earth.gif"
+                  src="/nier.gif"
                   alt=""
                   className="earth-gif"
                   style={{
                     display: "block",
-                    width: "3.5rem",
-                    height: "3.5rem",
+                    width: "6.5rem",
+                    height: "6.5rem",
                     position: "absolute",
-                    right: "-4rem",
-                    top: "10rem",
+                    right: "21rem",
+                    top: "0.5rem",
                   }}
                 />
               </h1>
             </div>
             <div className="hero-grid-text">
               <p>
-                Hi. I'm a web developer with a passion for{" "}
-                <span className="serif">interactive</span> and{" "}
+                Hi. I'm a{" "}
+                <span className="colored-background-variant-1">code-based</span>{" "}
+                web developer with a passion for interactive and{" "}
                 <span className="colored-background-variant-1">fun</span> web
                 experiences.
               </p>
@@ -642,12 +743,12 @@ function App() {
             <div className="hero-grid-cta">
               <button
                 className="blog-article-button"
-                style={{ fontSize: "1.2" }}
+                style={{ fontSize: "1.2rem" }}
                 onClick={() =>
                   (window.location.href = "mailto:mirkomimap@gmail.com")
                 }
               >
-                GET IN TOUCH &#x2709;
+                GET IN TOUCH
               </button>
             </div>
           </div>
@@ -658,8 +759,8 @@ function App() {
       <section className="komparacija">
         <div className="komparacija-header">
           <h1>
-            I create websites that are <span className="serif">explored</span>,
-            not <span className="colored-background-variant-3">scrolled</span>
+            I build digital spaces meant to be{" "}
+            <span className="serif">explored.</span>
           </h1>
         </div>
         <div className="komparacija-slike">
@@ -667,10 +768,10 @@ function App() {
             <img src="/circle1.jpg" alt="Picture 1" />
           </div>
           <div className="komparacija-img">
-            <img src="/circle2.jpg" alt="Picture 2" />
+            <img src="/nier.gif" alt="Picture 2" />
           </div>
           <div className="komparacija-img">
-            <img src="/circle3.jpg" alt="Picture 3" />
+            <img src="/circle2.jpg" alt="Picture 3" />
           </div>
           <div className="komparacija-img">
             <img src="/circle4.jpg" alt="Picture 4" />
@@ -679,70 +780,80 @@ function App() {
       </section>
 
       {/* Horizontal Scroll Container */}
-      <div ref={horizontalScrollRef} className="horizontal-scroll-container">
+      <div
+        ref={horizontalScrollRef}
+        className="horizontal-scroll-container"
+        style={{ zIndex: 10 }}
+      >
         <div className="horizontal-panels">
-          {/* Section 1 - Vinyl */}
-          <section className="horizontal-panel">
-            <div className="grid-content-container">
-              <div className="grid-content-left">
-                <div className="vinyl-container">
-                  <img
-                    src="/vinyl.png"
-                    alt="Spinning vinyl record"
-                    className="vinyl-record"
-                  />
-                  <NowPlayingSpotify />
-                </div>
-              </div>
-              <div className="grid-content-right">
-                <h1 className="vinyl-section-header">
-                  Giving the{" "}
-                  <span className="colored-background-variant-1"> UI </span>
-                  <br />a spin.
-                </h1>
-                <p className="vinyl-section-desc">
-                  I believe unconventional and fun websites come of as{" "}
-                  <span className="serif">more sincere</span>
-                </p>
-              </div>
+          {/* Panel 1 - Header */}
+          <section className="horizontal-panel panel-purple">
+            <div className="big-black-circle">
+              <h1 className="side-scroll-header">
+                Selected
+                <br />
+                <span className="serif">w</span>orks.
+              </h1>
             </div>
           </section>
 
-          {/* Section 2 */}
-          <section className="horizontal-panel">
-            <div className="grid-content-container">
-              <div className="grid-content-left section-2-left">
-                <img
-                  src="/circle1.jpg"
-                  alt="Image 1"
-                  className="random-img random-img-1"
-                />
-                <img
-                  src="/circle2.jpg"
-                  alt="Image 2"
-                  className="random-img random-img-2"
-                />
-                <img
-                  src="/circle3.jpg"
-                  alt="Image 3"
-                  className="random-img random-img-3"
-                />
-                <img
-                  src="/circle4.jpg"
-                  alt="Image 4"
-                  className="random-img random-img-4"
-                />
-              </div>
-              <div className="grid-content-right section-2-right">
-                <h1>
-                  <span className="serif">Fun </span> websites stay in folk's
-                  minds just a little{" "}
-                  <span className="colored-background-variant-3">
-                    l&#x263A;nger
-                  </span>
-                </h1>
-              </div>
-            </div>
+          {/* Panel 2 - Two Stacked Images */}
+          <section className="horizontal-panel panel-black panel-stacked">
+            <figure>
+              <a
+                href="https://example.com/charity"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle1.jpg" alt="Screening project" />
+              </a>
+              <figcaption>placeholder 01.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://example.com/school"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle2.jpg" alt="Residency project" />
+              </a>
+              <figcaption>placeholder 02.</figcaption>
+            </figure>
+          </section>
+
+          {/* Panel 3 - One Big Image */}
+          <section className="horizontal-panel panel-black panel-big-image">
+            <figure>
+              <a
+                href="https://example.com/jony-ive"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle3.jpg" alt="Featured project" />
+              </a>
+              <figcaption>placeholder 03.</figcaption>
+            </figure>
+          </section>
+
+          {/* Panel 4 - Two Stacked Images */}
+          <section className="horizontal-panel panel-black panel-stacked">
+            <figure>
+              <a
+                href="https://example.com/nier"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle5.jpg" alt="Project" />
+              </a>
+              <figcaption>placeholder 04.</figcaption>
+            </figure>
+            
+            <a
+              href="/work"
+              className="link"
+            >
+             All of my works &#8594;
+            </a>
           </section>
         </div>
       </div>
@@ -757,121 +868,162 @@ function App() {
           alignItems: "center",
           justifyContent: "center",
           overflow: "hidden",
-          position: "relative",
+          position: "sticky",
+          top: 0,
+          zIndex: 11,
         }}
       >
+        {/* White background layer */}
         <div
-          className="mouth-overlay mouth-top"
           style={{
-            transform: `rotate(${-45 * mouthProgress}deg)`,
+            zIndex: 1,
           }}
         />
-        <div
-          className="mouth-overlay mouth-bottom"
-          style={{
-            transform: `rotate(${45 * mouthProgress}deg)`,
-          }}
-        />
+        {/* Mouth overlays and header content above grain */}
         <div
           style={{
             position: "relative",
-            textAlign: "center",
-            maxWidth: "900px",
-            padding: "0 2rem",
-            zIndex: 1,
+            width: "100vw",
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 11,
           }}
         >
-          <h2 style={{ position: "relative", zIndex: 1 }}>
-            Thinking about showing your <span className="serif">business</span>{" "}
-            to the <span className="serif">web?</span>
-            <br></br>
-            Being{" "}
-            <span className="colored-background-variant-3">
-              code-based
-            </span>{" "}
-            gives me the flexibility to translate your ideas into reality using
-            <img
-              src="/javascript-logo-svgrepo-com.svg"
-              alt=""
-              style={{
-                display: "inline",
-                width: "70px",
-                height: "70px",
-                marginLeft: "4px",
-                marginRight: "4px",
-                verticalAlign: "middle",
-              }}
-            />
-            and libraries like{" "}
-            <img
-              src="/react-svgrepo-com.svg"
-              alt=""
-              style={{
-                display: "inline",
-                width: "70px",
-                height: "70px",
-                marginLeft: "4px",
-                marginRight: "4px",
-                verticalAlign: "middle",
-              }}
-            />{" "}
-            and
-            <span
-              style={{
-                display: "inline-block",
-                verticalAlign: "middle",
-                marginBottom: "10px",
-                marginLeft: "5px",
-                marginRight: "4px",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="120"
-                fill="none"
-                viewBox="0 0 82 30"
-              >
-                <path
-                  fill="#0ae448"
-                  d="M23.81 14.013v.013l-1.075 4.665c-.058.264-.322.458-.626.458H20.81a.218.218 0 0 0-.208.155c-1.198 4.064-2.82 6.858-4.962 8.535-1.822 1.428-4.068 2.093-7.069 2.093-2.696 0-4.514-.867-6.056-2.578C.478 25.09-.364 21.388.146 16.926 1.065 8.549 5.41.096 13.776.096c2.545-.023 4.543.762 5.933 2.33 1.47 1.657 2.216 4.154 2.22 7.421a.55.55 0 0 1-.549.536h-6.13a.42.42 0 0 1-.407-.41c-.05-2.259-.72-3.36-2.052-3.36-2.35 0-3.736 3.19-4.471 4.959-1.027 2.47-1.55 5.152-1.447 7.824.049 1.244.249 2.994 1.43 3.718 1.047.643 2.541.217 3.446-.495.904-.711 1.632-1.942 1.938-3.065.043-.156.046-.277.005-.332-.043-.055-.162-.068-.253-.068h-1.574a.572.572 0 0 1-.438-.202.42.42 0 0 1-.087-.362l1.076-4.674c.053-.24.27-.42.537-.453v-.011h10.33c.024 0 .049 0 .072.005.268.034.457.284.452.556h.002Z"
+          <div
+            className="mouth-overlay mouth-top"
+            style={
+              mouthLocked
+                ? {
+                    transform: `rotate(${
+                      -45 * mouthProgress + (-2.5 + 5 * mouseMouthProgress)
+                    }deg)`,
+                    transformOrigin: "left center",
+                  }
+                : {
+                    transform: `rotate(${-45 * mouthProgress}deg)`,
+                  }
+            }
+          />
+          <div
+            className="mouth-overlay mouth-bottom"
+            style={
+              mouthLocked
+                ? {
+                    transform: `rotate(${
+                      45 * mouthProgress + (-2.5 + 5 * mouseMouthProgress)
+                    }deg)`,
+                    transformOrigin: "left center",
+                  }
+                : {
+                    transform: `rotate(${45 * mouthProgress}deg)`,
+                  }
+            }
+          />
+          <div
+            style={{
+              position: "relative",
+              maxWidth: "900px",
+              marginRight: "-10%",
+              textAlign: "right",
+              zIndex: 11,
+            }}
+          >
+            <h3 style={{ position: "relative", zIndex: 11 }}>
+              {/* First text with moving images parallax */}I have a love for
+              optimizing the{" "}
+              <span className="colored-background-variant-1">f*#+</span> out of
+              user interfaces, making sure that good design does not compromise
+              performance.
+              <img
+                  src="/nier.gif"
+                  alt=""
+                  className="earth-gif"
+                  style={{
+                    display: "block",
+                    width: "8rem",
+                    height: "8rem",
+                    position: "absolute",
+                    right: "-9rem",
+                    bottom: "18.5rem",
+                  }}
                 />
-                <path
-                  fill="#0ae448"
-                  d="M41.594 8.65a.548.548 0 0 1-.548.531H35.4c-.37 0-.679-.3-.679-.665 0-1.648-.57-2.45-1.736-2.45s-1.918.717-1.94 1.968c-.025 1.395.764 2.662 3.01 4.84 2.957 2.774 4.142 5.232 4.085 8.48C38.047 26.605 34.476 30 29.042 30c-2.775 0-4.895-.743-6.305-2.207-1.431-1.486-2.087-3.668-1.95-6.485a.548.548 0 0 1 .549-.53h5.84a.55.55 0 0 1 .422.209.48.48 0 0 1 .106.384c-.065 1.016.112 1.775.512 2.195.256.272.613.41 1.058.41 1.079 0 1.711-.763 1.735-2.09.02-1.148-.343-2.155-2.321-4.19-2.555-2.496-4.846-5.075-4.775-9.13.042-2.351.976-4.502 2.631-6.056C28.294.868 30.687 0 33.465 0c2.783.02 4.892.813 6.269 2.359 1.304 1.466 1.932 3.582 1.862 6.29h-.002Z"
-                />
-                <path
-                  fill="#0ae448"
-                  d="m59.096 29.012.037-27.932a.525.525 0 0 0-.529-.533h-8.738c-.294 0-.423.252-.507.42L36.707 28.842v.005l-.005.006c-.14.343.126.71.497.71h6.108c.33 0 .548-.1.656-.308l1.213-2.915c.149-.388.177-.424.601-.424h5.836c.406 0 .415.008.408.405l-.131 2.71a.525.525 0 0 0 .529.532h6.17a.522.522 0 0 0 .403-.182.458.458 0 0 0 .104-.369Zm-10.81-9.326c-.057 0-.102-.001-.138-.005a.146.146 0 0 1-.13-.183c.012-.041.029-.095.053-.163l4.377-10.827c.038-.107.086-.212.136-.314.071-.145.157-.155.184-.047.023.09-.502 11.118-.502 11.118-.041.413-.06.43-.467.464l-3.509-.041h-.008l.003-.002Z"
-                />
-                <path
-                  fill="#0ae448"
-                  d="M71.545.547h-4.639c-.245 0-.52.13-.585.422l-6.455 28.029a.423.423 0 0 0 .088.364.572.572 0 0 0 .437.202h5.798c.311 0 .525-.153.583-.418 0 0 .703-3.168.704-3.178.05-.247-.036-.439-.258-.555-.105-.054-.209-.108-.312-.163l-1.005-.522-1-.522-.387-.201a.186.186 0 0 1-.102-.17.199.199 0 0 1 .198-.194l3.178.014c.95.005 1.901-.062 2.836-.234 6.58-1.215 10.95-6.485 11.076-13.656.107-6.12-3.309-9.221-10.15-9.221l-.005.003Zm-1.579 16.68h-.124c-.278 0-.328-.03-.337-.04-.004-.007 1.833-8.073 1.834-8.084.047-.233.045-.367-.099-.446-.184-.102-2.866-1.516-2.866-1.516a.188.188 0 0 1-.101-.172.197.197 0 0 1 .197-.192h4.241c1.32.04 2.056 1.221 2.021 3.237-.061 3.492-1.721 7.09-4.766 7.214Z"
-                />
-              </svg>
-              .
-            </span>{" "}
-          </h2>
+            </h3>
+          </div>
+        </div>
+      </section>
+
+      {/* Second text with moving images parallax */}
+      <section
+        className="parallax-gallery"
+        style={{ marginTop: "60vh" }} // Adjust this value to control when the parallax appears after mouth closes
+      >
+        <div
+          style={{
+            zIndex: 12,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+          }}
+        />
+        <div
+          className="parallax-gallery-inner"
+          style={{ position: "relative", zIndex: 12 }}
+        >
+          <div className="parallax-gallery-text">
+            <h3>
+              A coding approach gives me the
+              flexibility to differently tackle any challenges on the project,
+              blending efficiency with{" "}
+              creativity.
+            </h3>
+          </div>
+          <div className="parallax-gallery-image">
+            <img src="/circle5.jpg" alt="Gallery placeholder" />
+          </div>
+          <p className="parallax-gallery-caption">
+            I use modern libraries and frameworks to develop the best solution
+            for your project.
+          </p>
         </div>
       </section>
 
       {/* Footer with Folders */}
-      <div className="folders">
-        <h2 className="folders-header">
-          <span className="colored-background-variant-1">Everything</span> you
-          need to know about <span className="serif">Mirko</span>, tidily
-          packed.
-        </h2>
+      <div
+        className="folders"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
+            "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
+          backgroundSize: "50px 50px",
+          backgroundPosition: "-1px -1px",
+          backgroundColor: "var(--white)",
+        }}
+      >
+        <h1
+          style={{
+            marginLeft: "3rem",
+            marginTop: "1rem",
+            fontFamily: "Playfair Display, serif",
+            color: "var(--black)",
+          }}
+        >
+          Made by <span className="serif">m</span>irko.
+        </h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
             <div className="folder-preview">
               <div className="folder-preview-img">
-                <img src="/gridSistemi.jpg" alt="Grid Systems" />
+                <img src="/circle1.jpg" alt="Placeholder 1" />
               </div>
               <div className="folder-preview-img">
-                <img src="/poster7.jpg" alt="Poster 7" />
+                <img src="/circle2.jpg" alt="Placeholder 2" />
               </div>
               <div className="folder-preview-img">
-                <img src="/poster8.jpg" alt="Poster 8" />
+                <img src="/circle3.jpg" alt="Placeholder 3" />
               </div>
             </div>
             <div className="folder-wrapper">
@@ -879,7 +1031,7 @@ function App() {
                 <p>01</p>
               </div>
               <div className="folder-name">
-                <h1>Work</h1>
+                <h1>work</h1>
               </div>
             </div>
           </div>
@@ -888,22 +1040,18 @@ function App() {
             data-link="https://github.com/m3Mza"
           >
             <div className="folder-preview">
+              <div className="folder-preview-img"></div>
               <div className="folder-preview-img">
-                <img src="/gitDark.svg" alt="GitHub Dark" />
+                <img src="/nier.gif" alt="GitHub" />
               </div>
-              <div className="folder-preview-img">
-                <img src="/gitLight.svg" alt="GitHub Light" />
-              </div>
-              <div className="folder-preview-img">
-                <img src="/gitDark.svg" alt="GitHub Dark" />
-              </div>
+              <div className="folder-preview-img"></div>
             </div>
             <div className="folder-wrapper">
               <div className="folder-index">
                 <p>02</p>
               </div>
               <div className="folder-name">
-                <h1>GitHub</h1>
+                <h1>repo</h1>
               </div>
             </div>
           </div>
@@ -912,12 +1060,8 @@ function App() {
         <div className="row">
           <div className="folder variant-2" data-link="/about">
             <div className="folder-preview">
-              <div className="folder-preview-img">
-                <img src="/mirko1.jpeg" alt="Resume 1" />
-              </div>
-              <div className="folder-preview-img">
-                <img src="/mirko2.jpeg" alt="Resume 2" />
-              </div>
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img"></div>
               <div className="folder-preview-img">
                 <img src="/mirko3.jpeg" alt="Resume 3" />
               </div>
@@ -927,7 +1071,7 @@ function App() {
                 <p>03</p>
               </div>
               <div className="folder-name">
-                <h1>About</h1>
+                <h1>about</h1>
               </div>
             </div>
           </div>
@@ -942,7 +1086,7 @@ function App() {
                 <p>04</p>
               </div>
               <div className="folder-name">
-                <h1>Contact &#10174;</h1>
+                <h1>contact</h1>
               </div>
             </div>
           </div>

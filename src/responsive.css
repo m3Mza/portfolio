@@ -335,7 +335,7 @@ p {
 /* Container for nav links - Positioned in lower right area */
 .nav-spotlight-links {
   position: fixed;
-  top: 50vh; /* Center vertically in viewport */
+  top: 45vh; /* Center vertically in viewport */
   left: 50vw; /* Center horizontally in viewport */
   transform: translate(-50%, -70%); /* Perfect center */
   width: 100vw;
@@ -477,7 +477,7 @@ p {
   color: var(--black);
   line-height: 1.1;
   margin: 0;
-  font-size: 6rem;
+  font-size: 8rem;
   font-weight: 900;
 }
 
@@ -517,6 +517,17 @@ p {
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 1rem;
+}
+
+.komparacija-header {
+  text-align: center;
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  z-index: 12;
+  padding: 2rem;
+  margin-top: -35rem;
+
 }
 
 

@@ -6,12 +6,10 @@ import 'lenis/dist/lenis.css'
 import gsap from 'gsap'
 
 function Work() {
-  const [isMenuActive, setIsMenuActive] = useState(() => {
-    return sessionStorage.getItem('pageTransition') === 'true'
-  })
-  const [isPageTransition, setIsPageTransition] = useState(() => {
-    return sessionStorage.getItem('pageTransition') === 'true'
-  })
+ const [isMenuActive, setIsMenuActive] = useState(false); // Changed
+const [isPageTransition, setIsPageTransition] = useState(() => {
+  return sessionStorage.getItem('pageTransition') === 'true'
+})
   const [isReturning, setIsReturning] = useState(false)
   const navigate = useNavigate()
 
@@ -58,6 +56,7 @@ function Work() {
           setIsPageTransition(false)
           setIsMenuActive(false)
         } else if (isInternal) {
+          setIsMenuActive(false); // Close menu right before navigation
           navigate(href)
           return
         } else {
@@ -220,15 +219,16 @@ function Work() {
   const blogPosts = [
     {
       id: 1,
-      date: 'Dec 21, 2025',
-      title: 'Implementation of swiss design principles through a React application',
-      description: 'Graduation thesis project demonstrating the application of Swiss design principles in a modern React app.',
-      image: '/circle4.jpg'
+      date: 'Feb 23, 2017',
+      title: "Fancy website, totally not Emil.",
+      description: 'A fancy professional website for a fancy professional company.',
+      image: '/fancyCompany.png'
     }
   ]
 
   return (
     <>
+      <div className="grain-overlay"></div>
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
@@ -237,7 +237,7 @@ function Work() {
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? 'Close.' : 'Menu.'}
+            {isMenuActive ? 'CLOSE' : 'MENU'}
           </button>
         </div>
       </header>
@@ -246,10 +246,10 @@ function Work() {
       <nav className={`nav-spotlight-menu ${isMenuActive ? 'active' : ''} ${isPageTransition ? 'page-transition' : ''} ${isReturning ? 'returning' : ''}`}>
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>Home.</a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>About.</a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>Work.</a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>Contact&#10174;</a>
+          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>home</a>
+          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>about</a>
+          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>work</a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>contact</a>
         </div>
       </nav>
 
@@ -269,7 +269,12 @@ function Work() {
                 <time className="blog-article-date">{post.date}</time>
                 <h2 className="blog-article-title">{post.title}</h2>
                 <p className="blog-article-description">{post.description}</p>
-                <button className="blog-article-button">Visit →</button>
+                <button
+                  className="blog-article-button"
+                  onClick={() => window.open('https://youtu.be/Akz1fbOD3UA?si=Dm1xtpS-IfVnWW9P', '_blank')}
+                >
+                  Visit →
+                </button>
               </div>
             </article>
           ))}
@@ -278,28 +283,28 @@ function Work() {
 
       {/* Footer with Folders */}
       <div className="folders">
-        <h2 style={{ marginLeft: '3rem', marginTop: '1rem' }}><span className="colored-background-variant-1">Everything</span> you need to know about <span className="serif">Mirko</span>, tidily packed.</h2>
+       <h1 style={{ marginLeft: '3rem', marginTop: '1rem', fontFamily: 'Playfair Display, serif', color: 'var(--black)' }}>Made by <span className="serif">m</span>irko.</h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
             <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/gridSistemi.jpg" alt="Grid Systems" /></div>
-              <div className="folder-preview-img"><img src="/poster7.jpg" alt="Poster 7" /></div>  
-              <div className="folder-preview-img"><img src="/poster8.jpg" alt="Poster 8" /></div>    
+              <div className="folder-preview-img"><img src="/circle1.jpg" alt="Placeholder 1" /></div>
+              <div className="folder-preview-img"><img src="/circle2.jpg" alt="Placeholder 2" /></div>  
+              <div className="folder-preview-img"><img src="/circle3.jpg" alt="Placeholder 3" /></div>  
             </div>
             <div className="folder-wrapper">
               <div className="folder-index"><p>01</p></div>
-              <div className="folder-name"><h1>Work</h1></div>
+              <div className="folder-name"><h1>work</h1></div>
             </div>
           </div>
           <div className="folder variant-2" data-link="https://github.com/m3Mza">
             <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/gitDark.svg" alt="GitHub Dark" /></div>
-              <div className="folder-preview-img"><img src="/gitLight.svg" alt="GitHub Light" /></div>  
-              <div className="folder-preview-img"><img src="/gitDark.svg" alt="GitHub Dark" /></div>    
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img"><img src="/nier.gif" alt="GitHub" /></div>  
+              <div className="folder-preview-img"></div>    
             </div>
             <div className="folder-wrapper">
               <div className="folder-index"><p>02</p></div>
-              <div className="folder-name"><h1>GitHub</h1></div>
+              <div className="folder-name"><h1>repo</h1></div>
             </div>
           </div>
         </div>
@@ -307,13 +312,13 @@ function Work() {
         <div className="row">
           <div className="folder variant-2" data-link="/about">
             <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/mirko1.jpeg" alt="Resume 1" /></div>
-              <div className="folder-preview-img"><img src="/mirko2.jpeg" alt="Resume 2" /></div>  
+              <div className="folder-preview-img"></div>
+              <div className="folder-preview-img"></div>  
               <div className="folder-preview-img"><img src="/mirko3.jpeg" alt="Resume 3" /></div>    
             </div>
             <div className="folder-wrapper">
               <div className="folder-index"><p>03</p></div>
-              <div className="folder-name"><h1>About</h1></div>
+              <div className="folder-name"><h1>about</h1></div>
             </div>
           </div>
           <div className="folder variant-3" data-mailto="mirkomimap@gmail.com">
@@ -324,7 +329,7 @@ function Work() {
             </div>
             <div className="folder-wrapper">
               <div className="folder-index"><p>04</p></div>
-              <div className="folder-name"><h1>Contact &#10174;</h1></div>
+              <div className="folder-name"><h1>contact</h1></div>
             </div>
           </div>
         </div>

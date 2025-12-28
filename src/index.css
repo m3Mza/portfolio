@@ -1,22 +1,28 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
+
 
 * {
-    font-family: 'Neue Helvetica', sans-serif;
+    font-family: 'Playfair Display', serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    scrollbar-width: none;
+}
+
+a {
+    text-decoration: none;
 }
 
 :root {
-  --white: #ffffff;
+  --white: #FAF9F6;
   --black: #000000;
-  --accent-purple:  #a195ba;
-  --accent-yellow:  #FFBD35;
-  --accent-green:   #3FA796;
-  --disabled-folder-bg: #6b6b6b;
-  --disabled-folder-fg: #d4d4d0;
+  --accent-purple:   #FF7C5F;
+  --accent-yellow:  #fbae17;
+  --disabled-folder-bg: #4e4e4e;
+  --disabled-folder-fg: #b5b5b5;
 }
-
 
 h1 {
     font-size: 8rem;
@@ -24,6 +30,12 @@ h1 {
 
 h2 {
     font-size: 4rem;
+}
+
+h3 {
+    font-size: 3.1rem;
+    font-weight: 500;
+  line-height: 1.08;
 }
 
 p {
@@ -37,8 +49,6 @@ p {
     font-family: 'Playfair Display', serif;
     font-style: italic;
 }
-
-
 
 .serif h1 {
   font-size: 4rem;
@@ -57,15 +67,54 @@ p {
 .colored-background-variant-1 {
   background-color: var(--accent-purple);
   color: var(--black);
+  font-family: 'Inter', sans-serif;
 }
 
-.colored-background-variant-2 {
-  background-color: var(--accent-yellow);
+/* Link */
+
+.link {
+  display: inline;
+  text-decoration: none;
+  width: fit-content;
+  padding: 8px 16px;
+  transition: background 0s, color 0s;
+  font-family: 'Inter', serif;
+  color: var(--accent-yellow);
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+.link:hover {
+  background: var(--accent-yellow);
+  color: var(--black);
+  background-size: 2rem;
+}
+/* Grain Overlay Background Effect */
+
+.grain-overlay {
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    animation: grain 8s steps(10) infinite;
+    background-color: var(--white);
 }
 
-.colored-background-variant-3 {
-  background-color: var(--accent-green);
-  color: var(--white);
+@keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-2%, -3%); }
+    20% { transform: translate(-4%, 2%); }
+    30% { transform: translate(3%, -5%); }
+    40% { transform: translate(-2%, 5%); }
+    50% { transform: translate(-3%, 3%); }
+    60% { transform: translate(4%, 0%); }
+    70% { transform: translate(0%, 4%); }
+    80% { transform: translate(1%, 6%); }
+    90% { transform: translate(-3%, 2%); }
 }
 
 
@@ -95,7 +144,7 @@ p {
   border: none;
   padding: 1rem 2rem;
   font-size: 1rem;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.1em;
   cursor: pointer;
   transition: transform 0.3s ease;
@@ -103,6 +152,7 @@ p {
   position: relative;
   z-index: 9999;
   outline: none;
+  font-family: 'Inter', serif;
 }
 
 .nav-menu-toggle:hover {
@@ -123,7 +173,7 @@ p {
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 9997;
+  z-index: 9998;
   pointer-events: none;
   overflow: hidden;
 }
@@ -175,15 +225,21 @@ p {
 .nav-spotlight-links a {
   color: var(--black);
   text-decoration: none;
-  font-size: 3.5rem;
-  font-weight: 700;
+  font-size: 4rem;
+  font-weight: 400;
   letter-spacing: -0.02em;
   border-bottom: none;
   opacity: 0;
   transform: translateX(50px);
-  transition: opacity 0.2s ease, transform 0.3s ease;
+  transition: opacity 0.2s ease, transform 0.5s ease, background 0.5s, color 0.5s;
+  font-family: 'Playfair Display', serif;
 }
 
+.nav-spotlight-links a:hover {
+  background: var(--black);
+  color: var(--accent-yellow);
+  transition: background 0.2s, color 0.2s;
+}
 
 .nav-spotlight-links a span {
   display: inline-block;
@@ -245,3 +301,200 @@ p {
 }
 
 
+/* Footer with the folders */
+
+a:link, a:visited, a:hover, a:active {
+  text-decoration: none !important;
+}
+
+.folders {
+  width: 100%;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  padding: 0;
+    color: var(--black);
+    position: relative;
+    z-index: 9996;
+  text-decoration: none !important;
+  
+}
+
+.folders h1 {
+  color: var(--white);
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+}
+
+
+.folders .row {
+  position: relative;
+  width: 100%;
+  display: flex;
+}
+
+.folders .folder {
+  position: relative;
+  flex: 1;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  text-decoration: none !important;
+}
+
+.folders .row:nth-child(1) .folder {
+  height: 200px;
+}
+
+.folders .row:nth-child(2) .folder {
+  height: 270px;
+}
+
+.folders .folder-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+  z-index: 10;
+}
+
+.folders .folder-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28rem;
+  height: 100%;
+  pointer-events: none;
+}
+
+.folders .folder-preview-img {
+  position: absolute;
+  top: 50%;
+  width: 12rem;
+  height: 16rem;
+  overflow: hidden;
+}
+
+.folders .folder-preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.folders .folder-preview-img:nth-child(1) {
+  left: 20%;
+  transform-origin: top-left;
+}
+
+.folders .folder-preview-img:nth-child(2) {
+  left: 50%;
+  transform-origin: center;
+}
+
+.folders .folder-preview-img:nth-child(3) {
+  left: 80%;
+  transform-origin: top-right;
+}
+
+.folders .folder-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  will-change: transform;
+}
+
+.folders .folder-index {
+  position: relative;
+  width: 40%;
+  padding: 0.75rem;
+}
+
+.folders .folder-index::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 99%;
+  height: 101%;
+  aspect-ratio: 1;
+  clip-path: polygon(0 0, 5% 0, 100% 100%, 0% 100%);
+}
+
+.folders .folder-index p {
+  font-size: 0.875rem;
+  font-weight: 400;
+    font-family: 'Inter', sans-serif;
+}
+
+.folders .folder-name {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  padding: 0 0.25rem;
+  padding-left: 2rem;
+}
+
+.folders .folder-name h1 {
+  font-size: 2.5rem;
+}
+
+.folders .folder-index, 
+.folders .folder-index::after, 
+.folders .folder-name {
+  transition: background-color 250ms ease;
+}
+
+.folders .folder.variant-1 .folder-index,
+.folders .folder.variant-1 .folder-index::after,
+.folders .folder.variant-1 .folder-name {
+  background-color: var(--black);
+}
+
+.folders .folder.variant-1 p,
+.folders .folder.variant-1 h1 {
+  color: var(--white);
+}
+
+.folders .folder.variant-2 .folder-index,
+.folders .folder.variant-2 .folder-index::after,
+.folders .folder.variant-2 .folder-name {
+  background-color: var(--accent-purple);
+}
+
+.folders .folder.variant-2 p,
+.folders .folder.variant-2 h1 {
+  color: var(--black);
+}
+
+.folders .folder.variant-3 .folder-index,
+.folders .folder.variant-3 .folder-index::after,
+.folders .folder.variant-3 .folder-name {
+  background-color: var(--accent-yellow);
+}
+
+.folders .folder.variant-3 p,
+.folders .folder.variant-3 h1 {
+  color: var(--black);
+}
+
+.folders .folder.disabled .folder-index,
+.folders .folder.disabled .folder-index::after,
+.folders .folder.disabled .folder-name {
+  background-color: var(--disabled-folder-bg);
+}
+
+.folders .folder.disabled p, 
+.folders .folder.disabled h1 {
+  color: var(--disabled-folder-fg);
+}
+
+.folders .row:nth-child(2) {
+  position: relative;
+  bottom: -10rem;
+}
