@@ -1,9 +1,114 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import './App.css'
-import Lenis from 'lenis'
-import 'lenis/dist/lenis.css'
 import gsap from 'gsap'
+import { CustomEase } from 'gsap/CustomEase'
+
+gsap.registerPlugin(CustomEase)
+CustomEase.create('hop', '0.9, 0, 0.1, 1')
+
+const items = [
+  {
+    title: "Chromatic Loopscape",
+    description: "An immersive exploration of color transitions and infinite patterns through generative art.",
+    link: "https://example.com/chromatic-loopscape"
+  },
+  {
+    title: "Solar Bloom",
+    description: "Interactive visualization inspired by solar phenomena and organic growth patterns.",
+    link: "https://example.com/solar-bloom"
+  },
+  {
+    title: "Neon Handscape",
+    description: "Digital art installation combining hand-drawn aesthetics with vibrant neon lighting.",
+    link: "https://example.com/neon-handscape"
+  },
+  {
+    title: "Echo Discs",
+    description: "Sound-reactive visual experience featuring circular geometries and audio synthesis.",
+    link: "https://example.com/echo-discs"
+  },
+  {
+    title: "Void Gaze",
+    description: "Contemplative piece exploring depth perception and negative space in digital environments.",
+    link: "https://example.com/void-gaze"
+  },
+  {
+    title: "Gravity Sync",
+    description: "Physics-based animation showcasing gravitational forces and orbital mechanics.",
+    link: "https://example.com/gravity-sync"
+  },
+  {
+    title: "Heat Core",
+    description: "Thermal-inspired generative artwork with dynamic temperature gradients.",
+    link: "https://example.com/heat-core"
+  },
+  {
+    title: "Fractal Mirage",
+    description: "Self-similar patterns creating hypnotic visual illusions through recursive algorithms.",
+    link: "https://example.com/fractal-mirage"
+  },
+  {
+    title: "Nova Pulse",
+    description: "Explosive energy patterns mimicking stellar phenomena and cosmic events.",
+    link: "https://example.com/nova-pulse"
+  },
+  {
+    title: "Sonic Horizon",
+    description: "Audio-visual experience blending soundscapes with horizon-based compositions.",
+    link: "https://example.com/sonic-horizon"
+  },
+  {
+    title: "Dream Circuit",
+    description: "Surreal digital landscape exploring the intersection of technology and imagination.",
+    link: "https://example.com/dream-circuit"
+  },
+  {
+    title: "Lunar Mesh",
+    description: "3D wireframe exploration inspired by lunar topography and grid-based aesthetics.",
+    link: "https://example.com/lunar-mesh"
+  },
+  {
+    title: "Radiant Dusk",
+    description: "Gradient-based composition capturing the ethereal beauty of twilight hours.",
+    link: "https://example.com/radiant-dusk"
+  },
+  {
+    title: "Pixel Drift",
+    description: "Retro-inspired animation featuring pixel art and procedural movement patterns.",
+    link: "https://example.com/pixel-drift"
+  },
+  {
+    title: "Vortex Bloom",
+    description: "Spiraling organic forms combining natural growth with mathematical precision.",
+    link: "https://example.com/vortex-bloom"
+  },
+  {
+    title: "Shadow Static",
+    description: "Glitch art exploration using shadow manipulation and digital noise artifacts.",
+    link: "https://example.com/shadow-static"
+  },
+  {
+    title: "Crimson Phase",
+    description: "Monochromatic red-toned experience exploring phase shifts and transitions.",
+    link: "https://example.com/crimson-phase"
+  },
+  {
+    title: "Retro Cascade",
+    description: "Nostalgic journey through vintage computing aesthetics and cascading animations.",
+    link: "https://example.com/retro-cascade"
+  },
+  {
+    title: "Photon Fold",
+    description: "Light-based installation examining the behavior of photons and optical phenomena.",
+    link: "https://example.com/photon-fold"
+  },
+  {
+    title: "Zenith Flow",
+    description: "Meditative visual flow exploring peak moments and continuous movement.",
+    link: "https://example.com/zenith-flow"
+  }
+]
 
 function Work() {
  const [isMenuActive, setIsMenuActive] = useState(false); // Changed
@@ -43,6 +148,17 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     e.preventDefault()
     const isDesktop = window.innerWidth >= 768
     const isInternal = href.startsWith('/')
+    const currentPath = window.location.pathname
+
+    // Check if clicking the same page - just refresh
+    if (isInternal && currentPath === href) {
+      setIsMenuActive(false)
+      setTimeout(() => {
+        window.location.reload()
+      }, 100)
+      return
+    }
+
     if (isDesktop) {
       setIsPageTransition(true)
       sessionStorage.setItem('pageTransition', 'true')
@@ -78,153 +194,500 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     }
   }
 
-  // Initialize Lenis smooth scroll
+  // Gallery state and refs
+  const canvasRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const overlayRef = useRef<HTMLDivElement>(null)
+  const projectTitleRef = useRef<HTMLParagraphElement>(null)
+  
+  const [canDrag, setCanDrag] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
+  
+  const isDraggingRef = useRef(false)
+  const startXRef = useRef(0)
+  const startYRef = useRef(0)
+  const targetXRef = useRef(0)
+  const targetYRef = useRef(0)
+  const currentXRef = useRef(0)
+  const currentYRef = useRef(0)
+  const dragVelocityXRef = useRef(0)
+  const dragVelocityYRef = useRef(0)
+  const mouseHasMovedRef = useRef(false)
+  const visibleItemsRef = useRef(new Set<string>())
+  const lastUpdateTimeRef = useRef(0)
+  const lastXRef = useRef(0)
+  const lastYRef = useRef(0)
+  const activeItemRef = useRef<HTMLElement | null>(null)
+  const originalPositionRef = useRef<any>(null)
+  const expandedItemRef = useRef<HTMLDivElement | null>(null)
+  const activeItemIdRef = useRef<string | null>(null)
+  const lastDragTimeRef = useRef(Date.now())
+  const titleWordsRef = useRef<HTMLSpanElement[]>([])
+  const titleSplitRef = useRef<{ words: HTMLSpanElement[], revert: () => void } | null>(null)
+  
+  const itemCount = 20
+  const itemGap = 150
+  const itemWidth = 140
+  const itemHeight = 180
+
+  // Gallery hover animation
   useEffect(() => {
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    })
+    const canvas = canvasRef.current
+    const container = containerRef.current
+    const overlay = overlayRef.current
+    
+    if (!canvas || !container || !overlay) return
 
-    function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
-    }
-
-    requestAnimationFrame(raf)
-
-    return () => {
-      lenis.destroy()
-    }
-  }, [])
-
-  // Folder hover animation
-  useEffect(() => {
-    const folders = document.querySelectorAll('.folders .folder')
-    const folderWrappers = document.querySelectorAll('.folders .folder-wrapper')
-
-    if (folders.length === 0) return
-
-    let isMobile = window.innerWidth < 1000
-
-    function setInitialPositions() {
-      gsap.set(folderWrappers, { y: isMobile ? 0 : 25 })
-    }
-
-    setInitialPositions()
-
-    folders.forEach((folder, index) => {
-      const previewImages = folder.querySelectorAll('.folder-preview-img')
-
-      // Handle folder click for links
-      folder.addEventListener('click', () => {
-        const link = folder.getAttribute('data-link')
-        const mailto = folder.getAttribute('data-mailto')
-        const pdf = folder.getAttribute('data-pdf')
+    const setAndAnimateTitle = (title: string) => {
+      if (titleSplitRef.current) {
+        titleSplitRef.current.revert()
+      }
+      if (projectTitleRef.current) {
+        projectTitleRef.current.textContent = title
         
-        if (link) {
-          if (link.startsWith('http')) {
-            window.open(link, '_blank')
-          } else {
-            window.location.href = link
+        // Split text into words
+        const words = title.split(' ')
+        projectTitleRef.current.innerHTML = ''
+        titleWordsRef.current = []
+        
+        words.forEach((word) => {
+          const span = document.createElement('span')
+          span.className = 'word'
+          span.textContent = word
+          span.style.display = 'inline-block'
+          span.style.marginRight = '0.3em'
+          projectTitleRef.current?.appendChild(span)
+          titleWordsRef.current.push(span)
+        })
+        
+        titleSplitRef.current = {
+          words: titleWordsRef.current,
+          revert: () => {
+            if (projectTitleRef.current) {
+              projectTitleRef.current.innerHTML = ''
+            }
+            titleWordsRef.current = []
           }
-        } else if (mailto) {
-          window.location.href = `mailto:${mailto}`
-        } else if (pdf) {
-          window.open(pdf, '_blank')
+        }
+        
+        gsap.set(titleWordsRef.current, { y: '100%' })
+      }
+    }
+
+    const setProjectInfo = (description: string, link: string) => {
+      const descElement = document.querySelector('.project-description')
+      const linkElement = document.querySelector('.project-link') as HTMLAnchorElement
+      
+      if (descElement) {
+        descElement.textContent = description
+        gsap.set(descElement, { opacity: 0, y: 20 })
+      }
+      
+      if (linkElement) {
+        linkElement.href = link
+        gsap.set(linkElement, { opacity: 0, y: 20 })
+      }
+    }
+
+    const animateProjectInfoIn = () => {
+      const descElement = document.querySelector('.project-description')
+      const linkElement = document.querySelector('.project-link')
+      
+      gsap.to(descElement, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.6,
+        ease: 'power3.out'
+      })
+      
+      gsap.to(linkElement, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.8,
+        ease: 'power3.out'
+      })
+    }
+
+    const animateProjectInfoOut = () => {
+      const descElement = document.querySelector('.project-description')
+      const linkElement = document.querySelector('.project-link')
+      
+      gsap.to([descElement, linkElement], {
+        opacity: 0,
+        y: 20,
+        duration: 0.4,
+        ease: 'power3.out'
+      })
+    }
+
+    const animateTitleIn = () => {
+      gsap.to(titleWordsRef.current, {
+        y: '0%',
+        duration: 1,
+        ease: 'power3.out',
+        stagger: 0.1
+      })
+    }
+
+    const animateTitleOut = () => {
+      gsap.to(titleWordsRef.current, {
+        y: '-100%',
+        duration: 0.5,
+        ease: 'power3.out',
+        stagger: 0.05
+      })
+    }
+
+    const updateVisibleItems = () => {
+      const buffer = 2.5
+      const viewWidth = window.innerWidth * (1 + buffer)
+      const viewHeight = window.innerHeight * (1 + buffer)
+      const movingRight = targetXRef.current > currentXRef.current
+      const movingDown = targetYRef.current > currentYRef.current
+      const directionBufferX = movingRight ? -300 : 300
+      const directionBufferY = movingDown ? -300 : 300
+
+      const startCol = Math.floor(
+        (-currentXRef.current - viewWidth / 2 + (movingRight ? directionBufferX : 0)) / (itemWidth + itemGap)
+      )
+      const endCol = Math.ceil(
+        (-currentXRef.current + viewWidth * 1.5 + (!movingRight ? directionBufferX : 0)) / (itemWidth + itemGap)
+      )
+      const startRow = Math.floor(
+        (-currentYRef.current - viewHeight / 2 + (movingDown ? directionBufferY : 0)) / (itemHeight + itemGap)
+      )
+      const endRow = Math.ceil(
+        (-currentYRef.current + viewHeight * 1.5 + (!movingDown ? directionBufferY : 0)) / (itemHeight + itemGap)
+      )
+
+      const currentItems = new Set<string>()
+
+      for (let row = startRow; row <= endRow; row++) {
+        for (let col = startCol; col <= endCol; col++) {
+          const itemId = `${col},${row}`
+          currentItems.add(itemId)
+
+          if (visibleItemsRef.current.has(itemId)) continue
+          if (activeItemIdRef.current === itemId && isExpanded) continue
+
+          const item = document.createElement('div')
+          item.className = 'item'
+          item.id = itemId
+          item.style.left = `${col * (itemWidth + itemGap)}px`
+          item.style.top = `${row * (itemHeight + itemGap)}px`
+
+          const img = document.createElement('img')
+          const imgNum = (Math.abs(col) + Math.abs(row)) % itemCount + 1
+          img.src = `/img${imgNum}.jpg`
+          img.alt = `Gallery item ${imgNum}`
+          img.draggable = false
+          img.ondragstart = () => false
+          item.appendChild(img)
+
+          item.addEventListener('click', (e) => {
+            if (!mouseHasMovedRef.current && !isExpanded) {
+              expandItem(item)
+            }
+          })
+
+          canvas.appendChild(item)
+          visibleItemsRef.current.add(itemId)
+        }
+      }
+
+      visibleItemsRef.current.forEach((itemId) => {
+        if (!currentItems.has(itemId) || (activeItemIdRef.current === itemId && isExpanded)) {
+          const item = document.getElementById(itemId)
+          if (item) {
+            canvas.removeChild(item)
+            visibleItemsRef.current.delete(itemId)
+          }
+        }
+      })
+    }
+
+    const expandItem = (item: HTMLElement) => {
+      setIsExpanded(true)
+      activeItemRef.current = item
+      activeItemIdRef.current = item.id
+      expandedItemRef.current = item
+      setCanDrag(false)
+      if (container) container.style.cursor = 'auto'
+
+      const imgSrc = item.querySelector('img')?.src || ''
+      const imgMatch = imgSrc.match(/img(\d+)\.jpg$/)
+      const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1
+      const projectIndex = (imgNum - 1) % items.length
+      const project = items[projectIndex]
+      
+      setAndAnimateTitle(project.title)
+      setProjectInfo(project.description, project.link)
+
+      item.style.visibility = 'hidden'
+
+      const rect = item.getBoundingClientRect()
+
+      originalPositionRef.current = {
+        id: item.id,
+        rect: rect,
+        imgSrc: imgSrc
+      }
+
+      overlay.classList.add('active')
+
+      const expandedItem = document.createElement('div')
+      expandedItem.className = 'expanded-item'
+      expandedItem.style.width = `${itemWidth}px`
+      expandedItem.style.height = `${itemHeight}px`
+
+      const img = document.createElement('img')
+      img.src = imgSrc
+      img.alt = 'Expanded Image'
+      expandedItem.appendChild(img)
+      expandedItem.addEventListener('click', closeExpandedItem)
+      document.body.appendChild(expandedItem)
+      expandedItemRef.current = expandedItem
+
+      document.querySelectorAll('.item').forEach((el) => {
+        if (el !== item) {
+          gsap.to(el, {
+            opacity: 0,
+            duration: 0.5,
+            ease: 'power2.out'
+          })
         }
       })
 
-      folder.addEventListener('mouseenter', () => {
-        if (isMobile) return
-        
-        folders.forEach((siblingFolder) => {
-          if (siblingFolder !== folder) {
-            siblingFolder.classList.add('disabled')
-          }
-        })
-        
-        gsap.to(folderWrappers[index], {
+      const viewportWidth = window.innerWidth
+      const targetWidth = viewportWidth * 0.4
+      const targetHeight = targetWidth * 1.2
+
+      gsap.delayedCall(0.5, animateTitleIn)
+      gsap.delayedCall(0.6, animateProjectInfoIn)
+
+      gsap.fromTo(
+        expandedItem,
+        {
+          width: itemWidth,
+          height: itemHeight,
+          x: rect.left + itemWidth / 2 - window.innerWidth / 2,
+          y: rect.top + itemHeight / 2 - window.innerHeight / 2
+        },
+        {
+          width: targetWidth,
+          height: targetHeight,
+          x: 0,
           y: 0,
-          duration: 0.25,
-          ease: 'back.out(1.7)'
-        })
-     
-        previewImages.forEach((img, imgIndex) => {
-          let rotation
-          if (imgIndex === 0) {
-            rotation = gsap.utils.random(-20, -10)
-          } else if (imgIndex === 1) {
-            rotation = gsap.utils.random(-10, 10)
-          } else {
-            rotation = gsap.utils.random(10, 20)
+          duration: 1,
+          ease: 'hop'
+        }
+      )
+    }
+
+    const closeExpandedItem = () => {
+      if (!expandedItemRef.current || !originalPositionRef.current) return
+
+      animateTitleOut()
+      animateProjectInfoOut()
+      
+      // Clear title text after animation
+      setTimeout(() => {
+        if (projectTitleRef.current) {
+          projectTitleRef.current.innerHTML = ''
+        }
+      }, 1100)
+      
+      overlay.classList.remove('active')
+      const originalRect = originalPositionRef.current.rect
+
+      document.querySelectorAll('.item').forEach((el) => {
+        if (el.id !== activeItemIdRef.current) {
+          gsap.to(el, {
+            opacity: 1,
+            duration: 0.5,
+            ease: 'power2.out'
+          })
+        }
+      })
+
+      const originalItem = document.getElementById(activeItemIdRef.current || '')
+
+      gsap.to(expandedItemRef.current, {
+        width: itemWidth,
+        height: itemHeight,
+        x: originalRect.left + itemWidth / 2 - window.innerWidth / 2,
+        y: originalRect.top + itemHeight / 2 - window.innerHeight / 2,
+        duration: 1,
+        ease: 'hop',
+        onComplete: () => {
+          if (expandedItemRef.current && expandedItemRef.current.parentNode) {
+            expandedItemRef.current.parentNode.removeChild(expandedItemRef.current)
           }
 
-          gsap.to(img, {
-            y: '-100%',
-            rotation: rotation,
-            duration: 0.25,
-            ease: 'back.out(1.7)',
-            delay: imgIndex * 0.025,
-          })
-        })
+          if (originalItem) {
+            originalItem.style.visibility = 'visible'
+          }
+
+          expandedItemRef.current = null
+          setIsExpanded(false)
+          activeItemRef.current = null
+          originalPositionRef.current = null
+          activeItemIdRef.current = null
+          setCanDrag(true)
+          if (container) container.style.cursor = 'grab'
+          dragVelocityXRef.current = 0
+          dragVelocityYRef.current = 0
+        }
       })
-       
-      folder.addEventListener('mouseleave', () => {
-        if (isMobile) return
+    }
 
-        folders.forEach((siblingFolder) => {
-          siblingFolder.classList.remove('disabled')
-        })
-       
-        gsap.to(folderWrappers[index], {
-          y: 25,
-          duration: 0.25,
-          ease: 'back.out(1.7)'
-        })
+    const animate = () => {
+      if (canDrag) {
+        const ease = 0.075
+        currentXRef.current += (targetXRef.current - currentXRef.current) * ease
+        currentYRef.current += (targetYRef.current - currentYRef.current) * ease
 
-        previewImages.forEach((img, imgIndex) => {
-          gsap.to(img, {
-            y: '0%',
-            rotation: 0,
-            duration: 0.25,
-            ease: 'back.out(1.7)',
-            delay: imgIndex * 0.05,
-          })
-        })
-      })
-    })
+        canvas.style.transform = `translate(${currentXRef.current}px, ${currentYRef.current}px)`
 
-    const handleResize = () => {
-      const currentBreakpoint = window.innerWidth < 1000
-      if (currentBreakpoint !== isMobile) {
-        isMobile = currentBreakpoint
-        setInitialPositions()
+        const now = Date.now()
+        const distMoved = Math.sqrt(
+          Math.pow(currentXRef.current - lastXRef.current, 2) + Math.pow(currentYRef.current - lastYRef.current, 2)
+        )
+
+        if (distMoved > 100 || now - lastUpdateTimeRef.current > 100) {
+          updateVisibleItems()
+          lastXRef.current = currentXRef.current
+          lastYRef.current = currentYRef.current
+          lastUpdateTimeRef.current = now
+        }
       }
 
-      folders.forEach((folder) => {
-        folder.classList.remove('disabled')
-      })
-
-      const allPreviewImages = document.querySelectorAll('.folder-preview-img')
-      gsap.set(allPreviewImages, { y: '0%', rotation: 0 })
+      requestAnimationFrame(animate)
     }
 
+    const handleMouseDown = (e: MouseEvent) => {
+      if (!canDrag) return
+      isDraggingRef.current = true
+      mouseHasMovedRef.current = false
+      startXRef.current = e.clientX
+      startYRef.current = e.clientY
+      container.style.cursor = 'grabbing'
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isDraggingRef.current || !canDrag) return
+
+      const dx = e.clientX - startXRef.current
+      const dy = e.clientY - startYRef.current
+
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        mouseHasMovedRef.current = true
+      }
+
+      const now = Date.now()
+      const dt = Math.max(10, now - lastDragTimeRef.current)
+      lastDragTimeRef.current = now
+
+      dragVelocityXRef.current = dx / dt
+      dragVelocityYRef.current = dy / dt
+
+      targetXRef.current += dx
+      targetYRef.current += dy
+
+      startXRef.current = e.clientX
+      startYRef.current = e.clientY
+    }
+
+    const handleMouseUp = () => {
+      if (!isDraggingRef.current) return
+      isDraggingRef.current = false
+
+      if (canDrag) {
+        container.style.cursor = 'grab'
+      }
+
+      if (Math.abs(dragVelocityXRef.current) > 0.1 || Math.abs(dragVelocityYRef.current) > 0.1) {
+        const momentumFactor = 200
+        targetXRef.current += dragVelocityXRef.current * momentumFactor
+        targetYRef.current += dragVelocityYRef.current * momentumFactor
+      }
+    }
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (!canDrag) return
+      isDraggingRef.current = true
+      mouseHasMovedRef.current = false
+      startXRef.current = e.touches[0].clientX
+      startYRef.current = e.touches[0].clientY
+    }
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (!isDraggingRef.current || !canDrag) return
+
+      const dx = e.touches[0].clientX - startXRef.current
+      const dy = e.touches[0].clientY - startYRef.current
+
+      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+        mouseHasMovedRef.current = true
+      }
+
+      targetXRef.current += dx
+      targetYRef.current += dy
+
+      startXRef.current = e.touches[0].clientX
+      startYRef.current = e.touches[0].clientY
+    }
+
+    const handleTouchEnd = () => {
+      isDraggingRef.current = false
+    }
+
+    const handleOverlayClick = () => {
+      if (isExpanded) closeExpandedItem()
+    }
+
+    const handleResize = () => {
+      if (isExpanded && expandedItemRef.current) {
+        const viewportWidth = window.innerWidth
+        const targetWidth = viewportWidth * 0.4
+        const targetHeight = targetWidth * 1.2
+
+        gsap.to(expandedItemRef.current, {
+          width: targetWidth,
+          height: targetHeight,
+          duration: 0.3,
+          ease: 'power2.out'
+        })
+      } else {
+        updateVisibleItems()
+      }
+    }
+
+    container.addEventListener('mousedown', handleMouseDown)
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseup', handleMouseUp)
+    container.addEventListener('touchstart', handleTouchStart)
+    window.addEventListener('touchmove', handleTouchMove)
+    window.addEventListener('touchend', handleTouchEnd)
+    overlay.addEventListener('click', handleOverlayClick)
     window.addEventListener('resize', handleResize)
 
+    updateVisibleItems()
+    animate()
+
     return () => {
+      container.removeEventListener('mousedown', handleMouseDown)
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseup', handleMouseUp)
+      container.removeEventListener('touchstart', handleTouchStart)
+      window.removeEventListener('touchmove', handleTouchMove)
+      window.removeEventListener('touchend', handleTouchEnd)
+      overlay.removeEventListener('click', handleOverlayClick)
       window.removeEventListener('resize', handleResize)
     }
-  }, [])
-
-  const blogPosts = [
-    {
-      id: 1,
-      date: 'Feb 23, 2017',
-      title: "Fancy website, totally not Emil.",
-      description: 'A fancy professional website for a fancy professional company.',
-      image: '/fancyCompany.png'
-    }
-  ]
+  }, [canDrag, isExpanded])
 
   return (
     <>
@@ -246,93 +709,52 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       <nav className={`nav-spotlight-menu ${isMenuActive ? 'active' : ''} ${isPageTransition ? 'page-transition' : ''} ${isReturning ? 'returning' : ''}`}>
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>home</a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>about</a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>work</a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>contact</a>
+          <a href="/" onClick={(e) => handleLinkClick(e, '/')}><span className="serif">h</span>ome</a>
+          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}><span className="serif">a</span>bout</a>
+          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}><span className="serif">w</span>ork</a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}><span className="serif">c</span>ontact</a>
         </div>
       </nav>
 
-      {/* Blog Section */}
-      <section className="blog-section">
-        <div className="blog-header-sticky">
-          <h1><span className="serif">w</span>ork.</h1>
-        </div>
-        
-        <div className="blog-articles">
-          {blogPosts.map((post) => (
-            <article key={post.id} className="blog-article">
-              <div className="blog-article-image">
-                <img src={post.image} alt={post.title} />
-              </div>
-              <div className="blog-article-content">
-                <time className="blog-article-date">{post.date}</time>
-                <h2 className="blog-article-title">{post.title}</h2>
-                <p className="blog-article-description">{post.description}</p>
-                <button
-                  className="blog-article-button"
-                  onClick={() => window.open('https://youtu.be/Akz1fbOD3UA?si=Dm1xtpS-IfVnWW9P', '_blank')}
-                >
-                  Visit →
-                </button>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+      {/* Static Header */}
+      <div className="blog-header-sticky">
+        <h1><span className="serif">w</span>ork.
+        <img
+                  src="/nier.gif"
+                  alt=""
+                  className="earth-gif"
+                  style={{
+                    display: "block",
+                    width: "2.7rem",
+                    height: "2.7rem",
+                    position: "absolute",
+                    left:"0.6rem",
+                    top: "0.3rem",
+                  }}
+                /></h1>
+      </div>
 
-      {/* Footer with Folders */}
-      <div className="folders">
-       <h1 style={{ marginLeft: '3rem', marginTop: '1rem', fontFamily: 'Playfair Display, serif', color: 'var(--black)' }}>Made by <span className="serif">m</span>irko.</h1>
-        <div className="row">
-          <div className="folder variant-1" data-link="/work">
-            <div className="folder-preview">
-              <div className="folder-preview-img"><img src="/circle1.jpg" alt="Placeholder 1" /></div>
-              <div className="folder-preview-img"><img src="/circle2.jpg" alt="Placeholder 2" /></div>  
-              <div className="folder-preview-img"><img src="/circle3.jpg" alt="Placeholder 3" /></div>  
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index"><p>01</p></div>
-              <div className="folder-name"><h1>work</h1></div>
-            </div>
-          </div>
-          <div className="folder variant-2" data-link="https://github.com/m3Mza">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"><img src="/nier.gif" alt="GitHub" /></div>  
-              <div className="folder-preview-img"></div>    
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index"><p>02</p></div>
-              <div className="folder-name"><h1>repo</h1></div>
-            </div>
-          </div>
-        </div>
-
-        <div className="row">
-          <div className="folder variant-2" data-link="/about">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>  
-              <div className="folder-preview-img"><img src="/mirko3.jpeg" alt="Resume 3" /></div>    
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index"><p>03</p></div>
-              <div className="folder-name"><h1>about</h1></div>
-            </div>
-          </div>
-          <div className="folder variant-3" data-mailto="mirkomimap@gmail.com">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>  
-              <div className="folder-preview-img"></div>    
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index"><p>04</p></div>
-              <div className="folder-name"><h1>contact</h1></div>
-            </div>
-          </div>
-        </div>
+      {/* Gallery */}
+      <div className="work-container" ref={containerRef}>
+        <div className="work-canvas" ref={canvasRef}></div>
+        <div className="work-overlay" ref={overlayRef}></div>
+      </div>
+      
+      {/* Project Title */}
+      <div className="project-title">
+        <p ref={projectTitleRef}></p>
+      </div>
+      
+      {/* Project Info */}
+      <div className="project-info">
+        <p className="project-description"></p>
+        <a className="project-link" href="#" target="_blank" rel="noopener noreferrer">
+          Visit Project 
+          <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '6px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
+            <path d="M18 6L6 18"/>
+            <path d="M8 6h10v10"/>
+          </svg>
+        </a>
       </div>
     </>
   )

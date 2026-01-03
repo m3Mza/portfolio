@@ -1,4 +1,6 @@
+
 import { useState, useEffect, useRef } from "react";
+
 import { useNavigate, Link } from "react-router-dom";
 import "./App.css";
 import "./responsive.css";
@@ -9,11 +11,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-
 function App() {
 
-
- // Initialize Lenis smooth scroll
+  // Initialize Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -34,24 +34,17 @@ function App() {
     };
   }, []);
 
-
   
   // Meni i nneke druge gluposti nemam pojma iskreno
 
   const [isMenuActive, setIsMenuActive] = useState(false); // Always start with menu closed
-const [isPageTransition, setIsPageTransition] = useState(() => {
-  return sessionStorage.getItem("pageTransition") === "true";
-});
+  const [isPageTransition, setIsPageTransition] = useState(() => {
+    return sessionStorage.getItem("pageTransition") === "true";
+  });
   const [isReturning, setIsReturning] = useState(false);
-  // State for mouth animation progress (0 = closed, 1 = fully open)
-  const [mouthProgress, setMouthProgress] = useState(0);
-  // State to track if the mouth is in 'locked' mode (after scroll threshold)
-  const [mouthLocked, setMouthLocked] = useState(false);
-  // State for mouse-based mouth progress (used after lock)
-  const [mouseMouthProgress, setMouseMouthProgress] = useState(1);
-  const mouthSectionRef = useRef<HTMLDivElement>(null);
   const horizontalScrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
@@ -79,178 +72,88 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     }
   }, []);
 
-  // Mouth animation scroll effect with lock and mouse interaction
-  useEffect(() => {
-    const handleScroll = () => {
-      const section = mouthSectionRef.current;
-      if (!section) return;
+  // Handle link clicks with page transition
 
-        // Adjustable thresholds for mouth lock and close
-  // lockThreshold: when to lock the mouth (0 = top, 1 = bottom)
-  // closeThreshold: when to start closing (lower = closes earlier)
-  const lockThreshold = 0.15;
-  const closeThreshold = 1;
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const isDesktop = window.innerWidth >= 768;
+    const isInternal = href.startsWith("/");
+    const currentPath = window.location.pathname;
 
-  // Adjustable value for mouth closing scroll threshold
-  // 0 = closes as soon as section leaves viewport
-  // 0.5 = closes when 50% of section is still visible
-  // 1 = closes when section is fully visible (never closes)
-  // Example: 0.2 means closes when only 20% of the section is visible
-  const mouthCloseScrollThreshold = 0.2; // Set between 0 and 1
+    // Check if clicking the same page - just refresh
+    if (isInternal && currentPath === href) {
+      setIsMenuActive(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
+      return;
+    }
 
-      const rect = section.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
+    if (isDesktop && isInternal) {
+      // For internal links on desktop: use page transition with full page load
+      setIsPageTransition(true);
+      sessionStorage.setItem("pageTransition", "true");
+      
+      setTimeout(() => {
+        window.location.href = href;
+      }, 800);
+    } else if (isDesktop) {
+      // For external links on desktop: use page transition
+      setIsPageTransition(true);
+      sessionStorage.setItem("pageTransition", "true");
 
-      if (rect.top <= windowHeight && rect.bottom >= 0) {
-        const sectionHeight = rect.height;
-        const visibleTop = Math.max(0, windowHeight - rect.top);
-        const rawProgress = (visibleTop / sectionHeight - 0.8) / 0.3; // Start later (e.g., 0.7) and finish faster (e.g., /0.2)
-        // Clamp progress between 0 and 1
-        const progress = Math.min(1, Math.max(0, rawProgress));
-
-        if (progress >= lockThreshold && rawProgress < closeThreshold) {
-          setMouthProgress(lockThreshold);
-          setMouthLocked(true);
-        } else if (rawProgress >= closeThreshold) {
-          setMouthProgress(lockThreshold);
-          setMouthLocked(false);
+      setTimeout(() => {
+        if (href.startsWith("http")) {
+          window.open(href, "_blank");
+          sessionStorage.removeItem("pageTransition");
+          setIsPageTransition(false);
+          setIsMenuActive(false);
+        } else if (href.startsWith("#")) {
+          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+          sessionStorage.removeItem("pageTransition");
+          setIsPageTransition(false);
+          setIsMenuActive(false);
         } else {
-          setMouthProgress(progress);
-          setMouthLocked(false);
+          window.location.href = href;
         }
-      } else if (rect.top > windowHeight) {
-        setMouthProgress(0);
-        setMouthLocked(false);
-      } else {
-        // Calculate how much of the section is visible (0 = not visible, 1 = fully visible)
-        const section = mouthSectionRef.current;
-        if (section) {
-          const rect = section.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          const sectionHeight = rect.height;
-          // Amount of section visible in viewport
-          const visible = Math.max(0, Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0));
-          const visibleRatio = visible / sectionHeight;
-          if (visibleRatio < mouthCloseScrollThreshold) {
-            setMouthProgress(0);
-            setMouthLocked(false);
-          } else {
-            setMouthProgress(0);
-            setMouthLocked(false);
-          }
-        } else {
-          setMouthProgress(0);
-          setMouthLocked(false);
-        }
-      }
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  // Mouse move effect for mouth overlays after lock
-  useEffect(() => {
-    if (!mouthLocked) return;
-    const section = mouthSectionRef.current;
-    if (!section) return;
-
-    // Mouse move handler: map Y position to mouth opening (0 = closed, 1 = open)
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = section.getBoundingClientRect();
-      const y = e.clientY - rect.top;
-      const progress = Math.min(1, Math.max(0, y / rect.height));
-      setMouseMouthProgress(progress);
-    };
-
-    // Mouse leave handler: reset to fully open when mouse leaves
-    const handleMouseLeave = () => {
-      setMouseMouthProgress(1);
-    };
-
-    section.addEventListener("mousemove", handleMouseMove);
-    section.addEventListener("mouseleave", handleMouseLeave);
-    return () => {
-      section.removeEventListener("mousemove", handleMouseMove);
-      section.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, [mouthLocked]);
-
-
-
-// Handle link clicks with page transition
-
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-  e.preventDefault();
-  const isDesktop = window.innerWidth >= 768;
-  const isInternal = href.startsWith('/');
-  
-  if (isDesktop) {
-    setIsPageTransition(true);
-    sessionStorage.setItem('pageTransition', 'true');
-    
-    setTimeout(() => {
-      if (href.startsWith('http')) {
-        window.open(href, '_blank');
-        sessionStorage.removeItem('pageTransition');
-        setIsPageTransition(false);
-        setIsMenuActive(false);
-      } else if (href.startsWith('#')) {
-        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-        sessionStorage.removeItem('pageTransition');
-        setIsPageTransition(false);
-        setIsMenuActive(false);
+      }, 800);
+    } else {
+      // Mobile behavior
+      setIsMenuActive(false);
+      if (href.startsWith("http")) {
+        window.open(href, "_blank");
+      } else if (href.startsWith("#")) {
+        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
       } else if (isInternal) {
-        // Don't close menu here - let the new page handle it
         navigate(href);
       } else {
         window.location.href = href;
       }
-    }, 800);
-  } else {
-    // Mobile behavior
-    setIsMenuActive(false);
-    if (href.startsWith('http')) {
-      window.open(href, '_blank');
-    } else if (href.startsWith('#')) {
-      document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-    } else if (isInternal) {
-      navigate(href);
-    } else {
-      window.location.href = href;
     }
-  }
-};
+  };
 
-  // GSAP ScrollTrigger animation for images
+  // GSAP scroll animation for komparacija section
+
   useEffect(() => {
     // Wait a bit for DOM to be fully ready
     let animation: {
       scrollTrigger?: ScrollTrigger | null;
-      lenisKomparacija?: Lenis | null;
     } | null;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     const initAnimation = () => {
       gsap.registerPlugin(ScrollTrigger);
 
-      const lenisKomparacija = new Lenis();
-      lenisKomparacija.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenisKomparacija.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
-
       // ADJUST: Final X and Y positions for each image after animation completes
       // [x, y] where x controls horizontal spacing, y controls vertical position
       // More negative Y = higher up, more positive Y = lower down
       const komparacijaFinalPosition = [
-        [-240, -15], // Image 1: far left
-        [-120, -5], // Image 2: mid left
-        [20, -5], // Image 3: mid right
-        [140, -15], // Image 4: far right
+        [-180, -55], // Image 1: far left
+        [-250, 25], // Image 2: mid left
+        [40, 0], // Image 3: mid right
+        [165, -100], // Image 4: far right
       ];
 
       // ADJUST: Initial rotation for each image (in degrees)
@@ -355,7 +258,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         },
       });
 
-      return { scrollTrigger, lenisKomparacija };
+      return { scrollTrigger };
     };
 
     timeout = setTimeout(() => {
@@ -366,13 +269,10 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       clearTimeout(timeout);
       if (animation) {
         if (animation.scrollTrigger) animation.scrollTrigger.kill();
-        if (animation.lenisKomparacija) animation.lenisKomparacija.destroy();
-        gsap.ticker.remove((time) => {
-          if (animation && animation.lenisKomparacija) animation.lenisKomparacija.raf(time * 1000);
-        });
       }
     };
   }, []);
+
 
   // Folder hover animation (no click handler for navigation)
   useEffect(() => {
@@ -386,10 +286,40 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       gsap.set(folderWrappers, { y: isMobile ? 0 : 25 });
     }
     setInitialPositions();
-    const mouseEnterHandlers: Array<{ folder: Element; mouseEnterHandler: EventListener }> = [];
-    const mouseLeaveHandlers: Array<{ folder: Element; mouseLeaveHandler: EventListener }> = [];
+    const mouseEnterHandlers: Array<{
+      folder: Element;
+      mouseEnterHandler: EventListener;
+    }> = [];
+    const mouseLeaveHandlers: Array<{
+      folder: Element;
+      mouseLeaveHandler: EventListener;
+    }> = [];
+    const clickHandlers: Array<{
+      folder: Element;
+      clickHandler: EventListener;
+    }> = [];
     folders.forEach((folder, index) => {
       const previewImages = folder.querySelectorAll(".folder-preview-img");
+      
+      // Click handler for navigation
+      const clickHandler = (e: Event) => {
+        const target = folder as HTMLElement;
+        const link = target.getAttribute("data-link");
+        const mailto = target.getAttribute("data-mailto");
+        
+        if (mailto) {
+          window.location.href = `mailto:${mailto}`;
+        } else if (link) {
+          if (link.startsWith("http")) {
+            window.open(link, "_blank");
+          } else {
+            window.location.href = link;
+          }
+        }
+      };
+      folder.addEventListener("click", clickHandler);
+      clickHandlers.push({ folder, clickHandler });
+      
       const mouseEnterHandler = () => {
         if (isMobile) return;
         folders.forEach((siblingFolder) => {
@@ -466,12 +396,16 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       mouseLeaveHandlers.forEach(({ folder, mouseLeaveHandler }) => {
         folder.removeEventListener("mouseleave", mouseLeaveHandler);
       });
+      clickHandlers.forEach(({ folder, clickHandler }) => {
+        folder.removeEventListener("click", clickHandler);
+      });
     };
-  }, []);
+  }, [navigate]);
 
   // ========================================
   // HORIZONTAL SCROLL ANIMATION
   // ========================================
+
   useEffect(() => {
     const container = horizontalScrollRef.current;
     if (!container) return;
@@ -483,9 +417,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     const initDelay = 200;
 
     const timeoutId = setTimeout(() => {
-
       const scrollTrigger = ScrollTrigger.create({
-     
         trigger: container,
 
         start: "top top",
@@ -517,8 +449,10 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           const progress = self.progress;
           const moveDistance = window.innerWidth * 1;
 
-          gsap.set(panels, {
+          gsap.to(panels, {
             x: -progress * moveDistance,
+            duration: 0,
+            overwrite: true,
           });
         },
       });
@@ -535,57 +469,63 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     };
   }, []);
 
- // ========================================
+  
+  
+  // ========================================
   // PARALLAX GALLERY TEXT OVER IMAGE ANIMATION
   // ========================================
   useEffect(() => {
     const initDelay = 300;
-    
-    const timeoutId = setTimeout(() => {
-      const parallaxSection = document.querySelector('.parallax-gallery');
-      const textElement = document.querySelector('.parallax-gallery-text h3');
-      const imageElement = document.querySelector('.parallax-gallery-image img');
-      const captionElement = document.querySelector('.parallax-gallery-caption');
-      
-      if (!parallaxSection || !textElement || !imageElement || !captionElement) return;
 
-     
-      const OVERLAY_COLOR = 'rgba(255, 124, 95, 0.8)'; // Last number sets the opacity
+    const timeoutId = setTimeout(() => {
+      const parallaxSection = document.querySelector(".parallax-gallery");
+      const textElement = document.querySelector(".parallax-gallery-text h3");
+      const imageElement = document.querySelector(
+        ".parallax-gallery-image img"
+      );
+      const captionElement = document.querySelector(
+        ".parallax-gallery-caption"
+      );
+
+      if (!parallaxSection || !textElement || !imageElement || !captionElement)
+        return;
+
+      const OVERLAY_COLOR = "var(--salmon)";
 
       // Create parallax effect for image (moves up slower)
       gsap.to(imageElement, {
         y: -150, // Moves up as you scroll down
-        ease: 'none',
+        ease: "none",
         scrollTrigger: {
           trigger: parallaxSection,
-          start: 'top bottom',
-          end: 'bottom top',
+          start: "top bottom",
+          end: "bottom top",
           scrub: 1,
-        }
+        },
       });
 
       // Create parallax effect for caption (moves down slower)
       gsap.to(captionElement, {
         y: 150, // Moves down slower than scroll
-        ease: 'none',
+        ease: "none",
         scrollTrigger: {
           trigger: parallaxSection,
-          start: 'top bottom',
-          end: 'bottom top',
+          start: "top bottom",
+          end: "bottom top",
           scrub: 1,
-        }
+        },
       });
 
       // Animate text color with sharp color change based on image overlap
       const colorTrigger = ScrollTrigger.create({
         trigger: parallaxSection,
-        start: 'top bottom',
-        end: 'bottom top',
+        start: "top bottom",
+        end: "bottom top",
         scrub: 0.5, // Smooth scrubbing
         onUpdate: () => {
           const textRect = textElement.getBoundingClientRect();
           const imageRect = imageElement.getBoundingClientRect();
-          
+
           // Check if there's any overlap
           const isOverlapping = !(
             textRect.right < imageRect.left ||
@@ -594,23 +534,25 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
             textRect.top > imageRect.bottom
           );
 
-          
-          
           if (isOverlapping) {
             // Calculate the overlap boundaries
             const overlapTop = Math.max(textRect.top, imageRect.top);
             const overlapBottom = Math.min(textRect.bottom, imageRect.bottom);
             const overlapLeft = Math.max(textRect.left, imageRect.left);
             const overlapRight = Math.min(textRect.right, imageRect.right);
-            
+
             // Calculate percentages for vertical gradient
-            const topPercent = ((overlapTop - textRect.top) / textRect.height) * 100;
-            const bottomPercent = ((overlapBottom - textRect.top) / textRect.height) * 100;
-            
-            // Calculate percentages for horizontal gradient  
-            const leftPercent = ((overlapLeft - textRect.left) / textRect.width) * 100;
-            const rightPercent = ((overlapRight - textRect.left) / textRect.width) * 100;
-            
+            const topPercent =
+              ((overlapTop - textRect.top) / textRect.height) * 100;
+            const bottomPercent =
+              ((overlapBottom - textRect.top) / textRect.height) * 100;
+
+            // Calculate percentages for horizontal gradient
+            const leftPercent =
+              ((overlapLeft - textRect.left) / textRect.width) * 100;
+            const rightPercent =
+              ((overlapRight - textRect.left) / textRect.width) * 100;
+
             // Build gradient that colors only the overlapping area with sharp transitions
             const gradient = `
               linear-gradient(to bottom,
@@ -630,33 +572,33 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                 var(--black) 100%
               )
             `;
-            
-            gsap.to(textElement, { 
+
+            gsap.to(textElement, {
               backgroundImage: gradient,
-              backgroundClip: 'text',
-              webkitBackgroundClip: 'text',
-              webkitTextFillColor: 'transparent',
-              backgroundBlendMode: 'multiply',
+              backgroundClip: "text",
+              webkitBackgroundClip: "text",
+              webkitTextFillColor: "transparent",
+              backgroundBlendMode: "multiply",
               duration: 0.1,
-              ease: 'none'
+              ease: "none",
             });
           } else {
             // Reset to normal black text with smooth transition
-            gsap.to(textElement, { 
-              backgroundImage: 'none',
-              backgroundClip: 'unset',
-              webkitBackgroundClip: 'unset',
-              webkitTextFillColor: 'unset',
-              color: 'var(--black)',
+            gsap.to(textElement, {
+              backgroundImage: "none",
+              backgroundClip: "unset",
+              webkitBackgroundClip: "unset",
+              webkitTextFillColor: "unset",
+              color: "var(--black)",
               duration: 0.1,
-              ease: 'none'
+              ease: "none",
             });
           }
-        }
+        },
       });
 
       return () => {
-        ScrollTrigger.getAll().forEach(trigger => {
+        ScrollTrigger.getAll().forEach((trigger) => {
           if (trigger.vars.trigger === parallaxSection) {
             trigger.kill();
           }
@@ -668,6 +610,8 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       clearTimeout(timeoutId);
     };
   }, []);
+
+
 
   return (
     <>
@@ -694,16 +638,16 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            home
+            <span className="serif">h</span>ome
           </a>
           <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            about
+            <span className="serif">a</span>bout
           </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            work
+            <span className="serif">w</span>ork
           </a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
-            contact
+            <span className="serif">c</span>ontact
           </a>
         </div>
       </nav>
@@ -715,7 +659,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           <div className="hero-grid">
             <div className="hero-grid-header">
               <h1 style={{ position: "relative" }}>
-                <span className="serif">m</span>irko
+                <span className="serif">m</span>irko.
                 <img
                   src="/nier.gif"
                   alt=""
@@ -725,7 +669,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                     width: "6.5rem",
                     height: "6.5rem",
                     position: "absolute",
-                    right: "21rem",
+                    left: "10.8rem",
                     top: "0.5rem",
                   }}
                 />
@@ -734,38 +678,40 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
             <div className="hero-grid-text">
               <p>
                 Hi. I'm a{" "}
-                <span className="colored-background-variant-1">code-based</span>{" "}
-                web developer with a passion for interactive and{" "}
-                <span className="colored-background-variant-1">fun</span> web
+                <span className="salmon-background">code-based</span>{" "}
+                web developer with a passion for{" "}
+                <span className="serif">fun</span> web
                 experiences.
               </p>
             </div>
             <div className="hero-grid-cta">
-              <button
-                className="blog-article-button"
+              <a
+                className="link"
                 style={{ fontSize: "1.2rem" }}
                 onClick={() =>
                   (window.location.href = "mailto:mirkomimap@gmail.com")
                 }
               >
-                GET IN TOUCH
-              </button>
+                LET'S TALK.   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
+            <path d="M18 6L6 18"/>
+            <path d="M8 6h10v10"/>
+          </svg>
+              </a>
             </div>
           </div>
         </div>
       </section>
-
       {/* Scroll Animation Section */}
       <section className="komparacija">
         <div className="komparacija-header">
           <h1>
-            I build digital spaces meant to be{" "}
+            I build websites meant to be{" "}
             <span className="serif">explored.</span>
           </h1>
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
-            <img src="/circle1.jpg" alt="Picture 1" />
+            <img src="/circle5.jpg" alt="Picture 1" />
           </div>
           <div className="komparacija-img">
             <img src="/nier.gif" alt="Picture 2" />
@@ -774,7 +720,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
             <img src="/circle2.jpg" alt="Picture 3" />
           </div>
           <div className="komparacija-img">
-            <img src="/circle4.jpg" alt="Picture 4" />
+            <img src="/circle1.jpg" alt="Picture 4" />
           </div>
         </div>
       </section>
@@ -801,17 +747,17 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           <section className="horizontal-panel panel-black panel-stacked">
             <figure>
               <a
-                href="https://example.com/charity"
+                href="https://example.com/screening"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle1.jpg" alt="Screening project" />
+                <img src="/circle3.jpg" alt="Screening project" />
               </a>
               <figcaption>placeholder 01.</figcaption>
             </figure>
             <figure>
               <a
-                href="https://example.com/school"
+                href="https://example.com/residency"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -823,13 +769,13 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
 
           {/* Panel 3 - One Big Image */}
           <section className="horizontal-panel panel-black panel-big-image">
-            <figure>
+            <figure className="panel-big-image figure1">
               <a
                 href="https://example.com/jony-ive"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle3.jpg" alt="Featured project" />
+                <img src="/circle4.jpg" alt="Featured project" />
               </a>
               <figcaption>placeholder 03.</figcaption>
             </figure>
@@ -847,121 +793,50 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
               </a>
               <figcaption>placeholder 04.</figcaption>
             </figure>
-            
-            <a
-              href="/work"
-              className="link"
-            >
-             All of my works &#8594;
+
+            <a href="/work" className="link-alt">
+              All of my work   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
+            <path d="M18 6L6 18"/>
+            <path d="M8 6h10v10"/>
+          </svg>
             </a>
           </section>
         </div>
       </div>
 
-      {/* Styled header with svgs and mouth animation */}
-      <section
-        ref={mouthSectionRef}
-        style={{
-          width: "100vw",
-          height: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          position: "sticky",
-          top: 0,
-          zIndex: 11,
-        }}
-      >
-        {/* White background layer */}
-        <div
-          style={{
-            zIndex: 1,
-          }}
-        />
-        {/* Mouth overlays and header content above grain */}
-        <div
-          style={{
-            position: "relative",
-            width: "100vw",
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 11,
-          }}
-        >
-          <div
-            className="mouth-overlay mouth-top"
-            style={
-              mouthLocked
-                ? {
-                    transform: `rotate(${
-                      -45 * mouthProgress + (-2.5 + 5 * mouseMouthProgress)
-                    }deg)`,
-                    transformOrigin: "left center",
-                  }
-                : {
-                    transform: `rotate(${-45 * mouthProgress}deg)`,
-                  }
-            }
-          />
-          <div
-            className="mouth-overlay mouth-bottom"
-            style={
-              mouthLocked
-                ? {
-                    transform: `rotate(${
-                      45 * mouthProgress + (-2.5 + 5 * mouseMouthProgress)
-                    }deg)`,
-                    transformOrigin: "left center",
-                  }
-                : {
-                    transform: `rotate(${45 * mouthProgress}deg)`,
-                  }
-            }
-          />
-          <div
-            style={{
-              position: "relative",
-              maxWidth: "900px",
-              marginRight: "-10%",
-              textAlign: "right",
-              zIndex: 11,
-            }}
-          >
-            <h3 style={{ position: "relative", zIndex: 11 }}>
-              {/* First text with moving images parallax */}I have a love for
-              optimizing the{" "}
-              <span className="colored-background-variant-1">f*#+</span> out of
-              user interfaces, making sure that good design does not compromise
-              performance.
-              <img
-                  src="/nier.gif"
-                  alt=""
-                  className="earth-gif"
-                  style={{
-                    display: "block",
-                    width: "8rem",
-                    height: "8rem",
-                    position: "absolute",
-                    right: "-9rem",
-                    bottom: "18.5rem",
-                  }}
-                />
-            </h3>
-          </div>
-        </div>
+      {/* Continuation of the horizontal scroll - vertical */}
+      <section className="vertical-continuation">
+        <section className="horizontal-panel panel-black panel-big-image">
+          <figure className="vertical-continuation-figure-small panel-big-image figure2">
+            <a
+              href="https://example.com/placeholder"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/circle1.jpg" alt="Featured project" />
+            </a>
+            <figcaption>placeholder 05.</figcaption>
+          </figure>
+        </section>
+        <section className="horizontal-panel panel-black panel-big-image">
+          <figure className="vertical-continuation-figure-small panel-big-image figure3">
+            <a
+              href="https://example.com/featured-project"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/circle6.jpg" alt="Featured project" />
+            </a>
+            <figcaption>placeholder 06.</figcaption>
+          </figure>
+        </section>
       </section>
 
-      {/* Second text with moving images parallax */}
-      <section
-        className="parallax-gallery"
-        style={{ marginTop: "60vh" }} // Adjust this value to control when the parallax appears after mouth closes
-      >
+      {/* Grid background in white with parallax effect. */}
+      <section className="parallax-gallery">
         <div
           style={{
-            zIndex: 12,
+            zIndex: 11,
             position: "absolute",
             top: 0,
             left: 0,
@@ -971,22 +846,18 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         />
         <div
           className="parallax-gallery-inner"
-          style={{ position: "relative", zIndex: 12 }}
+          style={{ position: "relative", zIndex: 11 }}
         >
           <div className="parallax-gallery-text">
             <h3>
-              A coding approach gives me the
-              flexibility to differently tackle any challenges on the project,
-              blending efficiency with{" "}
-              creativity.
+              When figuring out <span className="serif">your</span> project, we can start from scratch or pick out a framework to speed things up, all up to you.
             </h3>
           </div>
           <div className="parallax-gallery-image">
             <img src="/circle5.jpg" alt="Gallery placeholder" />
           </div>
           <p className="parallax-gallery-caption">
-            I use modern libraries and frameworks to develop the best solution
-            for your project.
+            I'll go from scratch with <span className="salmon-background">TypeScript</span> combined with <span className="serif">GSAP</span> and <span className="salmon-background">React</span>, or I'll use the <span className="serif">Vue</span> or <span className="salmon-background">Laravel</span> frameworks (For those who prefer faster delivery).
           </p>
         </div>
       </section>
@@ -999,19 +870,18 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
             "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
             "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
           backgroundSize: "50px 50px",
-          backgroundPosition: "-1px -1px",
-          backgroundColor: "var(--white)",
         }}
       >
         <h1
           style={{
             marginLeft: "3rem",
             marginTop: "1rem",
+            fontWeight: 700,
             fontFamily: "Playfair Display, serif",
             color: "var(--black)",
           }}
         >
-          Made by <span className="serif">m</span>irko.
+        &copy; 2026 - <span className="serif">m</span>irko
         </h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
@@ -1037,7 +907,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           </div>
           <div
             className="folder variant-2"
-            data-link="https://github.com/m3Mza"
+            data-link="https://github.com/m3Mza/portfolio"
           >
             <div className="folder-preview">
               <div className="folder-preview-img"></div>
@@ -1086,7 +956,9 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                 <p>04</p>
               </div>
               <div className="folder-name">
-                <h1>contact</h1>
+                <h1>CONTACT
+                  
+                </h1>
               </div>
             </div>
           </div>

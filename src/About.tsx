@@ -43,6 +43,17 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     e.preventDefault()
     const isDesktop = window.innerWidth >= 768
     const isInternal = href.startsWith('/')
+    const currentPath = window.location.pathname
+
+    // Check if clicking the same page - just refresh
+    if (isInternal && currentPath === href) {
+      setIsMenuActive(false)
+      setTimeout(() => {
+        window.location.reload()
+      }, 100)
+      return
+    }
+
     if (isDesktop) {
       setIsPageTransition(true)
       sessionStorage.setItem('pageTransition', 'true')
@@ -241,16 +252,16 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            home
+            <span className="serif">h</span>ome
           </a>
           <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            about
+            <span className="serif">a</span>bout
           </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            work
+            <span className="serif">w</span>ork
           </a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
-            contact
+            <span className="serif">c</span>ontact
           </a>
         </div>
       </nav>
@@ -258,9 +269,6 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       {/* About Section */}
       <section className="about-section">
         <div className="about-content">
-          <div className="about-image">
-            <img src="/mirko3.jpeg" alt="Mirko" />
-          </div>
           <div className="about-title">
             <h1>
               <span className="serif">a</span>bout.
@@ -272,8 +280,8 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                   display: "inline-block",
                   width: "10.1rem",
                   height: "10.1rem",
-                  left: "45.5rem",
-                  top: "16.5rem",
+                  left: "39.6rem",
+                  top: "7.5rem",
                   position: "absolute",
                 }}
               />
@@ -281,29 +289,54 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           </div>
           <div className="about-text">
             <p>
-              I'm a cook turned web developer. I have a BSc in{" "}
-              <span className="serif">Software Engineering</span> which I got at
-              the University of Novi Sad, where I picked up a love for making
-              fun websites. You can contact me at{" "}
-              <span className="colored-background-variant-1">
-                mirkomimap@gmail.com
-              </span>
+              I'm a cook turned web developer. I have a BSc in Software
+              Engineering which I got at the University of Novi Sad, where I
+              picked up a love for making fun websites, focusing mainly on
+              JavaScript and all its' bells and whistles (GSAP, React,
+              TypeScript, Vue, Node etc..) but I also dabble in PHP from time to
+              time. You can contact me at
             </p>
+            <a
+              href="mailto:mirkomimap@gmail.com"
+              className="link"
+              style={{
+                textAlign: "justify",
+                gap: "0.5rem",
+                marginLeft: "-1rem",
+                marginTop: "1rem",
+                textDecoration: "none",
+                color: "inherit",
+                cursor: "pointer",
+                fontSize: "1.4rem",
+              }}
+            >
+              mirkomimap@gmail.com
+              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '6px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
+            <path d="M18 6L6 18"/>
+            <path d="M8 6h10v10"/>
+          </svg>
+            </a>
           </div>
         </div>
       </section>
 
       {/* Footer with Folders */}
-      <div className="folders">
+      <div className="folders" style={{
+        backgroundImage:
+              "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
+              "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
+            backgroundSize: "50px 50px",
+      }}>
         <h1
           style={{
             marginLeft: "3rem",
             marginTop: "1rem",
+            fontWeight: 700,
             fontFamily: "Playfair Display, serif",
             color: "var(--black)",
           }}
         >
-          Made by <span className="serif">m</span>irko.
+          &copy; 2026 - <span className="serif">m</span>irko
         </h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
@@ -329,7 +362,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           </div>
           <div
             className="folder variant-2"
-            data-link="https://github.com/m3Mza"
+            data-link="https://github.com/m3Mza/portfolio"
           >
             <div className="folder-preview">
               <div className="folder-preview-img"></div>
@@ -378,7 +411,9 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                 <p>04</p>
               </div>
               <div className="folder-name">
-                <h1>contact</h1>
+                <h1>
+                  CONTACT
+                </h1>
               </div>
             </div>
           </div>

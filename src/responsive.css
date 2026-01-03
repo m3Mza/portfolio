@@ -108,7 +108,7 @@
     justify-content: center;
     position: relative;
     z-index: 5;
-    background-color: var(--accent-purple);
+    background-color: serif;
     padding: 1rem 0;
   }
   .vinyl-container {
@@ -505,7 +505,7 @@ p {
   justify-content: flex-end;
 }
 
-.blog-article-button {
+.button {
   align-self: flex-start;
   padding: 0.5rem 1rem;
   background-color: var(--accent-yellow);
@@ -619,7 +619,7 @@ p {
   justify-content: center;
   position: relative;
   z-index: 5;
-  background-color: var(--accent-purple);
+  background-color: serif;
 }
 
 .vinyl-container {
