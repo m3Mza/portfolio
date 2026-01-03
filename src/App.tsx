@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import "./responsive.css";
 import Lenis from "lenis";
@@ -302,7 +302,7 @@ function App() {
       const previewImages = folder.querySelectorAll(".folder-preview-img");
       
       // Click handler for navigation
-      const clickHandler = (e: Event) => {
+      const clickHandler = () => {
         const target = folder as HTMLElement;
         const link = target.getAttribute("data-link");
         const mailto = target.getAttribute("data-mailto");
@@ -517,7 +517,7 @@ function App() {
       });
 
       // Animate text color with sharp color change based on image overlap
-      const colorTrigger = ScrollTrigger.create({
+      ScrollTrigger.create({
         trigger: parallaxSection,
         start: "top bottom",
         end: "bottom top",

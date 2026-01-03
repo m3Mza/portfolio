@@ -386,7 +386,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           img.ondragstart = () => false
           item.appendChild(img)
 
-          item.addEventListener('click', (e) => {
+          item.addEventListener('click', () => {
             if (!mouseHasMovedRef.current && !isExpanded) {
               expandItem(item)
             }
@@ -412,7 +412,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       setIsExpanded(true)
       activeItemRef.current = item
       activeItemIdRef.current = item.id
-      expandedItemRef.current = item
+      expandedItemRef.current = item as HTMLDivElement
       setCanDrag(false)
       if (container) container.style.cursor = 'auto'
 
