@@ -224,6 +224,10 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
   const lastDragTimeRef = useRef(Date.now())
   const titleWordsRef = useRef<HTMLSpanElement[]>([])
   const titleSplitRef = useRef<{ words: HTMLSpanElement[], revert: () => void } | null>(null)
+  const titleAnimationRef = useRef<gsap.core.Tween | null>(null)
+  const descAnimationRef = useRef<gsap.core.Tween | null>(null)
+  const linkAnimationRef = useRef<gsap.core.Tween | null>(null)
+  const isExpandAnimationCompleteRef = useRef(false)
   
   const itemCount = 20
   const itemGap = 150
@@ -270,7 +274,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           }
         }
         
-        gsap.set(titleWordsRef.current, { y: '100%' })
+        gsap.set(titleWordsRef.current, { y: '150%' })
       }
     }
 
@@ -296,16 +300,16 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       gsap.to(descElement, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        delay: 0.6,
+        duration: 0.5,
+        delay: 0.2,
         ease: 'power3.out'
       })
       
       gsap.to(linkElement, {
         opacity: 1,
         y: 0,
-        duration: 0.8,
-        delay: 0.8,
+        duration: 0.7,
+        delay: 0.4,
         ease: 'power3.out'
       })
     }
@@ -325,7 +329,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
     const animateTitleIn = () => {
       gsap.to(titleWordsRef.current, {
         y: '0%',
-        duration: 1,
+        duration: 0.9,
         ease: 'power3.out',
         stagger: 0.1
       })
@@ -333,8 +337,8 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
 
     const animateTitleOut = () => {
       gsap.to(titleWordsRef.current, {
-        y: '-100%',
-        duration: 0.5,
+        y: '-150%',
+        duration: 0.7,
         ease: 'power3.out',
         stagger: 0.05
       })
@@ -410,6 +414,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
 
     const expandItem = (item: HTMLElement) => {
       setIsExpanded(true)
+      isExpandAnimationCompleteRef.current = false
       activeItemRef.current = item
       activeItemIdRef.current = item.id
       expandedItemRef.current = item as HTMLDivElement
@@ -464,8 +469,26 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       const targetWidth = viewportWidth * 0.4
       const targetHeight = targetWidth * 1.2
 
-      gsap.delayedCall(0.5, animateTitleIn)
-      gsap.delayedCall(0.6, animateProjectInfoIn)
+      titleAnimationRef.current = gsap.delayedCall(0.7, animateTitleIn)
+      descAnimationRef.current = gsap.delayedCall(0.8, () => {
+        const descElement = document.querySelector('.project-description')
+        const linkElement = document.querySelector('.project-link')
+        
+        gsap.to(descElement, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out'
+        })
+        
+        linkAnimationRef.current = gsap.to(linkElement, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          delay: 0.2,
+          ease: 'power3.out'
+        })
+      })
 
       gsap.fromTo(
         expandedItem,
@@ -481,13 +504,30 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           x: 0,
           y: 0,
           duration: 1,
-          ease: 'hop'
+          ease: 'hop',
+          onComplete: () => {
+            isExpandAnimationCompleteRef.current = true
+          }
         }
       )
     }
 
     const closeExpandedItem = () => {
-      if (!expandedItemRef.current || !originalPositionRef.current) return
+      if (!expandedItemRef.current || !originalPositionRef.current || !isExpandAnimationCompleteRef.current) return
+
+      // Kill any pending animations
+      if (titleAnimationRef.current) {
+        titleAnimationRef.current.kill()
+        titleAnimationRef.current = null
+      }
+      if (descAnimationRef.current) {
+        descAnimationRef.current.kill()
+        descAnimationRef.current = null
+      }
+      if (linkAnimationRef.current) {
+        linkAnimationRef.current.kill()
+        linkAnimationRef.current = null
+      }
 
       animateTitleOut()
       animateProjectInfoOut()
@@ -497,7 +537,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         if (projectTitleRef.current) {
           projectTitleRef.current.innerHTML = ''
         }
-      }, 1100)
+      }, 450)
       
       overlay.classList.remove('active')
       const originalRect = originalPositionRef.current.rect
@@ -709,16 +749,16 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       <nav className={`nav-spotlight-menu ${isMenuActive ? 'active' : ''} ${isPageTransition ? 'page-transition' : ''} ${isReturning ? 'returning' : ''}`}>
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, '/')}><span className="serif">h</span>ome</a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}><span className="serif">a</span>bout</a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}><span className="serif">w</span>ork</a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}><span className="serif">c</span>ontact</a>
+          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>home</a>
+          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>about</a>
+          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>work</a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>contact</a>
         </div>
       </nav>
 
       {/* Static Header */}
       <div className="blog-header-sticky">
-        <h1><span className="serif">w</span>ork.
+        <h1>work.
         <img
                   src="/nier.gif"
                   alt=""
@@ -728,7 +768,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                     width: "2.7rem",
                     height: "2.7rem",
                     position: "absolute",
-                    left:"0.6rem",
+                    left:"0.8rem",
                     top: "0.3rem",
                   }}
                 /></h1>
@@ -749,7 +789,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       <div className="project-info">
         <p className="project-description"></p>
         <a className="project-link" href="#" target="_blank" rel="noopener noreferrer">
-          Visit Project 
+          VISIT 
           <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '6px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
             <path d="M18 6L6 18"/>
             <path d="M8 6h10v10"/>

@@ -130,23 +130,22 @@ mask-repeat: no-repeat;
 }
 
 .komparacija-img:nth-child(1) {
-  width: 350px;
+  width: 380px;
   height: 200px;
 }
 .komparacija-img:nth-child(2) {
-  width: 320px;
-  height: 320px;
+  width: 300px;
+  height: 300px;
 }
 .komparacija-img:nth-child(3) {
-  width: 250px;
-  height: 330px;
+  width: 380px;
+  height: 310px;
 }
 
 .komparacija-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 2rem;
 }
 
 
@@ -234,8 +233,8 @@ mask-repeat: no-repeat;
   font-size: 3.1rem;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
 }
 
 .panel-stacked figure:hover figcaption {
@@ -294,8 +293,8 @@ mask-repeat: no-repeat;
   font-size: 3.1rem;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
 }
 
 .panel-big-image figure:hover figcaption {
@@ -338,6 +337,29 @@ mask-repeat: no-repeat;
   90% { transform: translate(-3%, 2%); }
 }
 
+/* Figure hover description */
+.figure-description {
+  position: absolute;
+  top: 5%;
+  left: 0;
+  color: var(--black);
+  font-size: 1.4rem;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 500;
+  text-align: left;
+  padding: 1.5rem 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  max-width: 60%;
+  line-height: 1.4;
+}
+
+figure:hover .figure-description {
+  opacity: 1;
+}
+
 
 /* Continuation to horizontal scroll */
 
@@ -371,8 +393,8 @@ mask-repeat: no-repeat;
 }
 .vertical-continuation-figure-small figcaption {
   color: var(--white);
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -393,6 +415,7 @@ mask-repeat: no-repeat;
 .panel-stacked :nth-child(2)::after {
   background-color: var(--accent-yellow);
 }
+
 
 /* White grid with parallax effect */
 
@@ -442,10 +465,9 @@ mask-repeat: no-repeat;
 }
 
 .parallax-gallery-text h3 {
-  margin: 0 0 2vw 0;
-  text-align: justify;
   hyphens: auto;
-  min-width: 40vw;
+  text-align: justify;
+  min-width: 45vw;
   font-size: 2.7rem;
 }
 
@@ -463,8 +485,8 @@ mask-repeat: no-repeat;
   width: 45vw;
   height: auto;
   object-fit: fill;
-  margin-top: 45%;
-  margin-right: 81%;
+  margin-top: 40%;
+  margin-right: 79%;
 }
 
 .parallax-gallery-caption {
@@ -474,13 +496,120 @@ mask-repeat: no-repeat;
   margin: 0;
   text-align: justify;
   hyphens: auto;
-  min-width: 220px;
-  font-size: 1.3rem;
+  min-width: 255px;
+  font-size: 1.4rem;
   font-weight: 400;
   font-family: 'Playfair Display', serif;
 }
 
 
+/* FAQ Accordion Section */
+
+.faq-section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background-image: 
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-repeat: repeat;
+  z-index: 15;
+  position: relative;
+}
+
+.faq-container {
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.faq-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 400;
+  color: var(--black);
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.faq-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+
+
+.faq-question {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+
+.faq-number {
+  font-family: 'Archivo', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--black);
+  min-width: 2.5rem;
+}
+
+.faq-question h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.7rem;
+  font-weight: 400;
+  color: var(--black);
+  margin: 0;
+  flex: 1;
+  line-height: 1.3;
+}
+
+.faq-icon {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  color: var(--black);
+  min-width: 3rem;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.faq-icon.active {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: var(--salmon);
+  padding: 0 1rem 0 5rem;
+}
+
+.faq-answer.active {
+  max-height: 500px;
+  padding: 2rem 1rem 2rem 5rem;
+}
+
+.faq-answer p {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--black);
+  margin: 0;
+  letter-spacing: normal;
+  opacity: 1;
+}
 
 
 /* ======================
@@ -654,11 +783,10 @@ WORK SECTION
 .project-title p {
   position: relative;
   font-size: 2.7rem;
-  color: var(--salmon);
+  color: var(--black);
   font-weight: 600;
   overflow: hidden;
   display: inline-block;
-  font-family: 'Playfair Display', serif;
   padding: 0.5rem 1rem;
   line-height: 1.2;
 }
@@ -666,9 +794,10 @@ WORK SECTION
 .project-title p .word {
   position: relative;
   display: inline-block;
-  font-family: 'Playfair Display', serif;
+  font-family: 'Archivo', sans-serif;
   transform: translateY(0%);
   will-change: transform;
+  background-color: var(--salmon);
 }
 
 .project-info {
@@ -697,7 +826,7 @@ WORK SECTION
   padding: 0.5rem 1rem;
   margin-left: -0.5rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;

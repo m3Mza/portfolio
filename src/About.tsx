@@ -244,25 +244,13 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       </header>
 
       {/* Spotlight Menu Overlay */}
-      <nav
-        className={`nav-spotlight-menu ${isMenuActive ? "active" : ""} ${
-          isPageTransition ? "page-transition" : ""
-        } ${isReturning ? "returning" : ""}`}
-      >
+      <nav className={`nav-spotlight-menu ${isMenuActive ? 'active' : ''} ${isPageTransition ? 'page-transition' : ''} ${isReturning ? 'returning' : ''}`}>
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            <span className="serif">h</span>ome
-          </a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            <span className="serif">a</span>bout
-          </a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            <span className="serif">w</span>ork
-          </a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
-            <span className="serif">c</span>ontact
-          </a>
+          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>home</a>
+          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>about</a>
+          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>work</a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>contact</a>
         </div>
       </nav>
 
@@ -271,7 +259,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         <div className="about-content">
           <div className="about-title">
             <h1>
-              <span className="serif">a</span>bout.
+              <span >a</span>bout.
               <img
                 src="/nier.gif"
                 alt=""
@@ -289,11 +277,11 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
           </div>
           <div className="about-text">
             <p>
-              I'm a cook turned web developer. I have a BSc in Software
-              Engineering which I got at the University of Novi Sad, where I
+              I'm a cook turned web developer. I have a BSc in <span className="salmon-background">Software
+              Engineering</span> which I got at the University of Novi Sad, where I
               picked up a love for making fun websites, focusing mainly on
-              JavaScript and all its' bells and whistles (GSAP, React,
-              TypeScript, Vue, Node etc..) but I also dabble in PHP from time to
+              JavaScript and all its' bells and whistles (<span className="salmon-background">GSAP, React,
+              TypeScript, Vue, Node </span>) but I also dabble in PHP from time to
               time. You can contact me at
             </p>
             <a
@@ -330,13 +318,13 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
         <h1
           style={{
             marginLeft: "3rem",
-            marginTop: "1rem",
+            marginTop: "2rem",
             fontWeight: 700,
             fontFamily: "Playfair Display, serif",
             color: "var(--black)",
           }}
         >
-          &copy; 2026 - <span className="serif">m</span>irko
+         links.
         </h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
@@ -412,7 +400,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
               </div>
               <div className="folder-name">
                 <h1>
-                  CONTACT
+                  contact
                 </h1>
               </div>
             </div>

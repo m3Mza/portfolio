@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&display=swap');
 
 * {
     font-family: 'Playfair Display', serif;
@@ -39,29 +39,10 @@ p {
     letter-spacing: 1.8;
 }
 
-.serif {
-    font-family: 'Playfair Display', serif;
-    font-style: italic;
-}
-
-.serif h1 {
-  font-size: 4rem;
-}
-
-.serif h2 {
-  font-size: 4rem;
-}
-
-.serif p {
-  font-size: 1.4rem;
-  font-weight: 500;
-  letter-spacing: 1.8;
-}
-
 .salmon-background {
   color: var(--black);
   background-color: var(--salmon);
-  font-family: 'Inter', serif;
+  font-family: 'Archivo', serif;
   font-weight: 600;
 }
 
@@ -75,7 +56,7 @@ p {
   padding: 0.5rem 1rem;
   margin: 0 -0.25rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;
@@ -96,7 +77,7 @@ p {
   padding: 0.75rem 1.75rem;
   margin: 0 -0.25rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Archivo', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;
@@ -105,7 +86,7 @@ p {
 
 .link-alt:hover {
   color: var(--black);
-  box-shadow: inset 250px 0 0 0 var(--accent-yellow);
+  box-shadow: inset 290px 0 0 0 var(--accent-yellow);
 }
 
 
@@ -172,7 +153,7 @@ p {
   position: relative;
   z-index: 9999;
   outline: none;
-  font-family: 'Inter', serif;
+  font-family: 'Archivo', sans-serif;
 }
 
 .nav-menu-toggle:hover {
@@ -244,12 +225,12 @@ p {
 
 .nav-spotlight-links a {
   box-shadow: inset 0 0 0 0 var(--accent-yellow);
+  font-family: 'Archivo', sans-serif !important;
   color: var(--black);
   padding: 0.5rem 1rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Playfair Display', serif;
   font-size: 4rem;
-  font-weight: 400;
+  font-weight: 600;
   letter-spacing: -0.02em;
   transform: translateX(50px);
   opacity: 0;
@@ -266,7 +247,10 @@ p {
 
 .nav-spotlight-links a span {
   display: inline-block;
+  font-family: 'Archivo', sans-serif !important;
 }
+
+
 
 .nav-spotlight-links a:nth-child(1) {
   transition-delay: 0.4s;
@@ -347,8 +331,8 @@ a:link, a:visited, a:hover, a:active {
 
 .folders h1 {
   color: var(--white);
-  font-family: 'Playfair Display', serif;
-  font-weight: 400;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
 }
 
 
@@ -417,7 +401,6 @@ a:link, a:visited, a:hover, a:active {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 2rem;
 }
 
 .folders .folder-preview-img:nth-child(1) {
@@ -461,7 +444,7 @@ a:link, a:visited, a:hover, a:active {
 .folders .folder-index p {
   font-size: 0.875rem;
   font-weight: 400;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Archivo', sans-serif;
 }
 
 .folders .folder-name {
@@ -514,19 +497,17 @@ a:link, a:visited, a:hover, a:active {
 .folders .folder.variant-3 p,
 .folders .folder.variant-3 h1 {
   color: var(--black);
-  font-family: 'Inter', sans-serif;
-  font-weight: 600;
 }
 
 .folders .folder.disabled .folder-index,
 .folders .folder.disabled .folder-index::after,
 .folders .folder.disabled .folder-name {
-  background-color: var(--accent-dark-grey);
+  background-color: var(--accent-dark-grey) !important;
 }
 
 .folders .folder.disabled p, 
 .folders .folder.disabled h1 {
-  color: var(--black);
+  color: var(--black) !important;
 }
 
 .folders .row:nth-child(2) {

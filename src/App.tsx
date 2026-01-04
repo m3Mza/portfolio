@@ -42,12 +42,17 @@ function App() {
     return sessionStorage.getItem("pageTransition") === "true";
   });
   const [isReturning, setIsReturning] = useState(false);
+  const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
   const horizontalScrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
+  };
+
+  const toggleAccordion = (index: number) => {
+    setActiveAccordion(activeAccordion === index ? null : index);
   };
 
   // Check if we're coming from a page transition
@@ -152,7 +157,7 @@ function App() {
       const komparacijaFinalPosition = [
         [-180, -55], // Image 1: far left
         [-250, 25], // Image 2: mid left
-        [40, 0], // Image 3: mid right
+        [10, 0], // Image 3: mid right
         [165, -100], // Image 4: far right
       ];
 
@@ -449,10 +454,9 @@ function App() {
           const progress = self.progress;
           const moveDistance = window.innerWidth * 1;
 
-          gsap.to(panels, {
+          // Use gsap.set() for immediate updates - no tween creation
+          gsap.set(panels, {
             x: -progress * moveDistance,
-            duration: 0,
-            overwrite: true,
           });
         },
       });
@@ -523,6 +527,7 @@ function App() {
         end: "bottom top",
         scrub: 0.5, // Smooth scrubbing
         onUpdate: () => {
+          // Cache rect calculations for performance
           const textRect = textElement.getBoundingClientRect();
           const imageRect = imageElement.getBoundingClientRect();
 
@@ -573,25 +578,22 @@ function App() {
               )
             `;
 
-            gsap.to(textElement, {
+            // Use gsap.set() for instant updates - no tween creation
+            gsap.set(textElement, {
               backgroundImage: gradient,
               backgroundClip: "text",
               webkitBackgroundClip: "text",
               webkitTextFillColor: "transparent",
               backgroundBlendMode: "multiply",
-              duration: 0.1,
-              ease: "none",
             });
           } else {
-            // Reset to normal black text with smooth transition
-            gsap.to(textElement, {
+            // Reset to normal black text - use gsap.set() for instant updates
+            gsap.set(textElement, {
               backgroundImage: "none",
               backgroundClip: "unset",
               webkitBackgroundClip: "unset",
               webkitTextFillColor: "unset",
               color: "var(--black)",
-              duration: 0.1,
-              ease: "none",
             });
           }
         },
@@ -616,6 +618,11 @@ function App() {
   return (
     <>
       <div className="grain-overlay"></div>
+      <style>{`
+        .folder-work-white .folder-index::after {
+          background-color: var(--white) !important;
+        }
+      `}</style>
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
@@ -638,16 +645,16 @@ function App() {
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            <span className="serif">h</span>ome
+            <span >home</span>
           </a>
           <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            <span className="serif">a</span>bout
+            <span >about</span>
           </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            <span className="serif">w</span>ork
+            <span >work</span>
           </a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
-            <span className="serif">c</span>ontact
+            <span >contact</span>
           </a>
         </div>
       </nav>
@@ -659,7 +666,7 @@ function App() {
           <div className="hero-grid">
             <div className="hero-grid-header">
               <h1 style={{ position: "relative" }}>
-                <span className="serif">m</span>irko.
+                mirko.
                 <img
                   src="/nier.gif"
                   alt=""
@@ -669,7 +676,7 @@ function App() {
                     width: "6.5rem",
                     height: "6.5rem",
                     position: "absolute",
-                    left: "10.8rem",
+                    left: "11.5rem",
                     top: "0.5rem",
                   }}
                 />
@@ -677,11 +684,7 @@ function App() {
             </div>
             <div className="hero-grid-text">
               <p>
-                Hi. I'm a{" "}
-                <span className="salmon-background">code-based</span>{" "}
-                web developer with a passion for{" "}
-                <span className="serif">fun</span> web
-                experiences.
+                Hi. I'm a <span className="salmon-background"> code-based </span>web developer who makes websites <span className="salmon-background">f#*&#@g</span> cool.
               </p>
             </div>
             <div className="hero-grid-cta">
@@ -692,7 +695,7 @@ function App() {
                   (window.location.href = "mailto:mirkomimap@gmail.com")
                 }
               >
-                LET'S TALK.   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
+                  SAY HELLO.   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
             <path d="M18 6L6 18"/>
             <path d="M8 6h10v10"/>
           </svg>
@@ -705,8 +708,8 @@ function App() {
       <section className="komparacija">
         <div className="komparacija-header">
           <h1>
-            I build websites meant to be{" "}
-            <span className="serif">explored.</span>
+            Scroll down <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ai ai-ArrowDown"><path d="M12 20V4"/><path d="M5 13l7 7 7-7"/></svg> to{" "}
+            <span className="salmon-background">learn more.</span>
           </h1>
         </div>
         <div className="komparacija-slike">
@@ -723,113 +726,6 @@ function App() {
             <img src="/circle1.jpg" alt="Picture 4" />
           </div>
         </div>
-      </section>
-
-      {/* Horizontal Scroll Container */}
-      <div
-        ref={horizontalScrollRef}
-        className="horizontal-scroll-container"
-        style={{ zIndex: 10 }}
-      >
-        <div className="horizontal-panels">
-          {/* Panel 1 - Header */}
-          <section className="horizontal-panel panel-purple">
-            <div className="big-black-circle">
-              <h1 className="side-scroll-header">
-                Selected
-                <br />
-                <span className="serif">w</span>orks.
-              </h1>
-            </div>
-          </section>
-
-          {/* Panel 2 - Two Stacked Images */}
-          <section className="horizontal-panel panel-black panel-stacked">
-            <figure>
-              <a
-                href="https://example.com/screening"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/circle3.jpg" alt="Screening project" />
-              </a>
-              <figcaption>placeholder 01.</figcaption>
-            </figure>
-            <figure>
-              <a
-                href="https://example.com/residency"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/circle2.jpg" alt="Residency project" />
-              </a>
-              <figcaption>placeholder 02.</figcaption>
-            </figure>
-          </section>
-
-          {/* Panel 3 - One Big Image */}
-          <section className="horizontal-panel panel-black panel-big-image">
-            <figure className="panel-big-image figure1">
-              <a
-                href="https://example.com/jony-ive"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/circle4.jpg" alt="Featured project" />
-              </a>
-              <figcaption>placeholder 03.</figcaption>
-            </figure>
-          </section>
-
-          {/* Panel 4 - Two Stacked Images */}
-          <section className="horizontal-panel panel-black panel-stacked">
-            <figure>
-              <a
-                href="https://example.com/nier"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/circle5.jpg" alt="Project" />
-              </a>
-              <figcaption>placeholder 04.</figcaption>
-            </figure>
-
-            <a href="/work" className="link-alt">
-              All of my work   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
-            <path d="M18 6L6 18"/>
-            <path d="M8 6h10v10"/>
-          </svg>
-            </a>
-          </section>
-        </div>
-      </div>
-
-      {/* Continuation of the horizontal scroll - vertical */}
-      <section className="vertical-continuation">
-        <section className="horizontal-panel panel-black panel-big-image">
-          <figure className="vertical-continuation-figure-small panel-big-image figure2">
-            <a
-              href="https://example.com/placeholder"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src="/circle1.jpg" alt="Featured project" />
-            </a>
-            <figcaption>placeholder 05.</figcaption>
-          </figure>
-        </section>
-        <section className="horizontal-panel panel-black panel-big-image">
-          <figure className="vertical-continuation-figure-small panel-big-image figure3">
-            <a
-              href="https://example.com/featured-project"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src="/circle6.jpg" alt="Featured project" />
-            </a>
-            <figcaption>placeholder 06.</figcaption>
-          </figure>
-        </section>
       </section>
 
       {/* Grid background in white with parallax effect. */}
@@ -850,41 +746,217 @@ function App() {
         >
           <div className="parallax-gallery-text">
             <h3>
-              When figuring out <span className="serif">your</span> project, we can start from scratch or pick out a framework to speed things up, all up to you.
+              I am a web developer based in Serbia. I try to create timeless web experiences
+              that are memorable and keep users coming back for more.
             </h3>
           </div>
           <div className="parallax-gallery-image">
             <img src="/circle5.jpg" alt="Gallery placeholder" />
           </div>
           <p className="parallax-gallery-caption">
-            I'll go from scratch with <span className="salmon-background">TypeScript</span> combined with <span className="serif">GSAP</span> and <span className="salmon-background">React</span>, or I'll use the <span className="serif">Vue</span> or <span className="salmon-background">Laravel</span> frameworks (For those who prefer faster delivery).
+            For me, every project is a story of its' own, whether that be a hastily dished out <span className="salmon-background">framework</span> or a fine-tuned application made from <span className="salmon-background">scratch</span>.
           </p>
         </div>
+      </section>
+
+      {/* FAQ Accordion Section */}
+      <section className="faq-section">
+        <div className="faq-container">
+          <h1 className="faq-title">So, what do I <span className="salmon-background">actually</span> do?</h1>
+          
+          <div className="faq-items">
+            <div className="faq-item">
+              <div 
+                className="faq-question" 
+                onClick={() => toggleAccordion(1)}
+              >
+                <span className="faq-number">01</span>
+                <h3><span className="salmon-background">Strategic research.</span></h3>
+                <span className={`faq-icon ${activeAccordion === 1 ? 'active' : ''}`}>{activeAccordion === 1 ? '−' : '+'}</span>
+              </div>
+              <div className={`faq-answer ${activeAccordion === 1 ? 'active' : ''}`}>
+                <p>I study the context of your brand, its' story and competitors, to develop a broad idea on the next step.</p>
+              </div>
+            </div>
+
+            <div className="faq-item">
+              <div 
+                className="faq-question" 
+                onClick={() => toggleAccordion(2)}
+              >
+                <span className="faq-number">02</span>
+                <h3><span className="salmon-background">Brand identity.</span></h3>
+                <span className={`faq-icon ${activeAccordion === 2 ? 'active' : ''}`}>{activeAccordion === 2 ? '−' : '+'}</span>
+              </div>
+              <div className={`faq-answer ${activeAccordion === 2 ? 'active' : ''}`}>
+                <p>I'll carefully pick out the proper typography, palette and imaging for your brand, to ensure that its' message gets delivered.</p>
+              </div>
+            </div>
+
+            <div className="faq-item">
+              <div 
+                className="faq-question" 
+                onClick={() => toggleAccordion(3)}
+              >
+                <span className="faq-number">03</span>
+                <h3><span className="salmon-background">Web development.</span></h3>
+                <span className={`faq-icon ${activeAccordion === 3 ? 'active' : ''}`}>{activeAccordion === 3 ? '−' : '+'}</span>
+              </div>
+              <div className={`faq-answer ${activeAccordion === 3 ? 'active' : ''}`}>
+                <p>I develop an engaging and efficient web presence tailored to your needs, with the tools best suited for the job.</p>
+              </div>
+            </div>
+
+            <div className="faq-item">
+              <div 
+                className="faq-question" 
+                onClick={() => toggleAccordion(4)}
+              >
+                <span className="faq-number">04</span>
+                <h3><span className="salmon-background">Long-term maintenance</span></h3>
+                <span className={`faq-icon ${activeAccordion === 4 ? 'active' : ''}`}>{activeAccordion === 4 ? '−' : '+'}</span>
+              </div>
+              <div className={`faq-answer ${activeAccordion === 4 ? 'active' : ''}`}>
+                <p>If needed I will perform routine maintenance on the website, fine-tuning the performance aswell as later implementing new changes.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Horizontal Scroll Container */}
+      <div
+        ref={horizontalScrollRef}
+        className="horizontal-scroll-container"
+        style={{ zIndex: 10 }}
+      >
+        <div className="horizontal-panels">
+          {/* Panel 1 - Header */}
+          <section className="horizontal-panel panel-purple">
+            <div className="big-black-circle">
+              <h1 className="side-scroll-header">
+                Selected
+                <br />
+                work.
+              </h1>
+            </div>
+          </section>
+
+          {/* Panel 2 - Two Stacked Images */}
+          <section className="horizontal-panel panel-black panel-stacked">
+            <figure>
+              <a
+                href="https://example.com/screening"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle3.jpg" alt="Screening project" />
+              </a>
+              <div className="figure-description">JOHN YAKUZA ESTATE // REAL ESTATE // JAN 2026</div>
+              <figcaption>placeholder 01.</figcaption>
+            </figure>
+            <figure>
+              <a
+                href="https://example.com/residency"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle2.jpg" alt="Residency project" />
+              </a>
+              <div className="figure-description">ANOTHER PROJECT DESCRIPTION HERE // FILM // FEB 2026</div>
+              <figcaption>placeholder 02.</figcaption>
+            </figure>
+          </section>
+
+          {/* Panel 3 - One Big Image */}
+          <section className="horizontal-panel panel-black panel-big-image">
+            <figure className="panel-big-image figure1">
+              <a
+                href="https://example.com/jony-ive"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle4.jpg" alt="Featured project" />
+              </a>
+              <div className="figure-description">GREATEST WEBSITE IN THE HISTORY OF WEBSITES // EMIL // FEB 2017</div>
+              <figcaption>placeholder 03.</figcaption>
+            </figure>
+          </section>
+
+          {/* Panel 4 - Two Stacked Images */}
+          <section className="horizontal-panel panel-black panel-stacked">
+            <figure>
+              <a
+                href="https://example.com/nier"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle5.jpg" alt="Project" />
+              </a>
+              <div className="figure-description">COOL MAN // MOTORCYCLE // MAR 2027</div>
+              <figcaption>placeholder 04.</figcaption>
+            </figure>
+
+            <a href="/work" className="link-alt">
+              ALL OF MY WORKS   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
+            <path d="M18 6L6 18"/>
+            <path d="M8 6h10v10"/>
+          </svg>
+            </a>
+          </section>
+        </div>
+      </div>
+
+      {/* Continuation of the horizontal scroll - vertical */}
+      <section className="vertical-continuation">
+        <section className="horizontal-panel panel-black panel-big-image">
+          <figure className="vertical-continuation-figure-small panel-big-image figure2">
+            <a
+              href="https://example.com/placeholder"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/circle1.jpg" alt="Featured project" />
+            </a>
+            <div className="figure-description">TRAIN SPOTTED // TRANSPORT // APR 2028</div>
+            <figcaption>placeholder 05.</figcaption>
+          </figure>
+        </section>
+        <section className="horizontal-panel panel-black panel-big-image">
+          <figure className="vertical-continuation-figure-small panel-big-image figure3">
+            <a
+              href="https://example.com/featured-project"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img src="/circle6.jpg" alt="Featured project" />
+            </a>
+            <div className="figure-description">HE IS WALKING // FITNESS // JUN 1984</div>
+            <figcaption>placeholder 06.</figcaption>
+          </figure>
+        </section>
       </section>
 
       {/* Footer with Folders */}
       <div
         className="folders"
         style={{
-          backgroundImage:
-            "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
-            "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
-          backgroundSize: "50px 50px",
+         backgroundColor: "var(--black)",
         }}
       >
         <h1
           style={{
             marginLeft: "3rem",
-            marginTop: "1rem",
+            marginTop: "2rem",
             fontWeight: 700,
             fontFamily: "Playfair Display, serif",
-            color: "var(--black)",
+            color: "var(--white)",
           }}
         >
-        &copy; 2026 - <span className="serif">m</span>irko
+        links.
         </h1>
         <div className="row">
-          <div className="folder variant-1" data-link="/work">
+          <div className="folder variant-1 folder-work-white" data-link="/work">
             <div className="folder-preview">
               <div className="folder-preview-img">
                 <img src="/circle1.jpg" alt="Placeholder 1" />
@@ -897,11 +969,11 @@ function App() {
               </div>
             </div>
             <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>01</p>
+              <div className="folder-index" style={{ backgroundColor: "var(--white)" }}>
+                <p style={{ color: "var(--black)" }}>01</p>
               </div>
-              <div className="folder-name">
-                <h1>work</h1>
+              <div className="folder-name" style={{ backgroundColor: "var(--white)" }}>
+                <h1 style={{ color: "var(--black)" }}>work</h1>
               </div>
             </div>
           </div>
@@ -956,7 +1028,7 @@ function App() {
                 <p>04</p>
               </div>
               <div className="folder-name">
-                <h1>CONTACT
+                <h1>contact
                   
                 </h1>
               </div>
