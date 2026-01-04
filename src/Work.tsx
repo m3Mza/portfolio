@@ -293,27 +293,6 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       }
     }
 
-    const animateProjectInfoIn = () => {
-      const descElement = document.querySelector('.project-description')
-      const linkElement = document.querySelector('.project-link')
-      
-      gsap.to(descElement, {
-        opacity: 1,
-        y: 0,
-        duration: 0.5,
-        delay: 0.2,
-        ease: 'power3.out'
-      })
-      
-      gsap.to(linkElement, {
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        delay: 0.4,
-        ease: 'power3.out'
-      })
-    }
-
     const animateProjectInfoOut = () => {
       const descElement = document.querySelector('.project-description')
       const linkElement = document.querySelector('.project-link')
