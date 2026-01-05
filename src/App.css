@@ -73,7 +73,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   color: var(--black);
   line-height: 1.1;
   margin: 0;
-  font-weight: 1000;
+  font-weight: 600;
 }
 
 .hero-grid-text {
@@ -137,7 +137,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 
 }
 
-.komparacija-header h1 {
+.komparacija-header h2 {
   font-size: 4rem;
   color: var(--black);
   margin: 0;
@@ -273,7 +273,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   hyphens: auto;
   min-width: 320px;
   font-size: 1.4rem;
-  font-weight: 400;
   
 }
 
@@ -291,10 +290,13 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  background-image:
+   background-image:
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+  mask-repeat: no-repeat;
   background-size: 50px 50px;
+  background-position: -1px -1px;
   background-repeat: repeat;
   z-index: 15;
   position: relative;
@@ -309,7 +311,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .faq-title {
   
   font-size: 4rem;
-  font-weight: 400;
   color: var(--black);
   margin-bottom: 4rem;
   text-align: center;
@@ -320,8 +321,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   flex-direction: column;
   gap: 0;
 }
-
-
 
 .faq-question {
   display: flex;
@@ -336,7 +335,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .faq-number {
   
   font-size: 1.2rem;
-  font-weight: 400;
   color: var(--black);
   min-width: 2.5rem;
 }
@@ -344,7 +342,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .faq-question h3 {
   
   font-size: 2.7rem;
-  font-weight: 400;
   color: var(--black);
   margin: 0;
   flex: 1;
@@ -381,7 +378,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .faq-answer p {
   
   font-size: 1.4rem;
-  font-weight: 500;
   line-height: 1.7;
   color: var(--black);
   margin: 0;
@@ -419,7 +415,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 
 .selected-works-title {
   
-  font-weight: 500;
   color: var(--black);
   margin: 0;
    font-family: 'Playfair Display', serif;
@@ -464,7 +459,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   font-size: 2rem;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
-   font-family: 'Inter', sans-serif;
+   font-family: 'Grotesk', sans-serif;
   font-weight: 600;
   z-index: 2;
 }
@@ -479,8 +474,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   left: 0;
   color: var(--black);
   font-size: 1.2rem;
-   font-family: 'Inter', sans-serif;
-  font-weight: 400;
+   font-family: 'Grotesk', sans-serif;
   text-align: left;
   padding: 1rem 1.5rem;
   opacity: 0;
@@ -543,7 +537,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   font-size: 2rem;
   padding: 0.5rem 1rem;
   transition: all 0.3s ease;
-   font-family: 'Inter', sans-serif;
+   font-family: 'Grotesk', sans-serif;
   font-weight: 600;
   z-index: 2;
 }
@@ -558,8 +552,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   left: 0;
   color: var(--black);
   font-size: 1.4rem;
-   font-family: 'Inter', sans-serif;
-  font-weight: 400;
+   font-family: 'Grotesk', sans-serif;
   text-align: left;
   padding: 1.5rem 2rem;
   opacity: 0;
@@ -826,7 +819,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .project-title p .word {
   position: relative;
   display: inline-block;
-  
+    font-family: 'Grotesk', sans-serif;
   transform: translateY(0%);
   will-change: transform;
   background-color: var(--salmon);
@@ -846,8 +839,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   font-size: 1.4rem;
   color: var(--black);
   margin-bottom: 1.5rem;
-  
-  font-weight: 400;
   opacity: 0;
 }
 
@@ -858,7 +849,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   padding: 0.5rem 1rem;
   margin-left: -0.5rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Grotesk', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;

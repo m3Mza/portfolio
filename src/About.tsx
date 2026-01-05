@@ -258,7 +258,7 @@ FOLDER HOVER ANIMATIONS
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "close" : "menu"}
+            {isMenuActive ? "CLOSE" : "MENU"}
           </button>
         </div>
       </header>
@@ -359,106 +359,68 @@ FOLDER HOVER ANIMATIONS
         </div>
       </section>
 
-      {/* Footer with Folders */}
-      <div
-        className="folders"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
-            "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
-          backgroundSize: "50px 50px",
-        }}
-      >
-        <h1
-          style={{
-            marginLeft: "3rem",
-            marginBottom: "-4rem",
-            fontWeight: 700,
-            fontFamily: "Playfair Display, serif",
-            color: "var(--black)",
-          }}
-        >
-          links.
-        </h1>
-        <div className="row">
-          <div className="folder variant-1" data-link="/work">
-            <div className="folder-preview">
-              <div className="folder-preview-img">
-                <img src="/circle1.jpg" alt="Placeholder 1" />
-              </div>
-              <div className="folder-preview-img">
-                <img src="/circle2.jpg" alt="Placeholder 2" />
-              </div>
-              <div className="folder-preview-img">
-                <img src="/circle3.jpg" alt="Placeholder 3" />
-              </div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>01</p>
-              </div>
-              <div className="folder-name">
-                <h1>work</h1>
-              </div>
-            </div>
+      {/* Footer */}
+      <footer className="footer-section">
+        <div className="footer-links">
+          <div className="footer-column">
+            <h3 className="footer-heading">Navigation</h3>
+            <a href="/" className="link">home</a>
+            <a href="/work" className="link">work</a>
+            <a href="/about" className="link">about</a>
+    
           </div>
-          <div
-            className="folder variant-2"
-            data-link="https://github.com/m3Mza/portfolio"
-          >
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img">
-                <img src="/nier.gif" alt="GitHub" />
-              </div>
-              <div className="folder-preview-img"></div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>02</p>
-              </div>
-              <div className="folder-name">
-                <h1>repo</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+          
+          <div className="footer-column">
+            <h3 className="footer-heading">Contact</h3>
+            <a href="mailto:mirkomimap@gmail.com" className="link" onClick={(e) => { e.preventDefault(); window.location.href = "mailto:mirkomimap@gmail.com"; }}>mail
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{
+                    marginLeft: "2px",
+                    marginBottom: "3.5px",
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                  }}
+                  className="ai ai-ArrowUpRight"
+                >
+                  <path d="M18 6L6 18" />
+                  <path d="M8 6h10v10" />
+                </svg>
+            </a>
+            <a href="https://x.com/mirkosayshello" className="link" onClick={(e) => handleLinkClick(e, "https://x.com/mirkosayshello")} target="_blank" rel="noopener noreferrer">x</a>
+            <a href="https://github.com/m3Mza/portfolio" className="link" onClick={(e) => handleLinkClick(e, "https://github.com/m3Mza/portfolio")} target="_blank" rel="noopener noreferrer">github</a>
 
-        <div className="row">
-          <div className="folder variant-2" data-link="/about">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img">
-                <img src="/mirko3.jpeg" alt="Resume 3" />
-              </div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>03</p>
-              </div>
-              <div className="folder-name">
-                <h1>about</h1>
-              </div>
-            </div>
-          </div>
-          <div className="folder variant-3" data-mailto="mirkomimap@gmail.com">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>04</p>
-              </div>
-              <div className="folder-name">
-                <h1>contact</h1>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
+        
+  
+        
+        <div className="footer-bottom">
+          <p>© made with love, mirko, 2026.</p>
+          <h1 className="footer-logo">mirko</h1>
+          <img
+                  src="/nier.gif"
+                  alt=""
+                  className="earth-gif"
+                  style={{
+                    display: "block",
+                    width: "14rem",
+                    height: "14rem",
+                    position: "absolute",
+                    left: "27.5rem",
+                    bottom: "14rem",
+                  }}
+                />
+        </div>
+      </footer>
     </>
   );
 }

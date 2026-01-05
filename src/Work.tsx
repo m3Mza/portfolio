@@ -787,7 +787,7 @@ GALLERY STUFF AND INTERACTIONS
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "close" : "menu"}
+            {isMenuActive ? "CLOSE" : "MENU"}
           </button>
         </div>
       </header>

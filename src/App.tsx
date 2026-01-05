@@ -293,139 +293,6 @@ GSAP SCROLL ANIMATIONS FOR KOMPARACIJA SECTION
 
   /* =======================
 ==========================
-FOLDER HOVER INTERACTIONS
-==========================
-========================== */
-
-  useEffect(() => {
-    const folders = document.querySelectorAll(".folders .folder");
-    const folderWrappers = document.querySelectorAll(
-      ".folders .folder-wrapper"
-    );
-    if (folders.length === 0) return;
-    let isMobile = window.innerWidth < 1000;
-    function setInitialPositions() {
-      gsap.set(folderWrappers, { y: isMobile ? 0 : 25 });
-    }
-    setInitialPositions();
-    const mouseEnterHandlers: Array<{
-      folder: Element;
-      mouseEnterHandler: EventListener;
-    }> = [];
-    const mouseLeaveHandlers: Array<{
-      folder: Element;
-      mouseLeaveHandler: EventListener;
-    }> = [];
-    const clickHandlers: Array<{
-      folder: Element;
-      clickHandler: EventListener;
-    }> = [];
-    folders.forEach((folder, index) => {
-      const previewImages = folder.querySelectorAll(".folder-preview-img");
-
-      // Click handler for navigation
-      const clickHandler = () => {
-        const target = folder as HTMLElement;
-        const link = target.getAttribute("data-link");
-        const mailto = target.getAttribute("data-mailto");
-
-        if (mailto) {
-          window.location.href = `mailto:${mailto}`;
-        } else if (link) {
-          if (link.startsWith("http")) {
-            window.open(link, "_blank");
-          } else {
-            window.location.href = link;
-          }
-        }
-      };
-      folder.addEventListener("click", clickHandler);
-      clickHandlers.push({ folder, clickHandler });
-
-      const mouseEnterHandler = () => {
-        if (isMobile) return;
-        folders.forEach((siblingFolder) => {
-          if (siblingFolder !== folder) {
-            siblingFolder.classList.add("disabled");
-          }
-        });
-        gsap.to(folderWrappers[index], {
-          y: 0,
-          duration: 0.25,
-          ease: "back.out(1.7)",
-        });
-        previewImages.forEach((img, imgIndex) => {
-          let rotation;
-          if (imgIndex === 0) {
-            rotation = gsap.utils.random(-20, -10);
-          } else if (imgIndex === 1) {
-            rotation = gsap.utils.random(-10, 10);
-          } else {
-            rotation = gsap.utils.random(10, 20);
-          }
-          gsap.to(img, {
-            y: "-100%",
-            rotation: rotation,
-            duration: 0.25,
-            ease: "back.out(1.7)",
-            delay: imgIndex * 0.025,
-          });
-        });
-      };
-      folder.addEventListener("mouseenter", mouseEnterHandler);
-      mouseEnterHandlers.push({ folder, mouseEnterHandler });
-      const mouseLeaveHandler = () => {
-        if (isMobile) return;
-        folders.forEach((siblingFolder) => {
-          siblingFolder.classList.remove("disabled");
-        });
-        gsap.to(folderWrappers[index], {
-          y: 25,
-          duration: 0.25,
-          ease: "back.out(1.7)",
-        });
-        previewImages.forEach((img, imgIndex) => {
-          gsap.to(img, {
-            y: "0%",
-            rotation: 0,
-            duration: 0.25,
-            ease: "back.out(1.7)",
-            delay: imgIndex * 0.05,
-          });
-        });
-      };
-      folder.addEventListener("mouseleave", mouseLeaveHandler);
-      mouseLeaveHandlers.push({ folder, mouseLeaveHandler });
-    });
-    const handleResize = () => {
-      const currentBreakpoint = window.innerWidth < 1000;
-      if (currentBreakpoint !== isMobile) {
-        isMobile = currentBreakpoint;
-        setInitialPositions();
-      }
-      folders.forEach((folder) => {
-        folder.classList.remove("disabled");
-      });
-      const allPreviewImages = document.querySelectorAll(".folder-preview-img");
-      gsap.set(allPreviewImages, { y: "0%", rotation: 0 });
-    };
-    window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      mouseEnterHandlers.forEach(({ folder, mouseEnterHandler }) => {
-        folder.removeEventListener("mouseenter", mouseEnterHandler);
-      });
-      mouseLeaveHandlers.forEach(({ folder, mouseLeaveHandler }) => {
-        folder.removeEventListener("mouseleave", mouseLeaveHandler);
-      });
-      clickHandlers.forEach(({ folder, clickHandler }) => {
-        folder.removeEventListener("click", clickHandler);
-      });
-    };
-  }, [navigate]);
-
-  /* =======================
-==========================
 SELECTED WORKS PARALLAX
 ==========================
 ========================== */
@@ -494,7 +361,7 @@ PARALLAX GALLERY SECTION
       if (!parallaxSection || !textElement || !imageElement || !captionElement)
         return;
 
-      const OVERLAY_COLOR = "var(--salmon)";
+      const OVERLAY_COLOR = "rgba(255, 255, 255, 0.5)";
 
       // Create parallax effect for image (moves up slower)
       gsap.to(imageElement, {
@@ -624,7 +491,7 @@ PARALLAX GALLERY SECTION
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "close" : "menu"}
+            {isMenuActive ? "CLOSE" : "MENU"}
           </button>
         </div>
       </header>
@@ -678,7 +545,7 @@ PARALLAX GALLERY SECTION
             <div className="hero-grid-text">
               <p>
                 Hi. I'm a{" "}
-                <span className="salmon-background"> code-based </span>web
+                <span className="salmon-background">code-based</span> web
                 developer who makes websites{" "}
                 <span className="highlight-marker">f#*&#@g</span> cool.
               </p>
@@ -691,7 +558,7 @@ PARALLAX GALLERY SECTION
                   (window.location.href = "mailto:mirkomimap@gmail.com")
                 }
               >
-                SAY HELLO.{" "}
+                SAY HELLO{" "}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -799,7 +666,7 @@ PARALLAX GALLERY SECTION
         <div className="selected-works-header">
           <h3 className="selected-works-title">Some stuff I made.</h3>
           <a href="/work" className="link">
-            All of my work{" "}
+            ALL OF MY WORK{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="23"
@@ -913,7 +780,7 @@ PARALLAX GALLERY SECTION
                 <img src="/circle6.jpg" alt="Featured project" />
               </a>
               <div className="figure-description">
-                HE IS WALKING // FITNESS // JUN 1984
+                "he is walking" / fitness / jun 2026
               </div>
               <figcaption>placeholder 06.</figcaption>
             </figure>
@@ -1041,106 +908,68 @@ PARALLAX GALLERY SECTION
       </section>
 
     
-      {/* Footer with Folders */}
-      <div
-        className="folders"
-        style={{
-          backgroundImage:
-            "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
-            "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
-          backgroundSize: "50px 50px",
-        }}
-      >
-        <h1
-          style={{
-            marginLeft: "3rem",
-            marginBottom: "-4rem",
-            fontWeight: 700,
-            fontFamily: "Playfair Display, serif",
-            color: "var(--black)",
-          }}
-        >
-          links.
-        </h1>
-        <div className="row">
-          <div className="folder variant-1" data-link="/work">
-            <div className="folder-preview">
-              <div className="folder-preview-img">
-                <img src="/circle1.jpg" alt="Placeholder 1" />
-              </div>
-              <div className="folder-preview-img">
-                <img src="/circle2.jpg" alt="Placeholder 2" />
-              </div>
-              <div className="folder-preview-img">
-                <img src="/circle3.jpg" alt="Placeholder 3" />
-              </div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>01</p>
-              </div>
-              <div className="folder-name">
-                <h1>work</h1>
-              </div>
-            </div>
+      {/* Footer */}
+      <footer className="footer-section">
+        <div className="footer-links">
+          <div className="footer-column">
+            <h3 className="footer-heading">Navigation</h3>
+            <a href="/" className="link">home</a>
+            <a href="/work" className="link">work</a>
+            <a href="/about" className="link">about</a>
+    
           </div>
-          <div
-            className="folder variant-2"
-            data-link="https://github.com/m3Mza/portfolio"
-          >
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img">
-                <img src="/nier.gif" alt="GitHub" />
-              </div>
-              <div className="folder-preview-img"></div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>02</p>
-              </div>
-              <div className="folder-name">
-                <h1>repo</h1>
-              </div>
-            </div>
-          </div>
-        </div>
+          
+          <div className="footer-column">
+            <h3 className="footer-heading">Contact</h3>
+            <a href="mailto:mirkomimap@gmail.com" className="link" onClick={(e) => { e.preventDefault(); window.location.href = "mailto:mirkomimap@gmail.com"; }}>mail
+              <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{
+                    marginLeft: "2px",
+                    marginBottom: "3.5px",
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                  }}
+                  className="ai ai-ArrowUpRight"
+                >
+                  <path d="M18 6L6 18" />
+                  <path d="M8 6h10v10" />
+                </svg>
+            </a>
+            <a href="https://x.com/mirkosayshello" className="link" onClick={(e) => handleLinkClick(e, "https://x.com/mirkosayshello")} target="_blank" rel="noopener noreferrer">x</a>
+            <a href="https://github.com/m3Mza/portfolio" className="link" onClick={(e) => handleLinkClick(e, "https://github.com/m3Mza/portfolio")} target="_blank" rel="noopener noreferrer">github</a>
 
-        <div className="row">
-          <div className="folder variant-2" data-link="/about">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img">
-                <img src="/mirko3.jpeg" alt="Resume 3" />
-              </div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>03</p>
-              </div>
-              <div className="folder-name">
-                <h1>about</h1>
-              </div>
-            </div>
-          </div>
-          <div className="folder variant-3" data-mailto="mirkomimap@gmail.com">
-            <div className="folder-preview">
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>
-              <div className="folder-preview-img"></div>
-            </div>
-            <div className="folder-wrapper">
-              <div className="folder-index">
-                <p>04</p>
-              </div>
-              <div className="folder-name">
-                <h1>contact</h1>
-              </div>
-            </div>
           </div>
         </div>
-      </div>
+        
+  
+        
+        <div className="footer-bottom">
+          <p>© made with love, mirko, 2026.</p>
+          <h1 className="footer-logo">mirko</h1>
+          <img
+                  src="/nier.gif"
+                  alt=""
+                  className="earth-gif"
+                  style={{
+                    display: "block",
+                    width: "14rem",
+                    height: "14rem",
+                    position: "absolute",
+                    left: "27.5rem",
+                    bottom: "14rem",
+                  }}
+                />
+        </div>
+      </footer>
     </>
   );
 }
