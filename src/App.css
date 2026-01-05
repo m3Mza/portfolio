@@ -1,6 +1,40 @@
+/* ======================
+=========================
+=========================
+TABLE OF CONTENTS
+CSS for components used in App.tsx, Work.tsx, About.tsx
+=========================
+=========================
+1. Hero Grid Section
+2. Comparison Scroll Animation Section (The 4 images animation)
+3. Parallax "Gallery"
+4. FAQ Accordion Section
+5. Horizontal Scroll "Selected Works"
+    5.1. Vertical Continuation Section of "Selected Works"
+6. About Section
+7. Work Section (Draggable Grid of images)
+=========================
+=========================
+========================= */
 
 
-/* Hero Grid Section */
+
+
+
+
+
+
+
+
+
+
+
+
+/* =======================
+==========================
+1. HERO SECTION
+==========================
+========================== */
 
 .hero-grid-section {
   min-height: 30vh;
@@ -39,7 +73,6 @@
   color: var(--black);
   line-height: 1.1;
   margin: 0;
-  font-size: 14rem;
   font-weight: 1000;
 }
 
@@ -67,9 +100,13 @@
 }
 
 
+/* =======================
+==========================
+2. COMPARISON 4 IMAGES SECTION
+==========================
+========================== */
 
 
-/* Comparison Scroll Animation Section (The 4 images animation */
 
 .komparacija {
   width: 100%;
@@ -79,11 +116,11 @@
   justify-content: center;
   position: relative;
   overflow: hidden;
- background-image:
-  linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-  linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
-mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
-mask-repeat: no-repeat;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
+  mask-repeat: no-repeat;
   background-size: 50px 50px;
   background-position: -1px -1px;
   z-index: 10;
@@ -133,10 +170,12 @@ mask-repeat: no-repeat;
   width: 380px;
   height: 200px;
 }
+
 .komparacija-img:nth-child(2) {
   width: 300px;
   height: 300px;
 }
+
 .komparacija-img:nth-child(3) {
   width: 380px;
   height: 310px;
@@ -149,281 +188,17 @@ mask-repeat: no-repeat;
 }
 
 
-
-/* Horizontal scroll section */
-
-.horizontal-scroll-section {
-  width: 100vw;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
-
-.big-black-circle {
-  width: 50vw;
-  height: 100vh;
-  background: var(--black);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-}
-
-.side-scroll-header {
-  color: var(--white);
-  font-size: 5rem;
-  line-height: 1.1;
-  text-align: left;
-  margin-right: 25%;
-  margin-top: 30%;
-
-}
-
-.horizontal-panels {
-  display: flex;
-  height: 100%;
-  width: 400vw;
-  will-change: transform;
-}
-
-/* panels */
-.panel-purple {
-  background-color: var(--salmon);
-  height: 100vh;
-  width: 50vw;
-}
-
-.panel-black {
-  background: var(--black);
-  height: 100vh;
-  width: 50vw;
-}
-
-/* stacked small images (panels 2 & 4) */
-.panel-stacked {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 48px;
-  padding: 64px;
-}
-
-.panel-stacked figure {
-  position: relative;
-  margin: 0;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.panel-stacked img {
-  height: 20rem;
-  width: 40rem;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-  will-change: transform;
-}
-
-
-.panel-stacked figcaption {
-  position: absolute;
-  bottom: 5%;
-  left: 1%;
-  color: var(--white);
-  font-size: 3.1rem;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-  font-family: 'Archivo', sans-serif;
-  font-weight: 600;
-}
-
-.panel-stacked figure:hover figcaption {
-  color: var(--black);
-  z-index: 5;
-}
-
-/* Grain overlay for stacked images */
-.panel-stacked figure::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  opacity: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  background-color: var(--dynamic-overlay, var(--accent-dark-grey));
-  transition: opacity 0.3s ease;
-}
-
-.panel-stacked figure:hover::after {
-  opacity: 0.9;
-  animation: grain 8s steps(10) infinite;
-}
-
-/* big image (panel 3) */
-.panel-big-image {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.panel-big-image figure {
-  position: relative;
-  margin: 0;
-  justify-content: center;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.panel-big-image img {
-  object-fit: cover;
-  width: 45rem;
-  height: 83vh;
-  transition: transform 0.4s ease;
-  will-change: transform;
-}
-
-.panel-big-image figcaption {
-  position: absolute;
-  bottom: 5%;
-  left: 1%;
-  color: var(--white);
-  font-size: 3.1rem;
-  padding: 0.5rem 1rem;
-  transition: all 0.3s ease;
-  font-family: 'Archivo', sans-serif;
-  font-weight: 600;
-}
-
-.panel-big-image figure:hover figcaption {
-  color: var(--black);
-  z-index: 5;
-}
-
-/* Grain overlay for big image */
-.panel-big-image figure::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  opacity: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  background-color: var(--dynamic-overlay, var(--accent-dark-grey));
-  transition: opacity 0.3s ease;
-}
-
-.panel-big-image figure:hover::after {
-  opacity: 0.9;
-  animation: grainWorks 8s steps(10) infinite;
-  border-radius: 0.5rem;
-}
-
-/* Grain animation */
-@keyframes grainWorks {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-2%, -3%); }
-  20% { transform: translate(-4%, 2%); }
-  30% { transform: translate(3%, -5%); }
-  40% { transform: translate(-2%, 5%); }
-  50% { transform: translate(-3%, 3%); }
-  60% { transform: translate(4%, 0%); }
-  70% { transform: translate(0%, 4%); }
-  80% { transform: translate(1%, 6%); }
-  90% { transform: translate(-3%, 2%); }
-}
-
-/* Figure hover description */
-.figure-description {
-  position: absolute;
-  top: 5%;
-  left: 0;
-  color: var(--black);
-  font-size: 1.4rem;
-  font-family: 'Archivo', sans-serif;
-  font-weight: 500;
-  text-align: left;
-  padding: 1.5rem 2rem;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 10;
-  max-width: 60%;
-  line-height: 1.4;
-}
-
-figure:hover .figure-description {
-  opacity: 1;
-}
-
-
-/* Continuation to horizontal scroll */
-
-.vertical-continuation {
-  width: 100vw;
-  height: 100vh;
-  background: var(--black);
-  display: flex;
-  position: relative;
-  align-items: center;
-  justify-content: center;
-  z-index: 12;
-  box-sizing: border-box;
-  overflow: hidden;
-  padding: 0;
-}
-
-.vertical-continuation-figure-small {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  padding: 0;
-}
-.vertical-continuation-figure-small img {
-  width: 40vw;
-  height: 80vh;
-  object-fit: cover;
-  will-change: transform;
-}
-.vertical-continuation-figure-small figcaption {
-  color: var(--white);
-  font-family: 'Archivo', sans-serif;
-  font-weight: 600;
-  text-align: center;
-}
-
-/* Specific overlay colors for panels */
-.panel-big-image .figure1::after {
-  background-color: var(--accent-dark-grey); 
-}
-.panel-big-image .figure2::after {
-  background-color: var(--accent-yellow); 
-}
-.panel-big-image .figure3::after {
-  background-color: #FF7C5F;
-}
-.panel-stacked :nth-child(1)::after {
-  background-color: #11612f;
-}
-
-.panel-stacked :nth-child(2)::after {
-  background-color: var(--accent-yellow);
-}
-
-
-/* White grid with parallax effect */
+/* =======================
+==========================
+3. PARALLAX GALLERY
+==========================
+========================== */
 
 .parallax-gallery {
   width: 100vw;
   height: 100vh;
   color: var(--black);
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -496,14 +271,18 @@ figure:hover .figure-description {
   margin: 0;
   text-align: justify;
   hyphens: auto;
-  min-width: 255px;
+  min-width: 320px;
   font-size: 1.4rem;
   font-weight: 400;
-  font-family: 'Playfair Display', serif;
+  
 }
 
 
-/* FAQ Accordion Section */
+/* =======================
+==========================
+4. FAQ ACCORDION SECTION
+==========================
+========================== */
 
 .faq-section {
   min-height: 100vh;
@@ -512,7 +291,7 @@ figure:hover .figure-description {
   align-items: center;
   justify-content: center;
   padding: 4rem 2rem;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -528,7 +307,7 @@ figure:hover .figure-description {
 }
 
 .faq-title {
-  font-family: 'Playfair Display', serif;
+  
   font-size: 4rem;
   font-weight: 400;
   color: var(--black);
@@ -555,7 +334,7 @@ figure:hover .figure-description {
 
 
 .faq-number {
-  font-family: 'Archivo', sans-serif;
+  
   font-size: 1.2rem;
   font-weight: 400;
   color: var(--black);
@@ -563,7 +342,7 @@ figure:hover .figure-description {
 }
 
 .faq-question h3 {
-  font-family: 'Playfair Display', serif;
+  
   font-size: 2.7rem;
   font-weight: 400;
   color: var(--black);
@@ -573,7 +352,7 @@ figure:hover .figure-description {
 }
 
 .faq-icon {
-  font-family: 'Playfair Display', serif;
+  
   font-size: 3.5rem;
   color: var(--black);
   min-width: 3rem;
@@ -591,7 +370,6 @@ figure:hover .figure-description {
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  background-color: var(--salmon);
   padding: 0 1rem 0 5rem;
 }
 
@@ -601,15 +379,259 @@ figure:hover .figure-description {
 }
 
 .faq-answer p {
-  font-family: 'Playfair Display', serif;
+  
   font-size: 1.4rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.7;
   color: var(--black);
   margin: 0;
   letter-spacing: normal;
   opacity: 1;
 }
+
+
+/* =======================
+==========================
+5. SELECTED WORKS SECTION
+==========================
+========================== */
+
+.selected-works-section {
+  min-height: 100vh;
+  width: 100%;
+  padding: 4rem 2rem;
+  position: relative;
+  z-index: 14;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-repeat: repeat;
+}
+
+.selected-works-header {
+  max-width: 1400px;
+  margin: 0 auto 4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selected-works-title {
+  
+  font-weight: 500;
+  color: var(--black);
+  margin: 0;
+   font-family: 'Playfair Display', serif;
+}
+
+
+.selected-works-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.selected-works-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.selected-works-left figure {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.selected-works-left img {
+  width: 100%;
+  height: 250px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+
+.selected-works-left figcaption {
+  position: absolute;
+  bottom: 5%;
+  left: 3%;
+  color: var(--white);
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+   font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.selected-works-left figure:hover figcaption {
+  color: var(--white);
+}
+
+.selected-works-left .figure-description {
+  position: absolute;
+  top: 5%;
+  left: 0;
+  color: var(--black);
+  font-size: 1.2rem;
+   font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-align: left;
+  padding: 1rem 1.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  max-width: 70%;
+  line-height: 1.3;
+}
+
+.selected-works-left figure:hover .figure-description {
+  opacity: 1;
+}
+
+.selected-works-left figure::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-color: var(--accent-dark-grey);
+  transition: opacity 0.3s ease;
+}
+
+.selected-works-left figure:hover::after {
+  opacity: 0.9;
+  animation: grainWorks 8s steps(10) infinite;
+}
+
+.selected-works-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.selected-works-big-image {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.selected-works-big-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  will-change: transform;
+}
+
+.selected-works-big-image figcaption {
+  position: absolute;
+  bottom: 5%;
+  left: 3%;
+  color: var(--white);
+  font-size: 2rem;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+   font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.selected-works-big-image:hover figcaption {
+  color: var(--white);
+}
+
+.selected-works-big-image .figure-description {
+  position: absolute;
+  top: 5%;
+  left: 0;
+  color: var(--black);
+  font-size: 1.4rem;
+   font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-align: left;
+  padding: 1.5rem 2rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 10;
+  max-width: 60%;
+  line-height: 1.4;
+}
+
+.selected-works-big-image:hover .figure-description {
+  opacity: 1;
+}
+
+.selected-works-big-image::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-color: var(--accent-dark-grey);
+  transition: opacity 0.3s ease;
+}
+
+.selected-works-big-image:hover::after {
+  opacity: 0.9;
+  animation: grainWorks 8s steps(10) infinite;
+}
+
+@keyframes grainWorks {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -3%); }
+  20% { transform: translate(-4%, 2%); }
+  30% { transform: translate(3%, -5%); }
+  40% { transform: translate(-2%, 5%); }
+  50% { transform: translate(-3%, 3%); }
+  60% { transform: translate(4%, 0%); }
+  70% { transform: translate(0%, 4%); }
+  80% { transform: translate(1%, 6%); }
+  90% { transform: translate(-3%, 2%); }
+}
+
+/* Variant colors for overlay effects */
+.selected-works-left figure.variant-1::after,
+.selected-works-big-image.variant-1::after {
+  background-color: var(--accent-dark-grey);
+}
+
+.selected-works-left figure.variant-2::after,
+.selected-works-big-image.variant-2::after {
+  background-color: var(--accent-yellow);
+}
+
+.selected-works-left figure.variant-3::after,
+.selected-works-big-image.variant-3::after {
+  background-color: #FF7C5F;
+}
+
+.selected-works-left figure.variant-4::after,
+.selected-works-big-image.variant-4::after {
+  background-color: #11612f;
+}
+
+
+
+
+
+
 
 
 /* ======================
@@ -625,9 +647,11 @@ figure:hover .figure-description {
 
 
 
-/* ==================================
-ABOUT SECTION
-==================================== */
+/* =======================
+==========================
+6. ABOUT SECTION
+==========================
+========================== */
 
 
 .about-section {
@@ -637,7 +661,7 @@ ABOUT SECTION
   align-items: center;
   justify-content: flex-start;
   padding-top: 6rem;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -648,6 +672,12 @@ ABOUT SECTION
   font-weight: 600;
   margin-bottom: 2rem;
   z-index: 12;
+}
+
+.about-title,
+.about-title h2,
+.about-title span {
+  font-size: 8rem;
 }
 
 .about-content {
@@ -663,16 +693,18 @@ ABOUT SECTION
 .about-text {
   text-align: justify;
   hyphens: auto;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   line-height: 1.7;
   color: var(--black);
   z-index: 12;
 }
 
 
-/* ==================================
-WORK SECTION
-==================================== */
+/* =======================
+==========================
+7. WORK SECTION
+==========================
+========================== */
 
 .blog-header-sticky {
   position: fixed;
@@ -692,7 +724,7 @@ WORK SECTION
   width: 100vw;
   height: 100svh;
   cursor: grab;
-  background-image: 
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -763,7 +795,7 @@ WORK SECTION
 .work-overlay.active {
   opacity: 0.99;
   pointer-events: auto;
-   background-image: 
+  background-image:
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
   background-size: 50px 50px;
@@ -794,7 +826,7 @@ WORK SECTION
 .project-title p .word {
   position: relative;
   display: inline-block;
-  font-family: 'Archivo', sans-serif;
+  
   transform: translateY(0%);
   will-change: transform;
   background-color: var(--salmon);
@@ -814,7 +846,7 @@ WORK SECTION
   font-size: 1.4rem;
   color: var(--black);
   margin-bottom: 1.5rem;
-  font-family: 'Playfair Display', serif;
+  
   font-weight: 400;
   opacity: 0;
 }
@@ -826,7 +858,7 @@ WORK SECTION
   padding: 0.5rem 1rem;
   margin-left: -0.5rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Archivo', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;
@@ -839,5 +871,3 @@ WORK SECTION
   color: var(--black);
   box-shadow: inset 250px 0 0 0 var(--accent-yellow);
 }
-
-

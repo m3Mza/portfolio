@@ -1,51 +1,170 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
 
 * {
-    font-family: 'Playfair Display', serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    scrollbar-width: none;
-    text-decoration: none;
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  text-decoration: none;
 }
 
 :root {
   --white: #FFFFFF;
   --black: #000000;
   --salmon: #FF7C5F;
-  --accent-yellow:  #fbae17;
+  --accent-yellow: #fbae17;
   --accent-dark-grey: #535353;
 }
 
 h1 {
-    font-size: 8rem;
+  font-size: 14rem;
 }
 
 h2 {
-    font-size: 4rem;
+  font-size: 4rem;
 }
 
 h3 {
-    font-size: 2.7rem;
-    font-weight: 500;
+  font-size: 2.7rem;
+  font-weight: 500;
   line-height: 1.08;
 }
 
 p {
-    font-size: 1.4rem;
-    font-weight: 500;
-    line-height: 1.6;
-    letter-spacing: 1.8;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.6;
+  letter-spacing: 1.8;
 }
+
+/* ==================================== HIGHLIGHT STYLES ==================================== */
 
 .salmon-background {
   color: var(--black);
   background-color: var(--salmon);
-  font-family: 'Archivo', serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
 }
 
+.highlight-marker {
+  position: relative;
+  color: var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 0.2rem 0.4rem;
+}
+
+.highlight-marker::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/highlight1.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.7;
+  z-index: -1;
+}
+
+.highlight-marker-strong {
+  position: relative;
+  color: var(--salmon);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 0.2rem 0.4rem;
+}
+
+.highlight-marker-strong::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/highlight3.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1;
+}
+
+
+.highlight-big-redaction {
+  color: var(--black);
+  background-image: url('/highlight5.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  font-weight: 600;
+}
+
+.highlight-scribble {
+  color: var(--black);
+  background-image: url('/highlight6.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+
+  font-weight: 600;
+}
+
+.highlight-underline {
+  position: relative;
+  color: var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding-bottom: 0.3rem;
+}
+
+.highlight-underline::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  background-image: url('/highlight2.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.highlight-underline-marker {
+  position: relative;
+  color: var(--black);
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding-bottom: 0.3rem;
+}
+
+.highlight-underline-marker::after {
+  content: '';
+  position: absolute;
+  bottom: -0.2rem;
+  left: 0;
+  width: 100%;
+  height: 1.4rem;
+  background-image: url('/highlight2.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  z-index: -1;
+}
+
+.highlight-circle {
+  color: var(--black);
+  background-image: url('/highlight8.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  padding: 2rem 2rem;
+}
+
+/* ======================================================================= */
 
 /* Link - Light variant (black text, yellow hover) */
 
@@ -56,7 +175,7 @@ p {
   padding: 0.5rem 1rem;
   margin: 0 -0.25rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Archivo', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   text-decoration: none;
@@ -68,59 +187,74 @@ p {
   box-shadow: inset 400px 0 0 0 var(--accent-yellow);
 }
 
-/* Link - Dark variant (yellow text, yellow bg hover) */
-
-.link-alt {
-  display: inline-block;
-  box-shadow: inset 0 0 0 0 var(--accent-yellow);
-  color: var(--accent-yellow);
-  padding: 0.75rem 1.75rem;
-  margin: 0 -0.25rem;
-  transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  font-family: 'Archivo', sans-serif;
-  font-size: 1.4rem;
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.link-alt:hover {
-  color: var(--black);
-  box-shadow: inset 290px 0 0 0 var(--accent-yellow);
-}
 
 
 /* Grain Overlay Background Effect */
 
 .grain-overlay {
-    position: fixed;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    z-index: 10;
-    opacity: 0.5;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    animation: grain 8s steps(10) infinite;
-    background-color: var(--white);
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0.5;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  animation: grain 8s steps(10) infinite;
+  background-color: var(--white);
 }
 
 @keyframes grain {
-    0%, 100% { transform: translate(0, 0); }
-    10% { transform: translate(-2%, -3%); }
-    20% { transform: translate(-4%, 2%); }
-    30% { transform: translate(3%, -5%); }
-    40% { transform: translate(-2%, 5%); }
-    50% { transform: translate(-3%, 3%); }
-    60% { transform: translate(4%, 0%); }
-    70% { transform: translate(0%, 4%); }
-    80% { transform: translate(1%, 6%); }
-    90% { transform: translate(-3%, 2%); }
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  10% {
+    transform: translate(-2%, -3%);
+  }
+
+  20% {
+    transform: translate(-4%, 2%);
+  }
+
+  30% {
+    transform: translate(3%, -5%);
+  }
+
+  40% {
+    transform: translate(-2%, 5%);
+  }
+
+  50% {
+    transform: translate(-3%, 3%);
+  }
+
+  60% {
+    transform: translate(4%, 0%);
+  }
+
+  70% {
+    transform: translate(0%, 4%);
+  }
+
+  80% {
+    transform: translate(1%, 6%);
+  }
+
+  90% {
+    transform: translate(-3%, 2%);
+  }
 }
 
 
-/* Animated Navigation Menu */
+/* =======================
+==========================
+HEADER
+==========================
+========================== */
 
 .nav-header {
   position: fixed;
@@ -145,15 +279,16 @@ p {
   color: var(--black);
   border: none;
   padding: 1rem 2rem;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
+  font-family: 'Inter', sans-serif;
   letter-spacing: 0.1em;
   cursor: pointer;
   transition: transform 0.3s ease;
   position: relative;
   z-index: 9999;
   outline: none;
-  font-family: 'Archivo', sans-serif;
+
 }
 
 .nav-menu-toggle:hover {
@@ -162,11 +297,9 @@ p {
 }
 
 .nav-menu-toggle:focus {
-  outline: none; 
+  outline: none;
   background: var(--accent-yellow);
 }
-
-/* Spotlight Menu Overlay */
 
 .nav-spotlight-menu {
   position: fixed;
@@ -190,13 +323,13 @@ p {
   width: 100%;
   height: 100%;
   background: var(--accent-yellow);
-  clip-path: polygon(-8% -5%, -8% -5%,-8% -5%, -8% -5%);
+  clip-path: polygon(-10% -7%, -10% -7%, -10% -7%, -10% -7%);
   transition: clip-path 0.9s cubic-bezier(0.6, 0, 0.175, 1);
   transition-delay: 0.5s;
 }
 
 .nav-spotlight-menu.active .nav-spotlight-background {
-  clip-path: polygon(-8% -5%, 100% 25%, 100% 100%, 60% 100%);
+  clip-path: polygon(-10% -7%, 100% 25%, 100% 100%, 60% 100%);
   transition-delay: 0s;
 }
 
@@ -207,7 +340,7 @@ p {
 }
 
 .nav-spotlight-menu.returning .nav-spotlight-background {
-  clip-path: polygon(-8% -5%, 100% 25%, 100% 100%, 60% 100%);
+  clip-path: polygon(-10% -7%, 100% 25%, 100% 100%, 60% 100%);
   transition: clip-path 0.6s cubic-bezier(0.6, 0, 0.175, 1);
   transition-delay: 0s;
 }
@@ -225,7 +358,7 @@ p {
 
 .nav-spotlight-links a {
   box-shadow: inset 0 0 0 0 var(--accent-yellow);
-  font-family: 'Archivo', sans-serif !important;
+  font-family: 'Inter', sans-serif;
   color: var(--black);
   padding: 0.5rem 1rem;
   transition: color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -247,9 +380,8 @@ p {
 
 .nav-spotlight-links a span {
   display: inline-block;
-  font-family: 'Archivo', sans-serif !important;
+  font-family: 'Inter', sans-serif;
 }
-
 
 
 .nav-spotlight-links a:nth-child(1) {
@@ -308,9 +440,16 @@ p {
 }
 
 
-/* Footer with the folders */
+/* =======================
+==========================
+FOOTER
+==========================
+========================== */
 
-a:link, a:visited, a:hover, a:active {
+a:link,
+a:visited,
+a:hover,
+a:active {
   text-decoration: none !important;
 }
 
@@ -322,16 +461,16 @@ a:link, a:visited, a:hover, a:active {
   justify-content: flex-end;
   overflow: hidden;
   padding: 0;
-    color: var(--black);
-    position: relative;
-    z-index: 9996;
+  color: var(--black);
+  position: relative;
+  z-index: 9996;
   text-decoration: none !important;
-  
+
 }
 
 .folders h1 {
   color: var(--white);
-  font-family: 'Archivo', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
 }
 
@@ -444,7 +583,7 @@ a:link, a:visited, a:hover, a:active {
 .folders .folder-index p {
   font-size: 0.875rem;
   font-weight: 400;
-    font-family: 'Archivo', sans-serif;
+
 }
 
 .folders .folder-name {
@@ -460,8 +599,8 @@ a:link, a:visited, a:hover, a:active {
   font-size: 2.5rem;
 }
 
-.folders .folder-index, 
-.folders .folder-index::after, 
+.folders .folder-index,
+.folders .folder-index::after,
 .folders .folder-name {
   transition: background-color 250ms ease;
 }
@@ -505,7 +644,7 @@ a:link, a:visited, a:hover, a:active {
   background-color: var(--accent-dark-grey) !important;
 }
 
-.folders .folder.disabled p, 
+.folders .folder.disabled p,
 .folders .folder.disabled h1 {
   color: var(--black) !important;
 }

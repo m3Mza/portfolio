@@ -1,231 +1,251 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import './App.css'
-import Lenis from 'lenis'
-import 'lenis/dist/lenis.css'
-import gsap from 'gsap'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "./App.css";
+import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+import gsap from "gsap";
 
 function About() {
-  const [isMenuActive, setIsMenuActive] = useState(false); // Changed
-const [isPageTransition, setIsPageTransition] = useState(() => {
-  return sessionStorage.getItem('pageTransition') === 'true'
-})
-  const [isReturning, setIsReturning] = useState(false)
-  const navigate = useNavigate()
+  const [isMenuActive, setIsMenuActive] = useState(false);
+  const [isPageTransition, setIsPageTransition] = useState(() => {
+    return sessionStorage.getItem("pageTransition") === "true";
+  });
+  const [isReturning, setIsReturning] = useState(false);
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
-    setIsMenuActive(!isMenuActive)
-  }
+    setIsMenuActive(!isMenuActive);
+  };
 
-  // Check for page transition
+  /* =======================
+==========================
+PAGE TRANSITION LOGIC
+==========================
+========================== */
+
   useEffect(() => {
-    const isTransitioning = sessionStorage.getItem('pageTransition')
-    if (isTransitioning === 'true') {
-      sessionStorage.removeItem('pageTransition')
-      
+    const isTransitioning = sessionStorage.getItem("pageTransition");
+    if (isTransitioning === "true") {
+      sessionStorage.removeItem("pageTransition");
+
       // Hold at full screen for a short delay (already at full screen from initial state)
       setTimeout(() => {
         // Return to original shape
-        setIsPageTransition(false)
-        setIsReturning(true)
-        
+        setIsPageTransition(false);
+        setIsReturning(true);
+
         // Short delay after returning to original shape
         setTimeout(() => {
           // Close menu (return to button)
-          setIsReturning(false)
-          setIsMenuActive(false)
-        }, 900)
-      }, 800)
+          setIsReturning(false);
+          setIsMenuActive(false);
+        }, 900);
+      }, 800);
     }
-  }, [])
+  }, []);
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault()
-    const isDesktop = window.innerWidth >= 768
-    const isInternal = href.startsWith('/')
-    const currentPath = window.location.pathname
+  const handleLinkClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string
+  ) => {
+    e.preventDefault();
+    const isDesktop = window.innerWidth >= 768;
+    const isInternal = href.startsWith("/");
+    const currentPath = window.location.pathname;
 
     // Check if clicking the same page - just refresh
     if (isInternal && currentPath === href) {
-      setIsMenuActive(false)
+      setIsMenuActive(false);
       setTimeout(() => {
-        window.location.reload()
-      }, 100)
-      return
+        window.location.reload();
+      }, 100);
+      return;
     }
 
     if (isDesktop) {
-      setIsPageTransition(true)
-      sessionStorage.setItem('pageTransition', 'true')
+      setIsPageTransition(true);
+      sessionStorage.setItem("pageTransition", "true");
       setTimeout(() => {
-        if (href.startsWith('http')) {
-          window.open(href, '_blank')
-          sessionStorage.removeItem('pageTransition')
-        } else if (href.startsWith('#')) {
-          document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
-          sessionStorage.removeItem('pageTransition')
-          setIsPageTransition(false)
-          setIsMenuActive(false)
+        if (href.startsWith("http")) {
+          window.open(href, "_blank");
+          sessionStorage.removeItem("pageTransition");
+        } else if (href.startsWith("#")) {
+          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+          sessionStorage.removeItem("pageTransition");
+          setIsPageTransition(false);
+          setIsMenuActive(false);
         } else if (isInternal) {
           setIsMenuActive(false); // Close menu right before navigation
-          navigate(href)
-          return
+          navigate(href);
+          return;
         } else {
-          window.location.href = href
+          window.location.href = href;
         }
-      }, 800)
+      }, 800);
     } else {
-      setIsMenuActive(false)
-      if (href.startsWith('http')) {
-        window.open(href, '_blank')
-      } else if (href.startsWith('#')) {
-        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+      setIsMenuActive(false);
+      if (href.startsWith("http")) {
+        window.open(href, "_blank");
+      } else if (href.startsWith("#")) {
+        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
       } else if (isInternal) {
-        navigate(href)
-        return
+        navigate(href);
+        return;
       } else {
-        window.location.href = href
+        window.location.href = href;
       }
     }
-  }
+  };
 
-  // Initialize Lenis smooth scroll
+  /* =======================
+==========================
+LENIS
+==========================
+========================== */
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    })
+    });
 
     function raf(time: number) {
-      lenis.raf(time)
-      requestAnimationFrame(raf)
+      lenis.raf(time);
+      requestAnimationFrame(raf);
     }
 
-    requestAnimationFrame(raf)
+    requestAnimationFrame(raf);
 
     return () => {
-      lenis.destroy()
-    }
-  }, [])
+      lenis.destroy();
+    };
+  }, []);
 
-  // Folder hover animation
+  /* =======================
+==========================
+FOLDER HOVER ANIMATIONS
+==========================
+========================== */
+
   useEffect(() => {
-    const folders = document.querySelectorAll('.folders .folder')
-    const folderWrappers = document.querySelectorAll('.folders .folder-wrapper')
+    const folders = document.querySelectorAll(".folders .folder");
+    const folderWrappers = document.querySelectorAll(
+      ".folders .folder-wrapper"
+    );
 
-    if (folders.length === 0) return
+    if (folders.length === 0) return;
 
-    let isMobile = window.innerWidth < 1000
+    let isMobile = window.innerWidth < 1000;
 
     function setInitialPositions() {
-      gsap.set(folderWrappers, { y: isMobile ? 0 : 25 })
+      gsap.set(folderWrappers, { y: isMobile ? 0 : 25 });
     }
 
-    setInitialPositions()
+    setInitialPositions();
 
     folders.forEach((folder, index) => {
-      const previewImages = folder.querySelectorAll('.folder-preview-img')
+      const previewImages = folder.querySelectorAll(".folder-preview-img");
 
       // Handle folder click for links
-      folder.addEventListener('click', () => {
-        const link = folder.getAttribute('data-link')
-        const mailto = folder.getAttribute('data-mailto')
-        const pdf = folder.getAttribute('data-pdf')
-        
+      folder.addEventListener("click", () => {
+        const link = folder.getAttribute("data-link");
+        const mailto = folder.getAttribute("data-mailto");
+        const pdf = folder.getAttribute("data-pdf");
+
         if (link) {
-          if (link.startsWith('http')) {
-            window.open(link, '_blank')
+          if (link.startsWith("http")) {
+            window.open(link, "_blank");
           } else {
-            window.location.href = link
+            window.location.href = link;
           }
         } else if (mailto) {
-          window.location.href = `mailto:${mailto}`
+          window.location.href = `mailto:${mailto}`;
         } else if (pdf) {
-          window.open(pdf, '_blank')
+          window.open(pdf, "_blank");
         }
-      })
+      });
 
-      folder.addEventListener('mouseenter', () => {
-        if (isMobile) return
-        
+      folder.addEventListener("mouseenter", () => {
+        if (isMobile) return;
+
         folders.forEach((siblingFolder) => {
           if (siblingFolder !== folder) {
-            siblingFolder.classList.add('disabled')
+            siblingFolder.classList.add("disabled");
           }
-        })
-        
+        });
+
         gsap.to(folderWrappers[index], {
           y: 0,
           duration: 0.25,
-          ease: 'back.out(1.7)'
-        })
-     
+          ease: "back.out(1.7)",
+        });
+
         previewImages.forEach((img, imgIndex) => {
-          let rotation
+          let rotation;
           if (imgIndex === 0) {
-            rotation = gsap.utils.random(-20, -10)
+            rotation = gsap.utils.random(-20, -10);
           } else if (imgIndex === 1) {
-            rotation = gsap.utils.random(-10, 10)
+            rotation = gsap.utils.random(-10, 10);
           } else {
-            rotation = gsap.utils.random(10, 20)
+            rotation = gsap.utils.random(10, 20);
           }
 
           gsap.to(img, {
-            y: '-100%',
+            y: "-100%",
             rotation: rotation,
             duration: 0.25,
-            ease: 'back.out(1.7)',
+            ease: "back.out(1.7)",
             delay: imgIndex * 0.025,
-          })
-        })
-      })
-       
-      folder.addEventListener('mouseleave', () => {
-        if (isMobile) return
+          });
+        });
+      });
+
+      folder.addEventListener("mouseleave", () => {
+        if (isMobile) return;
 
         folders.forEach((siblingFolder) => {
-          siblingFolder.classList.remove('disabled')
-        })
-       
+          siblingFolder.classList.remove("disabled");
+        });
+
         gsap.to(folderWrappers[index], {
           y: 25,
           duration: 0.25,
-          ease: 'back.out(1.7)'
-        })
+          ease: "back.out(1.7)",
+        });
 
         previewImages.forEach((img, imgIndex) => {
           gsap.to(img, {
-            y: '0%',
+            y: "0%",
             rotation: 0,
             duration: 0.25,
-            ease: 'back.out(1.7)',
+            ease: "back.out(1.7)",
             delay: imgIndex * 0.05,
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
 
     const handleResize = () => {
-      const currentBreakpoint = window.innerWidth < 1000
+      const currentBreakpoint = window.innerWidth < 1000;
       if (currentBreakpoint !== isMobile) {
-        isMobile = currentBreakpoint
-        setInitialPositions()
+        isMobile = currentBreakpoint;
+        setInitialPositions();
       }
 
       folders.forEach((folder) => {
-        folder.classList.remove('disabled')
-      })
+        folder.classList.remove("disabled");
+      });
 
-      const allPreviewImages = document.querySelectorAll('.folder-preview-img')
-      gsap.set(allPreviewImages, { y: '0%', rotation: 0 })
-    }
+      const allPreviewImages = document.querySelectorAll(".folder-preview-img");
+      gsap.set(allPreviewImages, { y: "0%", rotation: 0 });
+    };
 
-    window.addEventListener('resize', handleResize)
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -238,19 +258,31 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "CLOSE" : "MENU"}
+            {isMenuActive ? "close" : "menu"}
           </button>
         </div>
       </header>
 
       {/* Spotlight Menu Overlay */}
-      <nav className={`nav-spotlight-menu ${isMenuActive ? 'active' : ''} ${isPageTransition ? 'page-transition' : ''} ${isReturning ? 'returning' : ''}`}>
+      <nav
+        className={`nav-spotlight-menu ${isMenuActive ? "active" : ""} ${
+          isPageTransition ? "page-transition" : ""
+        } ${isReturning ? "returning" : ""}`}
+      >
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, '/')}>home</a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, '/about')}>about</a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, '/work')}>work</a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, '#contact')}>contact</a>
+          <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
+            home
+          </a>
+          <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
+            about
+          </a>
+          <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
+            work
+          </a>
+          <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
+            contact
+          </a>
         </div>
       </nav>
 
@@ -258,8 +290,8 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
       <section className="about-section">
         <div className="about-content">
           <div className="about-title">
-            <h1>
-              <span >a</span>bout.
+            <h2>
+              <span>a</span>bout.
               <img
                 src="/nier.gif"
                 alt=""
@@ -273,16 +305,18 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                   position: "absolute",
                 }}
               />
-            </h1>
+            </h2>
           </div>
           <div className="about-text">
             <p>
-              I'm a cook turned web developer. I have a BSc in <span className="salmon-background">Software
-              Engineering</span> which I got at the University of Novi Sad, where I
-              picked up a love for making fun websites, focusing mainly on
-              JavaScript and all its' bells and whistles (<span className="salmon-background">GSAP, React,
-              TypeScript, Vue, Node </span>) but I also dabble in PHP from time to
-              time. You can contact me at
+              I'm a cook turned web developer with a BSc in <span className="salmon-background">Software Engineering</span>.
+              {" "}I focus mainly on JavaScript and
+              all its' bells and whistles (
+              <span className="highlight-underline">
+                GSAP, React, TypeScript, Vue, Node{" "}
+              </span>
+              ) but I also dabble in PHP from time to time. You can contact me
+              at:
             </p>
             <a
               href="mailto:mirkomimap@gmail.com"
@@ -299,32 +333,52 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
               }}
             >
               mirkomimap@gmail.com
-              <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '6px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
-            <path d="M18 6L6 18"/>
-            <path d="M8 6h10v10"/>
-          </svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  marginLeft: "6px",
+                  marginBottom: "4px",
+                  display: "inline-block",
+                  verticalAlign: "middle",
+                }}
+                className="ai ai-ArrowUpRight"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M8 6h10v10" />
+              </svg>
             </a>
           </div>
         </div>
       </section>
 
       {/* Footer with Folders */}
-      <div className="folders" style={{
-        backgroundImage:
-              "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
-              "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
-            backgroundSize: "50px 50px",
-      }}>
+      <div
+        className="folders"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
+            "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
+          backgroundSize: "50px 50px",
+        }}
+      >
         <h1
           style={{
             marginLeft: "3rem",
-            marginTop: "2rem",
+            marginBottom: "-4rem",
             fontWeight: 700,
             fontFamily: "Playfair Display, serif",
             color: "var(--black)",
           }}
         >
-         links.
+          links.
         </h1>
         <div className="row">
           <div className="folder variant-1" data-link="/work">
@@ -399,9 +453,7 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
                 <p>04</p>
               </div>
               <div className="folder-name">
-                <h1>
-                  contact
-                </h1>
+                <h1>contact</h1>
               </div>
             </div>
           </div>
@@ -411,4 +463,4 @@ const [isPageTransition, setIsPageTransition] = useState(() => {
   );
 }
 
-export default About
+export default About;

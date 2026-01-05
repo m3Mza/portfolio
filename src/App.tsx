@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
@@ -12,8 +11,12 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 function App() {
+  /* =======================
+==========================
+LENIS
+==========================
+========================== */
 
-  // Initialize Lenis smooth scroll
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -34,8 +37,11 @@ function App() {
     };
   }, []);
 
-  
-  // Meni i nneke druge gluposti nemam pojma iskreno
+  /* =======================
+==========================
+CONST AND STATE DECLARATIONS
+==========================
+========================== */
 
   const [isMenuActive, setIsMenuActive] = useState(false); // Always start with menu closed
   const [isPageTransition, setIsPageTransition] = useState(() => {
@@ -43,9 +49,7 @@ function App() {
   });
   const [isReturning, setIsReturning] = useState(false);
   const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
-  const horizontalScrollRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
@@ -55,7 +59,12 @@ function App() {
     setActiveAccordion(activeAccordion === index ? null : index);
   };
 
-  // Check if we're coming from a page transition
+  /* =======================
+==========================
+PAGE TRANSITION LOGIC
+==========================
+========================== */
+
   useEffect(() => {
     const isTransitioning = sessionStorage.getItem("pageTransition");
     if (isTransitioning === "true") {
@@ -101,7 +110,7 @@ function App() {
       // For internal links on desktop: use page transition with full page load
       setIsPageTransition(true);
       sessionStorage.setItem("pageTransition", "true");
-      
+
       setTimeout(() => {
         window.location.href = href;
       }, 800);
@@ -140,7 +149,11 @@ function App() {
     }
   };
 
-  // GSAP scroll animation for komparacija section
+  /* =======================
+==========================
+GSAP SCROLL ANIMATIONS FOR KOMPARACIJA SECTION
+==========================
+========================== */
 
   useEffect(() => {
     // Wait a bit for DOM to be fully ready
@@ -278,8 +291,12 @@ function App() {
     };
   }, []);
 
+  /* =======================
+==========================
+FOLDER HOVER INTERACTIONS
+==========================
+========================== */
 
-  // Folder hover animation (no click handler for navigation)
   useEffect(() => {
     const folders = document.querySelectorAll(".folders .folder");
     const folderWrappers = document.querySelectorAll(
@@ -305,13 +322,13 @@ function App() {
     }> = [];
     folders.forEach((folder, index) => {
       const previewImages = folder.querySelectorAll(".folder-preview-img");
-      
+
       // Click handler for navigation
       const clickHandler = () => {
         const target = folder as HTMLElement;
         const link = target.getAttribute("data-link");
         const mailto = target.getAttribute("data-mailto");
-        
+
         if (mailto) {
           window.location.href = `mailto:${mailto}`;
         } else if (link) {
@@ -324,7 +341,7 @@ function App() {
       };
       folder.addEventListener("click", clickHandler);
       clickHandlers.push({ folder, clickHandler });
-      
+
       const mouseEnterHandler = () => {
         if (isMobile) return;
         folders.forEach((siblingFolder) => {
@@ -407,64 +424,46 @@ function App() {
     };
   }, [navigate]);
 
-  // ========================================
-  // HORIZONTAL SCROLL ANIMATION
-  // ========================================
+  /* =======================
+==========================
+SELECTED WORKS PARALLAX
+==========================
+========================== */
 
   useEffect(() => {
-    const container = horizontalScrollRef.current;
-    if (!container) return;
-
-    const panels = container.querySelector(".horizontal-panels");
-    if (!panels) return;
-
-    // ADJUST: Increase this value if animation is twitchy (try 500, 1000, or 1500)
-    const initDelay = 200;
+    const initDelay = 300;
 
     const timeoutId = setTimeout(() => {
-      const scrollTrigger = ScrollTrigger.create({
-        trigger: container,
+      const selectedWorksSection = document.querySelector(".selected-works-section");
+      const bigImageFigures = document.querySelectorAll(".selected-works-big-image");
 
-        start: "top top",
+      if (!selectedWorksSection || bigImageFigures.length === 0) return;
 
-        // ====================================
-        // END: When the animation completes
-        // ====================================
-        // * 1.0 = FAST (minimal scrolling needed)
-        // * 1.5 = MEDIUM (current setting - good balance)
-        // * 2.0 = SLOW (more scrolling needed to complete animation)
-        // * 2.5 = VERY SLOW (lots of scrolling)
-        end: () => `+=${window.innerWidth * 1.5}`,
-
-        // ====================================
-        // PIN: Lock the section in place
-        // ====================================
-        pin: true,
-        pinSpacing: true,
-
-        // scrub
-        // true = Instant response (can feel jerky)
-        // 0.1 = Very snappy, minimal smoothing
-        // 0.5 = Balanced (current - smooth but responsive)
-        // 1 = Slower, more lag/smoothing
-        // 2 = Very smooth but feels sluggish
-        scrub: 0.5,
-
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const moveDistance = window.innerWidth * 1;
-
-          // Use gsap.set() for immediate updates - no tween creation
-          gsap.set(panels, {
-            x: -progress * moveDistance,
-          });
-        },
+      // Create parallax effect for big images (move up very slightly)
+      bigImageFigures.forEach((figure) => {
+        gsap.fromTo(figure, 
+          {
+            y: 0,
+          },
+          {
+            y: -100,
+            ease: "none",
+            scrollTrigger: {
+              trigger: selectedWorksSection,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          }
+        );
       });
 
       return () => {
-        if (scrollTrigger) {
-          scrollTrigger.kill();
-        }
+        ScrollTrigger.getAll().forEach((trigger) => {
+          if (trigger.vars.trigger === selectedWorksSection) {
+            trigger.kill();
+          }
+        });
       };
     }, initDelay);
 
@@ -473,11 +472,12 @@ function App() {
     };
   }, []);
 
-  
-  
-  // ========================================
-  // PARALLAX GALLERY TEXT OVER IMAGE ANIMATION
-  // ========================================
+  /* =======================
+==========================
+PARALLAX GALLERY SECTION
+==========================
+========================== */
+
   useEffect(() => {
     const initDelay = 300;
 
@@ -613,16 +613,9 @@ function App() {
     };
   }, []);
 
-
-
   return (
     <>
       <div className="grain-overlay"></div>
-      <style>{`
-        .folder-work-white .folder-index::after {
-          background-color: var(--white) !important;
-        }
-      `}</style>
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
@@ -631,7 +624,7 @@ function App() {
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "CLOSE" : "MENU"}
+            {isMenuActive ? "close" : "menu"}
           </button>
         </div>
       </header>
@@ -645,16 +638,16 @@ function App() {
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            <span >home</span>
+            <span>home</span>
           </a>
           <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            <span >about</span>
+            <span>about</span>
           </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            <span >work</span>
+            <span>work</span>
           </a>
           <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
-            <span >contact</span>
+            <span>contact</span>
           </a>
         </div>
       </nav>
@@ -684,7 +677,10 @@ function App() {
             </div>
             <div className="hero-grid-text">
               <p>
-                Hi. I'm a <span className="salmon-background"> code-based </span>web developer who makes websites <span className="salmon-background">f#*&#@g</span> cool.
+                Hi. I'm a{" "}
+                <span className="salmon-background"> code-based </span>web
+                developer who makes websites{" "}
+                <span className="highlight-marker">f#*&#@g</span> cool.
               </p>
             </div>
             <div className="hero-grid-cta">
@@ -695,10 +691,28 @@ function App() {
                   (window.location.href = "mailto:mirkomimap@gmail.com")
                 }
               >
-                  SAY HELLO.   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
-            <path d="M18 6L6 18"/>
-            <path d="M8 6h10v10"/>
-          </svg>
+                SAY HELLO.{" "}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="23"
+                  height="23"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{
+                    marginLeft: "1px",
+                    marginBottom: "4px",
+                    display: "inline-block",
+                    verticalAlign: "middle",
+                  }}
+                  className="ai ai-ArrowUpRight"
+                >
+                  <path d="M18 6L6 18" />
+                  <path d="M8 6h10v10" />
+                </svg>
               </a>
             </div>
           </div>
@@ -707,10 +721,25 @@ function App() {
       {/* Scroll Animation Section */}
       <section className="komparacija">
         <div className="komparacija-header">
-          <h1>
-            Scroll down <svg xmlns="http://www.w3.org/2000/svg" width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ai ai-ArrowDown"><path d="M12 20V4"/><path d="M5 13l7 7 7-7"/></svg> to{" "}
-            <span className="salmon-background">learn more.</span>
-          </h1>
+          <h2>
+            Scroll down{" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="55"
+              height="55"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="ai ai-ArrowDown"
+            >
+              <path d="M12 20V4" />
+              <path d="M5 13l7 7 7-7" />
+            </svg>{" "}
+            to <span className="highlight-underline-marker">learn more.</span>
+          </h2>
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
@@ -746,105 +775,56 @@ function App() {
         >
           <div className="parallax-gallery-text">
             <h3>
-              I am a web developer based in Serbia. I try to create timeless web experiences
-              that are memorable and keep users coming back for more.
+              I am a web developer based in{" "}
+              <span className="highlight-scribble">Serbia</span>. I aim to
+              create timeless web experiences that are memorable and keep users
+              coming back for more.
             </h3>
           </div>
           <div className="parallax-gallery-image">
             <img src="/circle5.jpg" alt="Gallery placeholder" />
           </div>
           <p className="parallax-gallery-caption">
-            For me, every project is a story of its' own, whether that be a hastily dished out <span className="salmon-background">framework</span> or a fine-tuned application made from <span className="salmon-background">scratch</span>.
+            <span className="highlight-big-redaction">
+              For me, every project is a story of its' own, whether that be a
+              hastily dished out framework
+            </span>{" "}
+            or a fine-tuned application made from scratch.
           </p>
         </div>
       </section>
 
-      {/* FAQ Accordion Section */}
-      <section className="faq-section">
-        <div className="faq-container">
-          <h1 className="faq-title">So, what do I <span className="salmon-background">actually</span> do?</h1>
-          
-          <div className="faq-items">
-            <div className="faq-item">
-              <div 
-                className="faq-question" 
-                onClick={() => toggleAccordion(1)}
-              >
-                <span className="faq-number">01</span>
-                <h3><span className="salmon-background">Strategic research.</span></h3>
-                <span className={`faq-icon ${activeAccordion === 1 ? 'active' : ''}`}>{activeAccordion === 1 ? '−' : '+'}</span>
-              </div>
-              <div className={`faq-answer ${activeAccordion === 1 ? 'active' : ''}`}>
-                <p>I study the context of your brand, its' story and competitors, to develop a broad idea on the next step.</p>
-              </div>
-            </div>
-
-            <div className="faq-item">
-              <div 
-                className="faq-question" 
-                onClick={() => toggleAccordion(2)}
-              >
-                <span className="faq-number">02</span>
-                <h3><span className="salmon-background">Brand identity.</span></h3>
-                <span className={`faq-icon ${activeAccordion === 2 ? 'active' : ''}`}>{activeAccordion === 2 ? '−' : '+'}</span>
-              </div>
-              <div className={`faq-answer ${activeAccordion === 2 ? 'active' : ''}`}>
-                <p>I'll carefully pick out the proper typography, palette and imaging for your brand, to ensure that its' message gets delivered.</p>
-              </div>
-            </div>
-
-            <div className="faq-item">
-              <div 
-                className="faq-question" 
-                onClick={() => toggleAccordion(3)}
-              >
-                <span className="faq-number">03</span>
-                <h3><span className="salmon-background">Web development.</span></h3>
-                <span className={`faq-icon ${activeAccordion === 3 ? 'active' : ''}`}>{activeAccordion === 3 ? '−' : '+'}</span>
-              </div>
-              <div className={`faq-answer ${activeAccordion === 3 ? 'active' : ''}`}>
-                <p>I develop an engaging and efficient web presence tailored to your needs, with the tools best suited for the job.</p>
-              </div>
-            </div>
-
-            <div className="faq-item">
-              <div 
-                className="faq-question" 
-                onClick={() => toggleAccordion(4)}
-              >
-                <span className="faq-number">04</span>
-                <h3><span className="salmon-background">Long-term maintenance</span></h3>
-                <span className={`faq-icon ${activeAccordion === 4 ? 'active' : ''}`}>{activeAccordion === 4 ? '−' : '+'}</span>
-              </div>
-              <div className={`faq-answer ${activeAccordion === 4 ? 'active' : ''}`}>
-                <p>If needed I will perform routine maintenance on the website, fine-tuning the performance aswell as later implementing new changes.</p>
-              </div>
-            </div>
-          </div>
+        {/* Selected Works Section */}
+      <section className="selected-works-section">
+        <div className="selected-works-header">
+          <h3 className="selected-works-title">Some stuff I made.</h3>
+          <a href="/work" className="link">
+            All of my work{" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="23"
+              height="23"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                marginLeft: "1px",
+                marginBottom: "4px",
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+            >
+              <path d="M18 6L6 18" />
+              <path d="M8 6h10v10" />
+            </svg>
+          </a>
         </div>
-      </section>
-
-      {/* Horizontal Scroll Container */}
-      <div
-        ref={horizontalScrollRef}
-        className="horizontal-scroll-container"
-        style={{ zIndex: 10 }}
-      >
-        <div className="horizontal-panels">
-          {/* Panel 1 - Header */}
-          <section className="horizontal-panel panel-purple">
-            <div className="big-black-circle">
-              <h1 className="side-scroll-header">
-                Selected
-                <br />
-                work.
-              </h1>
-            </div>
-          </section>
-
-          {/* Panel 2 - Two Stacked Images */}
-          <section className="horizontal-panel panel-black panel-stacked">
-            <figure>
+        <div className="selected-works-container">
+          <div className="selected-works-left">
+            <figure className="variant-1">
               <a
                 href="https://example.com/screening"
                 target="_blank"
@@ -852,10 +832,12 @@ function App() {
               >
                 <img src="/circle3.jpg" alt="Screening project" />
               </a>
-              <div className="figure-description">JOHN YAKUZA ESTATE // REAL ESTATE // JAN 2026</div>
+              <div className="figure-description">
+                john yakuza estates // REAL ESTATE // JAN 2026
+              </div>
               <figcaption>placeholder 01.</figcaption>
             </figure>
-            <figure>
+            <figure className="variant-2">
               <a
                 href="https://example.com/residency"
                 target="_blank"
@@ -863,29 +845,12 @@ function App() {
               >
                 <img src="/circle2.jpg" alt="Residency project" />
               </a>
-              <div className="figure-description">ANOTHER PROJECT DESCRIPTION HERE // FILM // FEB 2026</div>
+              <div className="figure-description">
+                ANOTHER PROJECT DESCRIPTION HERE // FILM // FEB 2026
+              </div>
               <figcaption>placeholder 02.</figcaption>
             </figure>
-          </section>
-
-          {/* Panel 3 - One Big Image */}
-          <section className="horizontal-panel panel-black panel-big-image">
-            <figure className="panel-big-image figure1">
-              <a
-                href="https://example.com/jony-ive"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/circle4.jpg" alt="Featured project" />
-              </a>
-              <div className="figure-description">GREATEST WEBSITE IN THE HISTORY OF WEBSITES // EMIL // FEB 2017</div>
-              <figcaption>placeholder 03.</figcaption>
-            </figure>
-          </section>
-
-          {/* Panel 4 - Two Stacked Images */}
-          <section className="horizontal-panel panel-black panel-stacked">
-            <figure>
+            <figure className="variant-3">
               <a
                 href="https://example.com/nier"
                 target="_blank"
@@ -893,70 +858,212 @@ function App() {
               >
                 <img src="/circle5.jpg" alt="Project" />
               </a>
-              <div className="figure-description">COOL MAN // MOTORCYCLE // MAR 2027</div>
+              <div className="figure-description">
+                COOL MAN // MOTORCYCLE // MAR 2027
+              </div>
               <figcaption>placeholder 04.</figcaption>
             </figure>
-
-            <a href="/work" className="link-alt">
-              ALL OF MY WORKS   <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ marginLeft: '1px', marginBottom: '4px', display: 'inline-block', verticalAlign: 'middle' }} className="ai ai-ArrowUpRight">
-            <path d="M18 6L6 18"/>
-            <path d="M8 6h10v10"/>
-          </svg>
-            </a>
-          </section>
+            <figure className="variant-4">
+              <a
+                href="https://example.com/placeholder"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle1.jpg" alt="Featured project" />
+              </a>
+              <div className="figure-description">
+                TRAIN SPOTTED // TRANSPORT // APR 2028
+              </div>
+              <figcaption>placeholder 05.</figcaption>
+            </figure>
+          </div>
+          <div className="selected-works-right">
+            <figure className="selected-works-big-image variant-1">
+              <a
+                href="https://example.com/jony-ive"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle4.jpg" alt="Featured project" />
+              </a>
+              <div className="figure-description">
+                GREATEST WEBSITE IN THE HISTORY OF WEBSITES // EMIL // FEB 2017
+              </div>
+              <figcaption>placeholder 03.</figcaption>
+            </figure>
+            <figure className="selected-works-big-image variant-2">
+              <a
+                href="https://example.com/placeholder"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle1.jpg" alt="Featured project" />
+              </a>
+              <div className="figure-description">
+                TRAIN SPOTTED // TRANSPORT // APR 2028
+              </div>
+              <figcaption>placeholder 05.</figcaption>
+            </figure>
+            <figure className="selected-works-big-image variant-3">
+              <a
+                href="https://example.com/featured-project"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <img src="/circle6.jpg" alt="Featured project" />
+              </a>
+              <div className="figure-description">
+                HE IS WALKING // FITNESS // JUN 1984
+              </div>
+              <figcaption>placeholder 06.</figcaption>
+            </figure>
+          </div>
         </div>
-      </div>
-
-      {/* Continuation of the horizontal scroll - vertical */}
-      <section className="vertical-continuation">
-        <section className="horizontal-panel panel-black panel-big-image">
-          <figure className="vertical-continuation-figure-small panel-big-image figure2">
-            <a
-              href="https://example.com/placeholder"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src="/circle1.jpg" alt="Featured project" />
-            </a>
-            <div className="figure-description">TRAIN SPOTTED // TRANSPORT // APR 2028</div>
-            <figcaption>placeholder 05.</figcaption>
-          </figure>
-        </section>
-        <section className="horizontal-panel panel-black panel-big-image">
-          <figure className="vertical-continuation-figure-small panel-big-image figure3">
-            <a
-              href="https://example.com/featured-project"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <img src="/circle6.jpg" alt="Featured project" />
-            </a>
-            <div className="figure-description">HE IS WALKING // FITNESS // JUN 1984</div>
-            <figcaption>placeholder 06.</figcaption>
-          </figure>
-        </section>
       </section>
 
+      {/* FAQ Accordion Section */}
+      <section className="faq-section">
+        <div className="faq-container">
+          <h3 className="faq-title">
+            So, what do I <span className="highlight-circle">actually</span> do?
+          </h3>
+
+          <div className="faq-items">
+            <div className="faq-item">
+              <div className="faq-question" onClick={() => toggleAccordion(1)}>
+                <span className="faq-number">01</span>
+                <h3>
+                  <span className="salmon-background">Strategic research.</span>
+                </h3>
+                <span
+                  className={`faq-icon ${
+                    activeAccordion === 1 ? "active" : ""
+                  }`}
+                >
+                  {activeAccordion === 1 ? "−" : "+"}
+                </span>
+              </div>
+              <div
+                className={`faq-answer ${
+                  activeAccordion === 1 ? "active" : ""
+                }`}
+              >
+                <p>
+                  I study the context of your brand, its' story and competitors,
+                  to develop a broad idea on the next step to take.
+                </p>
+              </div>
+            </div>
+
+            <div className="faq-item">
+              <div className="faq-question" onClick={() => toggleAccordion(2)}>
+                <span className="faq-number">02</span>
+                <h3>
+                  <span className="salmon-background">Brand identity.</span>
+                </h3>
+                <span
+                  className={`faq-icon ${
+                    activeAccordion === 2 ? "active" : ""
+                  }`}
+                >
+                  {activeAccordion === 2 ? "−" : "+"}
+                </span>
+              </div>
+              <div
+                className={`faq-answer ${
+                  activeAccordion === 2 ? "active" : ""
+                }`}
+              >
+                <p>
+                  I'll carefully pick out the proper typography, palette and
+                  imaging for your brand, to ensure that its' message gets
+                  delivered.
+                </p>
+              </div>
+            </div>
+
+            <div className="faq-item">
+              <div className="faq-question" onClick={() => toggleAccordion(3)}>
+                <span className="faq-number">03</span>
+                <h3>
+                  <span className="highlight-underline">Web development.</span>
+                </h3>
+                <span
+                  className={`faq-icon ${
+                    activeAccordion === 3 ? "active" : ""
+                  }`}
+                >
+                  {activeAccordion === 3 ? "−" : "+"}
+                </span>
+              </div>
+              <div
+                className={`faq-answer ${
+                  activeAccordion === 3 ? "active" : ""
+                }`}
+              >
+                <p>
+                  I develop an engaging and efficient web presence tailored to
+                  your needs, with the tools best suited for the job.
+                </p>
+              </div>
+            </div>
+
+            <div className="faq-item">
+              <div className="faq-question" onClick={() => toggleAccordion(4)}>
+                <span className="faq-number">04</span>
+                <h3>
+                  <span className="highlight-marker-strong" style={{fontFamily:'Playfair Display'}}>
+                    Long-term maintenance.
+                  </span>
+                </h3>
+                <span
+                  className={`faq-icon ${
+                    activeAccordion === 4 ? "active" : ""
+                  }`}
+                >
+                  {activeAccordion === 4 ? "−" : "+"}
+                </span>
+              </div>
+              <div
+                className={`faq-answer ${
+                  activeAccordion === 4 ? "active" : ""
+                }`}
+              >
+                <p>
+                  If needed I will perform routine maintenance on the website,
+                  fine-tuning the performance aswell as later implementing new
+                  changes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    
       {/* Footer with Folders */}
       <div
         className="folders"
         style={{
-         backgroundColor: "var(--black)",
+          backgroundImage:
+            "linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), " +
+            "linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
+          backgroundSize: "50px 50px",
         }}
       >
         <h1
           style={{
             marginLeft: "3rem",
-            marginTop: "2rem",
+            marginBottom: "-4rem",
             fontWeight: 700,
             fontFamily: "Playfair Display, serif",
-            color: "var(--white)",
+            color: "var(--black)",
           }}
         >
-        links.
+          links.
         </h1>
         <div className="row">
-          <div className="folder variant-1 folder-work-white" data-link="/work">
+          <div className="folder variant-1" data-link="/work">
             <div className="folder-preview">
               <div className="folder-preview-img">
                 <img src="/circle1.jpg" alt="Placeholder 1" />
@@ -969,11 +1076,11 @@ function App() {
               </div>
             </div>
             <div className="folder-wrapper">
-              <div className="folder-index" style={{ backgroundColor: "var(--white)" }}>
-                <p style={{ color: "var(--black)" }}>01</p>
+              <div className="folder-index">
+                <p>01</p>
               </div>
-              <div className="folder-name" style={{ backgroundColor: "var(--white)" }}>
-                <h1 style={{ color: "var(--black)" }}>work</h1>
+              <div className="folder-name">
+                <h1>work</h1>
               </div>
             </div>
           </div>
@@ -1028,9 +1135,7 @@ function App() {
                 <p>04</p>
               </div>
               <div className="folder-name">
-                <h1>contact
-                  
-                </h1>
+                <h1>contact</h1>
               </div>
             </div>
           </div>
