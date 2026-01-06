@@ -48,16 +48,12 @@ CONST AND STATE DECLARATIONS
     return sessionStorage.getItem("pageTransition") === "true";
   });
   const [isReturning, setIsReturning] = useState(false);
-  const [activeAccordion, setActiveAccordion] = useState<number | null>(null);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
   };
 
-  const toggleAccordion = (index: number) => {
-    setActiveAccordion(activeAccordion === index ? null : index);
-  };
 
   /* =======================
 ==========================
