@@ -366,12 +366,12 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .faq-answer {
   max-height: 0;
   overflow: hidden;
-  transition: max-height 0.6s cubic-bezier(0.4, 0, 0.2, 1), padding 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0 1rem 0 5rem;
 }
 
 .faq-answer.active {
-  max-height: 500px;
+  max-height: 200px;
   padding: 2rem 1rem 2rem 5rem;
 }
 
