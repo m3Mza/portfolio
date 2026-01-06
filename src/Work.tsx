@@ -267,8 +267,8 @@ GALLERY STUFF AND INTERACTIONS
 
   const itemCount = 20;
   const itemGap = 150;
-  const itemWidth = 140;
-  const itemHeight = 180;
+  const itemWidth = 160;
+  const itemHeight = 200;
 
   // Gallery hover animation
   useEffect(() => {

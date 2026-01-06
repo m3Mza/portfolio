@@ -404,7 +404,7 @@ FOLDER HOVER ANIMATIONS
   
         
         <div className="footer-bottom">
-          <p>© made with love, mirko, 2026.</p>
+          <p>© made with <span className="highlight-circle">love</span>, mirko, 2026.</p>
           <h1 className="footer-logo">mirko</h1>
           <img
                   src="/nier.gif"

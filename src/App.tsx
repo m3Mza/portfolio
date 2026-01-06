@@ -388,12 +388,20 @@ PARALLAX GALLERY SECTION
       });
 
       // Animate text color with sharp color change based on image overlap
+      // Use throttling to reduce expensive layout calculations
+      let lastUpdateTime = 0;
+      const throttleMs = 16; // ~60fps max
+
       ScrollTrigger.create({
         trigger: parallaxSection,
         start: "top bottom",
         end: "bottom top",
-        scrub: 0.5, // Smooth scrubbing
+        scrub: 0.5,
         onUpdate: () => {
+          const now = performance.now();
+          if (now - lastUpdateTime < throttleMs) return;
+          lastUpdateTime = now;
+
           // Cache rect calculations for performance
           const textRect = textElement.getBoundingClientRect();
           const imageRect = imageElement.getBoundingClientRect();
@@ -426,24 +434,7 @@ PARALLAX GALLERY SECTION
               ((overlapRight - textRect.left) / textRect.width) * 100;
 
             // Build gradient that colors only the overlapping area with sharp transitions
-            const gradient = `
-              linear-gradient(to bottom,
-                var(--black) 0%,
-                var(--black) ${topPercent}%,
-                ${OVERLAY_COLOR} ${topPercent}%,
-                ${OVERLAY_COLOR} ${bottomPercent}%,
-                var(--black) ${bottomPercent}%,
-                var(--black) 100%
-              ),
-              linear-gradient(to right,
-                var(--black) 0%,
-                var(--black) ${leftPercent}%,
-                ${OVERLAY_COLOR} ${leftPercent}%,
-                ${OVERLAY_COLOR} ${rightPercent}%,
-                var(--black) ${rightPercent}%,
-                var(--black) 100%
-              )
-            `;
+            const gradient = `linear-gradient(to bottom, var(--black) 0%, var(--black) ${topPercent}%, ${OVERLAY_COLOR} ${topPercent}%, ${OVERLAY_COLOR} ${bottomPercent}%, var(--black) ${bottomPercent}%, var(--black) 100%), linear-gradient(to right, var(--black) 0%, var(--black) ${leftPercent}%, ${OVERLAY_COLOR} ${leftPercent}%, ${OVERLAY_COLOR} ${rightPercent}%, var(--black) ${rightPercent}%, var(--black) 100%)`;
 
             // Use gsap.set() for instant updates - no tween creation
             gsap.set(textElement, {
@@ -788,126 +779,7 @@ PARALLAX GALLERY SECTION
         </div>
       </section>
 
-      {/* FAQ Accordion Section */}
-      <section className="faq-section">
-        <div className="faq-container">
-          <h3 className="faq-title">
-            So, what do I <span className="highlight-circle">actually</span> do?
-          </h3>
-
-          <div className="faq-items">
-            <div className="faq-item">
-              <div className="faq-question" onClick={() => toggleAccordion(1)}>
-                <span className="faq-number">01</span>
-                <h3>
-                  <span className="salmon-background">Strategic research.</span>
-                </h3>
-                <span
-                  className={`faq-icon ${
-                    activeAccordion === 1 ? "active" : ""
-                  }`}
-                >
-                  {activeAccordion === 1 ? "−" : "+"}
-                </span>
-              </div>
-              <div
-                className={`faq-answer ${
-                  activeAccordion === 1 ? "active" : ""
-                }`}
-              >
-                <p>
-                  I study the context of your brand, its' story and competitors,
-                  to develop a broad idea on the next step to take.
-                </p>
-              </div>
-            </div>
-
-            <div className="faq-item">
-              <div className="faq-question" onClick={() => toggleAccordion(2)}>
-                <span className="faq-number">02</span>
-                <h3>
-                  <span className="salmon-background">Brand identity.</span>
-                </h3>
-                <span
-                  className={`faq-icon ${
-                    activeAccordion === 2 ? "active" : ""
-                  }`}
-                >
-                  {activeAccordion === 2 ? "−" : "+"}
-                </span>
-              </div>
-              <div
-                className={`faq-answer ${
-                  activeAccordion === 2 ? "active" : ""
-                }`}
-              >
-                <p>
-                  I'll carefully pick out the proper typography, palette and
-                  imaging for your brand, to ensure that its' message gets
-                  delivered.
-                </p>
-              </div>
-            </div>
-
-            <div className="faq-item">
-              <div className="faq-question" onClick={() => toggleAccordion(3)}>
-                <span className="faq-number">03</span>
-                <h3>
-                  <span className="highlight-underline">Web development.</span>
-                </h3>
-                <span
-                  className={`faq-icon ${
-                    activeAccordion === 3 ? "active" : ""
-                  }`}
-                >
-                  {activeAccordion === 3 ? "−" : "+"}
-                </span>
-              </div>
-              <div
-                className={`faq-answer ${
-                  activeAccordion === 3 ? "active" : ""
-                }`}
-              >
-                <p>
-                  I develop an engaging and efficient web presence tailored to
-                  your needs, with the tools best suited for the job.
-                </p>
-              </div>
-            </div>
-
-            <div className="faq-item">
-              <div className="faq-question" onClick={() => toggleAccordion(4)}>
-                <span className="faq-number">04</span>
-                <h3>
-                  <span className="highlight-marker-strong" style={{fontFamily:'Playfair Display'}}>
-                    Long-term maintenance.
-                  </span>
-                </h3>
-                <span
-                  className={`faq-icon ${
-                    activeAccordion === 4 ? "active" : ""
-                  }`}
-                >
-                  {activeAccordion === 4 ? "−" : "+"}
-                </span>
-              </div>
-              <div
-                className={`faq-answer ${
-                  activeAccordion === 4 ? "active" : ""
-                }`}
-              >
-                <p>
-                  If needed I will perform routine maintenance on the website,
-                  fine-tuning the performance aswell as later implementing new
-                  changes.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    
+      
       {/* Footer */}
       <footer className="footer-section">
         <div className="footer-links">
@@ -953,7 +825,7 @@ PARALLAX GALLERY SECTION
   
         
         <div className="footer-bottom">
-          <p>© made with love, mirko, 2026.</p>
+          <p>© made with <span className="highlight-circle">love</span>, mirko, 2026.</p>
           <h1 className="footer-logo">mirko</h1>
           <img
                   src="/nier.gif"

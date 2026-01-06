@@ -77,29 +77,6 @@ p {
   z-index: -1;
 }
 
-.highlight-marker-strong {
-  position: relative;
-  color: var(--salmon);
-  font-family: 'Grotesk', sans-serif;
-  font-weight: 600;
-  padding: 0.2rem 0.4rem;
-}
-
-.highlight-marker-strong::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url('/highlight3.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  opacity: 1;
-  z-index: -1;
-}
-
-
 .highlight-big-redaction {
   color: var(--black);
   background-image: url('/highlight5.png');
