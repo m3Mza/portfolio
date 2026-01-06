@@ -921,7 +921,7 @@ PARALLAX GALLERY SECTION
           
           <div className="footer-column">
             <h3 className="footer-heading">Contact</h3>
-            <a href="mailto:mirkomimap@gmail.com" className="link" onClick={(e) => { e.preventDefault(); window.location.href = "mailto:mirkomimap@gmail.com"; }}>mail
+            <a href="mailto:mirkomimap@gmail.com" className="link">mail
               <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -944,8 +944,8 @@ PARALLAX GALLERY SECTION
                   <path d="M8 6h10v10" />
                 </svg>
             </a>
-            <a href="https://x.com/mirkosayshello" className="link" onClick={(e) => handleLinkClick(e, "https://x.com/mirkosayshello")} target="_blank" rel="noopener noreferrer">x</a>
-            <a href="https://github.com/m3Mza/portfolio" className="link" onClick={(e) => handleLinkClick(e, "https://github.com/m3Mza/portfolio")} target="_blank" rel="noopener noreferrer">github</a>
+            <a href="https://x.com/mirkosayshello" className="link">x</a>
+            <a href="https://github.com/m3Mza/portfolio" className="link">github</a>
 
           </div>
         </div>
