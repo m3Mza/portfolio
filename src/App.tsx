@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-import { useNavigate } from "react-router-dom";
 import "./App.css";
 import "./responsive.css";
 import Lenis from "lenis";
@@ -48,7 +47,6 @@ CONST AND STATE DECLARATIONS
     return sessionStorage.getItem("pageTransition") === "true";
   });
   const [isReturning, setIsReturning] = useState(false);
-  const navigate = useNavigate();
   const heroContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
