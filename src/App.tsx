@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
 import "./App.css";
@@ -49,6 +49,7 @@ CONST AND STATE DECLARATIONS
   });
   const [isReturning, setIsReturning] = useState(false);
   const navigate = useNavigate();
+  const heroContainerRef = useRef<HTMLDivElement>(null);
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
@@ -80,6 +81,233 @@ PAGE TRANSITION LOGIC
         }, 900);
       }, 800);
     }
+  }, []);
+
+  /* =======================
+==========================
+IMAGE TRAILING HOVER EFFECT
+==========================
+========================== */
+
+  useEffect(() => {
+    const container = heroContainerRef.current;
+    if (!container) return;
+
+    const config = {
+      imageCount: 15,
+      imageLifespan: 750,
+      removalDelay: 50,
+      mouseThreshold: 100,
+      scrollThreshold: 100,
+      idleCursorInterval: 1000,
+      inDuration: 750,
+      outDuration: 1000,
+      inEasing: "cubic-bezier(.07, .5, .5, 1)",
+      outEasing: "cubic-bezier(.8, 0, .15, 1)"
+    };
+
+    const images = Array.from({ length: config.imageCount }, (_, i) => 
+      `/circle${(i % 6) + 1}.jpg`
+    );
+
+    const trail: Array<{
+      element: HTMLImageElement;
+      rotation: number;
+      removeTime: number;
+    }> = [];
+
+    let mouseX = 0, mouseY = 0, lastMouseX = 0, lastMouseY = 0;
+    let isMoving = false;
+    let isCursorInContainer = false;
+    let lastRemovalTime = 0;
+    let lastSteadyImageTime = 0;
+    let lastScrollTime = 0;
+    let isScrolling = false;
+    let scrollTicking = false;
+
+    const isInContainer = (x: number, y: number): boolean => {
+      const rect = container.getBoundingClientRect();
+      return (
+        x >= rect.left && x <= rect.right &&
+        y >= rect.top && y <= rect.bottom
+      );
+    };
+
+    const setInitialMousePos = (event: MouseEvent) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
+      isCursorInContainer = isInContainer(mouseX, mouseY);
+      document.removeEventListener('mousemove', setInitialMousePos);
+    };
+    document.addEventListener('mousemove', setInitialMousePos, { once: true });
+
+    const hasMovedEnough = (): boolean => {
+      const distance = Math.sqrt(
+        Math.pow(mouseX - lastMouseX, 2) + Math.pow(mouseY - lastMouseY, 2)
+      );
+      return distance >= config.mouseThreshold;
+    };
+
+    const createImage = () => {
+      const img = document.createElement('img');
+      img.classList.add("trail-img");
+
+      const randomIndex = Math.floor(Math.random() * images.length);
+      const rotationImage = (Math.random() - 0.5) * 50;
+      img.src = images[randomIndex];
+
+      const rect = container.getBoundingClientRect();
+      const relativeX = mouseX - rect.left;
+      const relativeY = mouseY - rect.top;
+
+      img.style.left = `${relativeX}px`;
+      img.style.top = `${relativeY - 100}px`;
+      img.style.transform = `translate(-50%, -50%) rotate(${rotationImage}deg) scale(0)`;
+      img.style.transition = `transform ${config.inDuration}ms ${config.inEasing}`;
+
+      container.appendChild(img);
+
+      setTimeout(() => {
+        img.style.transform = `translate(-50%, -50%) rotate(${rotationImage}deg) scale(1)`;
+      }, 10);
+
+      trail.push({
+        element: img,
+        rotation: rotationImage,
+        removeTime: Date.now() + config.imageLifespan,  
+      });
+    };
+
+    const createTrailImage = () => {
+      if (!isCursorInContainer) return;
+      
+      const now = Date.now();
+
+      if (isMoving && hasMovedEnough()) {
+        lastMouseX = mouseX;
+        lastMouseY = mouseY;
+        lastSteadyImageTime = now;
+        createImage();
+        return;
+      }
+
+      if (!isMoving && (now - lastSteadyImageTime) >= config.idleCursorInterval) {
+        lastSteadyImageTime = now;
+        createImage();
+      }
+    };
+
+    const createScrollTrailImage = () => {
+      if (!isCursorInContainer) return;
+
+      lastMouseX += (config.mouseThreshold + 10) * (Math.random() > 0.5 ? 1 : -1);
+      lastMouseY += (config.mouseThreshold + 10) * (Math.random() > 0.5 ? 1 : -1);
+
+      createImage();
+
+      lastMouseX = mouseX;
+      lastMouseY = mouseY;
+    };
+
+    const removeOldImages = () => {
+      const now = Date.now();
+      if (now - lastRemovalTime < config.removalDelay || trail.length === 0) 
+        return;
+
+      const oldestImage = trail[0];
+      if (now >= oldestImage.removeTime) {
+        const imgToRemove = trail.shift();
+        if (!imgToRemove) return;
+
+        imgToRemove.element.style.transition = `transform ${config.outDuration}ms ${config.outEasing}`;
+        imgToRemove.element.style.transform = `translate(-50%, -50%) rotate(${imgToRemove.rotation}deg) scale(0)`;
+
+        lastRemovalTime = now;
+
+        setTimeout(() => {
+          if (imgToRemove.element.parentNode) {
+            imgToRemove.element.parentNode.removeChild(imgToRemove.element);
+          }
+        }, config.outDuration);
+      }
+    };
+
+    const handleMouseMove = (event: MouseEvent) => {
+      mouseX = event.clientX;
+      mouseY = event.clientY;
+      isMoving = true;
+      isCursorInContainer = isInContainer(mouseX, mouseY);
+
+      if (isCursorInContainer) {
+        isMoving = true;
+        clearTimeout((window as any).moveTimeout);
+        (window as any).moveTimeout = setTimeout(() => {
+          isMoving = false;
+        }, 100);
+      }
+    };
+
+    const handleScroll = () => {
+      isCursorInContainer = isInContainer(mouseX, mouseY);
+
+      if (isCursorInContainer) {
+        isMoving = true;
+        lastMouseX += (Math.random() - 0.5) * 10;
+
+        clearTimeout((window as any).moveTimeout);
+        (window as any).scrollTimeout = setTimeout(() => {
+          isMoving = false;
+        }, 100);
+      }
+    };
+
+    const handleScrollThrottled = () => {
+      const now = Date.now();
+      isScrolling = true;
+
+      if (now - lastScrollTime < config.scrollThreshold) return;
+
+      lastScrollTime = now;
+
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          if (isScrolling) {
+            createScrollTrailImage();
+            isScrolling = false;
+          }
+          scrollTicking = false;
+        });
+        scrollTicking = true;
+      }
+    };
+
+    const animate = () => {
+      createTrailImage();
+      removeOldImages();
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScrollThrottled, { passive: true });
+
+    let animationFrameId = requestAnimationFrame(animate);
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('scroll', handleScrollThrottled);
+      cancelAnimationFrame(animationFrameId);
+      
+      // Cleanup all trail images
+      trail.forEach(item => {
+        if (item.element.parentNode) {
+          item.element.parentNode.removeChild(item.element);
+        }
+      });
+    };
   }, []);
 
   // Handle link clicks with page transition
@@ -161,17 +389,22 @@ GSAP SCROLL ANIMATIONS FOR KOMPARACIJA SECTION
       gsap.registerPlugin(ScrollTrigger);
 
       // ADJUST: Final X and Y positions for each image after animation completes
-      // [x, y] where x controls horizontal spacing, y controls vertical position
-      // More negative Y = higher up, more positive Y = lower down
+      // Generate random final positions on each refresh
       const komparacijaFinalPosition = [
-        [-180, -55], // Image 1: far left
-        [-250, 25], // Image 2: mid left
-        [10, 0], // Image 3: mid right
-        [165, -100], // Image 4: far right
+        [Math.random() * 200 - 100, Math.random() * 200 - 200], // Image 1: random
+        [Math.random() * 300 - 300, Math.random() * 100 - 50], // Image 2: random
+        [Math.random() * 100 - 50, Math.random() * 100 - 50], // Image 3: random
+        [Math.random() * 250 - 50, Math.random() * 150 - 75], // Image 4: random
       ];
 
       // ADJUST: Initial rotation for each image (in degrees)
-      const initialRotations = [5, -1, 4, -2];
+      // Also randomize rotations
+      const initialRotations = [
+        Math.random() * 10 - 5, // Random between -5 and 5
+        Math.random() * 10 - 5,
+        Math.random() * 10 - 5,
+        Math.random() * 10 - 5,
+      ];
 
       const komparacijaSlike = document.querySelectorAll(".komparacija-img");
 
@@ -179,6 +412,14 @@ GSAP SCROLL ANIMATIONS FOR KOMPARACIJA SECTION
         console.warn("No images found for animation");
         return null;
       }
+
+      // Randomize image sizes on each refresh
+      komparacijaSlike.forEach((img) => {
+        const randomWidth = Math.floor(Math.random() * (450 - 250 + 1)) + 250; // Random between 250-450px
+        const randomHeight = Math.floor(Math.random() * (400 - 200 + 1)) + 200; // Random between 200-400px
+        (img as HTMLElement).style.width = `${randomWidth}px`;
+        (img as HTMLElement).style.height = `${randomHeight}px`;
+      });
 
       const scrollTrigger = ScrollTrigger.create({
         trigger: ".komparacija",
@@ -311,11 +552,12 @@ SELECTED WORKS PARALLAX
           {
             y: -100,
             ease: "none",
+            force3D: true,
             scrollTrigger: {
               trigger: selectedWorksSection,
               start: "top bottom",
               end: "bottom top",
-              scrub: 1,
+              scrub: 0.5,
             },
           }
         );
@@ -350,43 +592,38 @@ PARALLAX GALLERY SECTION
       const imageElement = document.querySelector(
         ".parallax-gallery-image img"
       );
-      const captionElement = document.querySelector(
-        ".parallax-gallery-caption"
-      );
 
-      if (!parallaxSection || !textElement || !imageElement || !captionElement)
+      if (!parallaxSection || !textElement || !imageElement)
         return;
 
-      const OVERLAY_COLOR = "rgba(255, 255, 255, 0.5)";
+      const OVERLAY_COLOR = "rgba(255, 255, 255, 1)";
 
       // Create parallax effect for image (moves up slower)
       gsap.to(imageElement, {
         y: -150, // Moves up as you scroll down
         ease: "none",
+        force3D: true,
         scrollTrigger: {
           trigger: parallaxSection,
           start: "top bottom",
           end: "bottom top",
-          scrub: 1,
-        },
-      });
-
-      // Create parallax effect for caption (moves down slower)
-      gsap.to(captionElement, {
-        y: 150, // Moves down slower than scroll
-        ease: "none",
-        scrollTrigger: {
-          trigger: parallaxSection,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: 1,
+          scrub: 0.5,
         },
       });
 
       // Animate text color with sharp color change based on image overlap
       // Use throttling to reduce expensive layout calculations
       let lastUpdateTime = 0;
-      const throttleMs = 16; // ~60fps max
+      const throttleMs = 32; // ~30fps for better performance
+      let rafId: number | null = null;
+      let cachedTextRect: DOMRect | null = null;
+      let cachedImageRect: DOMRect | null = null;
+
+      // Cache rects in RAF for smoother updates
+      const updateRects = () => {
+        cachedTextRect = textElement.getBoundingClientRect();
+        cachedImageRect = imageElement.getBoundingClientRect();
+      };
 
       ScrollTrigger.create({
         trigger: parallaxSection,
@@ -398,9 +635,15 @@ PARALLAX GALLERY SECTION
           if (now - lastUpdateTime < throttleMs) return;
           lastUpdateTime = now;
 
-          // Cache rect calculations for performance
-          const textRect = textElement.getBoundingClientRect();
-          const imageRect = imageElement.getBoundingClientRect();
+          // Use RAF to batch rect calculations
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = requestAnimationFrame(() => {
+            updateRects();
+            
+            if (!cachedTextRect || !cachedImageRect) return;
+            
+            const textRect = cachedTextRect;
+            const imageRect = cachedImageRect;
 
           // Check if there's any overlap
           const isOverlapping = !(
@@ -450,6 +693,7 @@ PARALLAX GALLERY SECTION
               color: "var(--black)",
             });
           }
+          });
         },
       });
 
@@ -508,11 +752,11 @@ PARALLAX GALLERY SECTION
 
       {/* Hero Grid Section */}
 
-      <section className="hero-grid-section">
+      <section className="hero-grid-section" ref={heroContainerRef}>
         <div className="hero-grid-container">
           <div className="hero-grid">
             <div className="hero-grid-header">
-              <h1 style={{ position: "relative" }}>
+              <h1 className="title" style={{ position: "relative" }}>
                 mirko.
                 <img
                   src="/nier.gif"
@@ -532,7 +776,7 @@ PARALLAX GALLERY SECTION
             <div className="hero-grid-text">
               <p>
                 Hi. I'm a{" "}
-                <span className="salmon-background">code-based</span> web
+                code-based web
                 developer who makes websites{" "}
                 <span className="highlight-marker">f#*&#@g</span> cool.
               </p>
@@ -579,8 +823,8 @@ PARALLAX GALLERY SECTION
             Scroll down{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="55"
-              height="55"
+              width="16"
+              height="16"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -591,16 +835,15 @@ PARALLAX GALLERY SECTION
             >
               <path d="M12 20V4" />
               <path d="M5 13l7 7 7-7" />
-            </svg>{" "}
-            to <span className="highlight-underline-marker">learn more.</span>
+            </svg>
           </h2>
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
-            <img src="/circle5.jpg" alt="Picture 1" />
+            <img src="/circle6.jpg" alt="Picture 1" />
           </div>
           <div className="komparacija-img">
-            <img src="/nier.gif" alt="Picture 2" />
+            <img src="/img6.jpg" alt="Picture 2" />
           </div>
           <div className="komparacija-img">
             <img src="/circle2.jpg" alt="Picture 3" />
@@ -638,20 +881,13 @@ PARALLAX GALLERY SECTION
           <div className="parallax-gallery-image">
             <img src="/circle5.jpg" alt="Gallery placeholder" />
           </div>
-          <p className="parallax-gallery-caption">
-            <span className="highlight-big-redaction">
-              For me, every project is a story of its' own, whether that be a
-              hastily dished out framework
-            </span>{" "}
-            or a fine-tuned application made from scratch.
-          </p>
         </div>
       </section>
 
         {/* Selected Works Section */}
       <section className="selected-works-section">
         <div className="selected-works-header">
-          <h3 className="selected-works-title">Some stuff I made.</h3>
+          <h3 className="selected-works-title">Some stuff I <span className="highlight-underline-marker">made.</span></h3>
           <a href="/work" className="link">
             ALL OF MY WORK{" "}
             <svg
@@ -780,7 +1016,6 @@ PARALLAX GALLERY SECTION
       <footer className="footer-section">
         <div className="footer-links">
           <div className="footer-column">
-            <h3 className="footer-heading">Navigation</h3>
             <a href="/" className="link">home</a>
             <a href="/work" className="link">work</a>
             <a href="/about" className="link">about</a>
@@ -788,7 +1023,6 @@ PARALLAX GALLERY SECTION
           </div>
           
           <div className="footer-column">
-            <h3 className="footer-heading">Contact</h3>
             <a href="mailto:mirkomimap@gmail.com" className="link">mail
               <svg
                   xmlns="http://www.w3.org/2000/svg"

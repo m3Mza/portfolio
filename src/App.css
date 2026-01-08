@@ -36,33 +36,40 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 ========================== */
 
 .hero-grid-section {
-  min-height: 30vh;
+  min-height: 50vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--white);
   padding: 2rem;
+      background-image:
+    linear-gradient(to bottom, transparent 0%, transparent 70%, var(--white) 100%),
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+  background-repeat: no-repeat, repeat, repeat;
 }
 
 .hero-grid-container {
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
+  margin-top: 5%;
 }
 
 .hero-grid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   gap: 0rem;
   align-items: end;
-  min-height: 40vh;
+  min-height: 50vh;
 }
 
 .hero-grid-header {
   grid-column: 1 / 5;
-  grid-row: 1 / 3;
+  grid-row: 3;
   display: flex;
   align-items: flex-end;
   z-index: 12;
@@ -76,12 +83,12 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 }
 
 .hero-grid-text {
-  grid-column: 9 / 11;
-  grid-row: 1 / 2;
+  grid-column: 1 / 5;
+  grid-row: 2;
   display: flex;
   align-items: center;
-  margin-top: 3rem;
-  margin-left: 0.5rem;
+  margin-top: 0;
+  margin-left: 0;
   z-index: 12;
 }
 
@@ -91,10 +98,22 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 }
 
 .hero-grid-cta {
-  grid-column: 9 / 11;
-  grid-row: 2 / 3;
+  grid-column: 10 / 13;
+  grid-row: 2;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: flex-end;
+  z-index: 14;
+}
+
+.trail-img {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  transform-origin: center;
+  pointer-events: none;
+  will-change: transform;
   z-index: 12;
 }
 
@@ -115,13 +134,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   justify-content: center;
   position: relative;
   overflow: hidden;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  mask-image: linear-gradient(to bottom, transparent 0%, black 15%);
-  mask-repeat: no-repeat;
-  background-size: 50px 50px;
-  background-position: -1px -1px;
   z-index: 10;
 }
 
@@ -132,17 +144,11 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   max-width: 1000px;
   z-index: 8;
   padding: 2rem;
-  margin-top: -18rem;
-  animation: twitchTilt 2s steps(1) infinite;
-}
-
-@keyframes twitchTilt {
-  0%, 49% { transform: rotate(-1deg); }
-  50%, 100% { transform: rotate(1deg); }
+  margin-top: -24rem;
 }
 
 .komparacija-header h2 {
-  font-size: 4rem;
+  font-size: 1.4rem;
   color: var(--black);
   margin: 0;
   line-height: 1.2;
@@ -170,21 +176,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   z-index: 9;
 }
 
-.komparacija-img:nth-child(1) {
-  width: 380px;
-  height: 200px;
-}
-
-.komparacija-img:nth-child(2) {
-  width: 300px;
-  height: 300px;
-}
-
-.komparacija-img:nth-child(3) {
-  width: 380px;
-  height: 310px;
-}
-
 .komparacija-img img {
   width: 100%;
   height: 100%;
@@ -202,11 +193,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   width: 100vw;
   height: 100vh;
   color: var(--black);
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  background-repeat: repeat;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -215,6 +201,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   z-index: 12;
   position: relative;
   overflow-x: hidden;
+  contain: layout style paint;
 }
 
 
@@ -246,8 +233,9 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 .parallax-gallery-text h3 {
   hyphens: auto;
   text-align: justify;
-  min-width: 45vw;
-  font-size: 2.7rem;
+  min-width: 65vw;
+  font-size: 3.6rem;
+  will-change: background-image, -webkit-background-clip, -webkit-text-fill-color;
 }
 
 
@@ -261,24 +249,16 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 
 .parallax-gallery-image img {
   width: 100%;
-  width: 45vw;
+  width: 40vw;
   height: auto;
   object-fit: fill;
-  margin-top: 40%;
+  margin-top: 45%;
   margin-right: 79%;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
-.parallax-gallery-caption {
-  position: relative;
-  left: -25vw;
-  top: 10vw;
-  margin: 0;
-  text-align: justify;
-  hyphens: auto;
-  min-width: 320px;
-  font-size: 1.4rem;
-  
-}
+
 
 
 /* =======================
@@ -293,13 +273,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   padding: 4rem 2rem;
   position: relative;
   z-index: 14;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
-  background-repeat: repeat;
-  mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
-  mask-repeat: no-repeat;
 }
 
 .selected-works-header {
@@ -314,7 +287,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   
   color: var(--black);
   margin: 0;
-   font-family: 'Playfair Display', serif;
 }
 
 
@@ -401,7 +373,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 }
 
 .selected-works-left figure:hover::after {
-  opacity: 0.9;
+  opacity: 1;
   animation: grainWorks 8s steps(10) infinite;
 }
 
@@ -416,6 +388,9 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   margin: 0;
   overflow: hidden;
   cursor: pointer;
+  contain: layout style paint;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .selected-works-big-image img {
@@ -479,7 +454,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 }
 
 .selected-works-big-image:hover::after {
-  opacity: 0.9;
+  opacity: 1;
   animation: grainWorks 8s steps(10) infinite;
 }
 
@@ -551,10 +526,12 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   align-items: center;
   justify-content: flex-start;
   padding-top: 6rem;
-  background-image:
+    background-image:
+    linear-gradient(to bottom, transparent 0%, transparent 70%, var(--white) 100%),
     linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
+  background-size: 100% 100%, 30px 30px, 30px 30px;
+  background-repeat: no-repeat, repeat, repeat;
 }
 
 .about-title {
@@ -614,16 +591,17 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   width: 100vw;
   height: 100svh;
   cursor: grab;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
   z-index: 14;
   user-select: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   overflow: hidden;
+   background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-repeat: repeat;
 }
 
 .work-canvas {
@@ -640,6 +618,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   overflow: hidden;
   cursor: pointer;
   user-select: none;
+  z-index: 10;
 }
 
 .item img {
@@ -675,20 +654,23 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: white;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
   z-index: 2;
+  background-color: var(--white);
+   background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  background-repeat: repeat;
+
 }
 
 .work-overlay.active {
-  opacity: 0.99;
+  opacity: 1;
   pointer-events: auto;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 50px 50px;
+  z-index: 2;
 }
 
 .project-title {
@@ -719,7 +701,8 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
     font-family: 'Grotesk', sans-serif;
   transform: translateY(0%);
   will-change: transform;
-  background-color: var(--salmon);
+  background-color: var(--white);
+  color: var(--black);
 }
 
 .project-info {

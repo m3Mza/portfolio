@@ -290,8 +290,8 @@ FOLDER HOVER ANIMATIONS
       <section className="about-section">
         <div className="about-content">
           <div className="about-title">
-            <h2>
-              <span>a</span>bout.
+            <h2 className="title">
+              about.
               <img
                 src="/nier.gif"
                 alt=""
@@ -309,14 +309,11 @@ FOLDER HOVER ANIMATIONS
           </div>
           <div className="about-text">
             <p>
-              I'm a cook turned web developer with a BSc in <span className="salmon-background">Software Engineering</span>.
+              I'm a cook turned web developer with a BSc in Software Engineering.
               {" "}I focus mainly on JavaScript and
-              all its' bells and whistles (
-              <span className="highlight-underline">
-                GSAP, React, TypeScript, Vue, Node{" "}
+              all its' bells and whistles (<span className="highlight-underline">GSAP, React, TypeScript, Vue, Node{" "}
               </span>
-              ) but I also dabble in PHP from time to time. You can contact me
-              at:
+              ). If you want to say hello: 
             </p>
             <a
               href="mailto:mirkomimap@gmail.com"
@@ -325,7 +322,6 @@ FOLDER HOVER ANIMATIONS
                 textAlign: "justify",
                 gap: "0.5rem",
                 marginLeft: "-1rem",
-                marginTop: "1rem",
                 textDecoration: "none",
                 color: "inherit",
                 cursor: "pointer",
@@ -333,6 +329,45 @@ FOLDER HOVER ANIMATIONS
               }}
             >
               mirkomimap@gmail.com
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="23"
+                height="23"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  marginLeft: "6px",
+                  marginBottom: "4px",
+                  display: "inline-block",
+                  verticalAlign: "middle",
+                }}
+                className="ai ai-ArrowUpRight"
+              >
+                <path d="M18 6L6 18" />
+                <path d="M8 6h10v10" />
+              </svg>
+            </a>
+
+              <br></br>
+
+            <a
+              href="https://x.com/mirkosayshello"
+              className="link"
+              style={{
+                textAlign: "justify",
+                gap: "0.5rem",
+                marginLeft: "-1rem",
+                textDecoration: "none",
+                color: "inherit",
+                cursor: "pointer",
+                fontSize: "1.4rem",
+              }}
+            >
+              @mirkosayshello
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="23"
@@ -363,7 +398,6 @@ FOLDER HOVER ANIMATIONS
       <footer className="footer-section">
         <div className="footer-links">
           <div className="footer-column">
-            <h3 className="footer-heading">Navigation</h3>
             <a href="/" className="link">home</a>
             <a href="/work" className="link">work</a>
             <a href="/about" className="link">about</a>
@@ -371,7 +405,6 @@ FOLDER HOVER ANIMATIONS
           </div>
           
           <div className="footer-column">
-            <h3 className="footer-heading">Contact</h3>
             <a href="mailto:mirkomimap@gmail.com" className="link">mail
               <svg
                   xmlns="http://www.w3.org/2000/svg"
