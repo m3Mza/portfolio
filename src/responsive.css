@@ -114,7 +114,7 @@
 /* Container for nav links - Positioned in lower right area */
 .nav-spotlight-links {
   position: fixed;
-  top: 45vh; /* Center vertically in viewport */
+  top: 60vh; /* Center vertically in viewport */
   left: 50vw; /* Center horizontally in viewport */
   transform: translate(-50%, -70%); /* Perfect center */
   width: 100vw;
@@ -221,7 +221,7 @@
   gap: 3rem;
   align-self: flex-start;
   margin: 0;
-  margin-top: 15rem;
+  margin-top: 10rem;
 }
 
 .footer-column {

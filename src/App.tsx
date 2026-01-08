@@ -362,7 +362,12 @@ IMAGE TRAILING HOVER EFFECT
       if (href.startsWith("http")) {
         window.open(href, "_blank");
       } else if (href.startsWith("#")) {
-        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+        // Handle contact link specifically
+        if (href === "#contact") {
+          window.location.href = "mailto:mirkomimap@gmail.com";
+        } else {
+          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+        }
       } else if (isInternal) {
         // Use full page load for internal links on mobile
         setTimeout(() => {
@@ -745,7 +750,7 @@ PARALLAX GALLERY SECTION
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
             <span>work</span>
           </a>
-          <a href="#contact" onClick={(e) => handleLinkClick(e, "#contact")}>
+          <a href="mailto:mirkomimap@gmail.com">
             <span>contact</span>
           </a>
         </div>
