@@ -1,227 +1,6 @@
 /* Excuse the mess I am very very bad at responsive design */
 
-
 @media (max-width: 600px) {
-  .mouth-overlay-header,
-  section[ref],
-  section .mouth-overlay + div h2 {
-    font-size: 2.1rem !important;
-    line-height: 1.05;
-    font-weight: 900;
-    margin: 0.5em 0 0.2em 0;
-    letter-spacing: -0.02em;
-  }
-}
-@media (max-width: 600px) {
-  .now-playing-spotify-embed {
-    display: none !important;
-  }
-}
-@media (max-width: 600px) {
-  /* Vinyl section header: make huge */
-  .vinyl-section-header {
-    font-size: 5.5rem !important;
-    line-height: 1.05;
-    font-weight: 1000;
-    margin: 0.2em 0 0.1em 0;
-    text-align: left;
-    letter-spacing: -0.04em;
-  }
-  /* Hide vinyl section paragraph */
-  .vinyl-section-desc {
-    display: none !important;
-  }
-  /* Vinyl record: make big and offset left so half is hidden */
-  .vinyl-container {
-    width: 340px !important;
-    height: 340px !important;
-    position: relative !important;
-    left: -170px !important;
-    margin-left: 0 !important;
-    margin-right: auto !important;
-    overflow: visible !important;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-  }
-  .vinyl-record {
-    width: 768px !important;
-    height: 768px !important;
-    max-width: none !important;
-    max-height: none !important;
-    object-fit: contain;
-    display: block;
-  }
-}
-@media (max-width: 600px) {
-  .horizontal-scroll-container {
-    width: 100vw;
-    height: auto;
-    min-height: 60vh;
-    overflow-x: auto;
-    overflow-y: visible;
-    position: relative;
-    background-color: var(--white);
-    margin: 0;
-    padding: 0;
-    display: block;
-  }
-  .horizontal-panels {
-    display: block;
-    width: 100vw;
-    height: auto;
-    will-change: auto;
-  }
-  .horizontal-panel {
-    width: 100vw;
-    min-height: 60vh;
-    height: auto;
-    flex-shrink: 0;
-    padding: 0.5rem 0;
-    margin: 0;
-    background-color: var(--white);
-    display: block;
-  }
-  .grid-content-section {
-    width: 100vw;
-    min-height: 60vh;
-    height: auto;
-    padding: 0;
-    margin: 0;
-    z-index: 3;
-    background-color: var(--white);
-  }
-  .grid-content-container {
-    width: 100%;
-    min-height: 60vh;
-    height: auto;
-    margin: 0;
-    display: block;
-    z-index: 3;
-  }
-  .grid-content-left {
-    width: 100vw;
-    min-height: 30vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 5;
-    background-color: serif;
-    padding: 1rem 0;
-  }
-  .vinyl-container {
-    position: static;
-    width: 180px;
-    height: 180px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-    margin: 0 auto;
-  }
-  .now-playing-spotify-embed {
-    position: static;
-    width: 95vw;
-    max-width: 340px;
-    margin-left: auto;
-    margin-right: 2.5rem;
-    margin-top: 4.5rem;
-    border-radius: 1.2rem;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-    z-index: 10;
-    overflow: hidden;
-    display: block;
-  }
-  .now-playing-spotify-embed iframe {
-    width: 100%;
-    height: 120px;
-  }
-  .grid-content-right {
-    width: 100vw;
-    min-height: 30vh;
-    background-color: var(--black);
-    color: var(--white);
-    padding: 1.2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 1.2rem;
-    z-index: 10;
-  }
-  .grid-content-right h1 {
-    font-size: 2rem;
-    line-height: 1.1;
-    margin: 0 0 0.5rem 0;
-  }
-  .grid-content-right p {
-    font-size: 1rem;
-    margin: 0;
-  }
-  .section-2-left {
-    width: 100vw !important;
-    min-height: 30vh;
-    background-color: var(--black) !important;
-    position: relative;
-    overflow: visible;
-    padding: 1rem 0;
-  }
-  .section-2-right {
-    width: 100vw !important;
-    min-height: 30vh;
-    background-color: var(--white) !important;
-    color: var(--black) !important;
-    padding: 1.2rem 1rem;
-  }
-  .section-2-right h1 {
-    font-size: 1.5rem;
-    line-height: 1.1;
-    margin: 0 0 0.5rem 0;
-  }
-}
-
-/* responsive.css: Styles for vertical phone resolution (portrait) */
-
-@media (max-width: 768px) {
- 
-h1 {
-    font-size: 4rem; /* Smaller main headings */      
-}
-
-h2 {
-    font-size: 1.7rem; /* Smaller secondary headings */      
-}
-
-p {
-    font-size: 1rem; /* Standard paragraph size for readability */
-     font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: 1.4;  
-}
-
-.serif h1 {
-  font-size: 3rem;
-}
-
-.serif h2 {
-  font-size: 1.7rem;
-}
-
-.serif p {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 1.8;
-}
-
-  .komparacija-header h1 {
-    font-size: 2.5rem;
-  }
-  
-  .komparacija-img {
-    width: 200px;
-    height: 280px;
-  }
 
 /* ============================== 
    Animated Navigation Menu (Mobile) 
@@ -258,7 +37,7 @@ p {
   letter-spacing: 0.1em; /* Spaced out letters */
   cursor: pointer; /* Pointer on hover */
   transition: transform 0.3s ease; /* Smooth scale on hover */
-  border-bottom-right-radius: 1.5rem; /* Rounded corner for style */
+  border-bottom-right-radius: 1rem; /* Rounded corner for style */
   position: relative; /* For stacking context */
   z-index: 9999; /* Above overlay */
   outline: none; /* Remove default outline */
@@ -428,11 +207,60 @@ p {
   opacity: 1;
 }
 
-
 /* ============================== 
-   Hero Section (Mobile)
+   Footer (Mobile)
    ============================== */
 
+.footer-section {
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  min-height: 70vh;
+}
+
+.footer-links {
+  flex-direction: row;
+  gap: 3rem;
+  align-self: flex-start;
+  margin: 0;
+  margin-top: 15rem;
+}
+
+.footer-column {
+  gap: 0;
+}
+
+.footer-column .link {
+  font-size: 1.2rem;
+  padding: 0.3rem 0;
+}
+
+.footer-bottom {
+  gap: 1.5rem;
+}
+
+.footer-bottom p {
+  font-size: 0.7rem;
+  order: 1;
+}
+
+.footer-logo {
+  font-size: 8rem;
+  order: 2;
+  margin-bottom: 0;
+  line-height: 0.85;
+}
+
+.footer-bottom .earth-gif {
+  display: none !important;
+}
+
+
+/* ============================== 
+   Hero Section (Mobile) + A bit of the comparison scroll effect
+   ============================== */
+
+.trail-img {
+  display: none !important;
+}
 
    .earth-gif {
     display: none !important;
@@ -530,273 +358,86 @@ p {
 
 }
 
-
-/* ============================== 
-   Swiss Style Section (Mobile)
-   ============================== */
-
-.mouth-overlay {
-  position: absolute;
-  width: 200%;
-  height: 50%;
-  background: var(--accent-green);
-  z-index: 2;
-  will-change: transform;
-  transition: transform 0.3s ease-out;
-  margin-left: -50%;
-}
-
-.mouth-overlay.mouth-top {
-  top: 0;
-  left: 0;
-  transform-origin: 0% 100%;
-}
-
-.mouth-overlay.mouth-bottom {
-  bottom: 0;
-  left: 0;
-  transform-origin: 0% 0%;
-}
-
-
-
-/* ============================== 
-   Horizontal Scroll Sections (Mobile) 
-   ============================== */
-
-
-.horizontal-scroll-container {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden; /* Hides the horizontal overflow */
-  position: relative;
-  background-color: var(--white);
-  margin: 0; /* Remove any margin that could cause white space */
-  padding: 0; /* Remove any padding that could cause white space */
-}
-
-/* The sliding panels container - moves horizontally */
-.horizontal-panels {
-  display: flex;
-  height: 100%;
-  width: 200vw; /* ADJUST: 2 sections × 100vw each. Add more sections? Increase this (e.g., 300vw for 3 sections) */
-  will-change: transform;
-}
-
-/* Individual panel/section */
-.horizontal-panel {
-  width: 100vw;
-  height: 100vh;
-  flex-shrink: 0; 
-  padding: 0;
-  margin: 0;
-  background-color: var(--white);
-}
-
-.grid-content-section {
-  width: 100vw;
-  height: 100vh;
-  padding: 0;
-  margin: 0;
-  z-index: 3;
-  background-color: var(--white);
-}
-
-.grid-content-container {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: 0;
-  z-index: 3;
-}
-
-.grid-content-left {
-  grid-column: 1 / 7;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 5;
-  background-color: serif;
-}
-
-.vinyl-container {
-.vinyl-container {
+.komparacija-img {
   position: absolute;
   top: 50%;
-  width: 44rem;
-  height: 44rem;
-   display: flex;
-   align-items: flex-end;
-   justify-content: flex-start;
-   z-index: 2;
+  left: 50%;
+  width: 270px !important;
+  height: 270px !important;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  opacity: 0;
+  z-index: 14;
 }
 
-.now-playing-spotify-embed {
-  position: absolute;
-  right: 2.5rem;
-  bottom: 2.5rem;
-  border-radius: 1.2rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-  z-index: 10;
-  width: 320px;
-  overflow: hidden;
-  z-index: 3;
+/* ============================== 
+  Parallax text effect (Mobile)
+   ============================== */
+
+  .parallax-gallery-text h3 {
+  text-align: left;
+  min-width: 75vw;
+  font-size: 2.7rem;
+  margin-left: 2%;
+  will-change: background-image, -webkit-background-clip, -webkit-text-fill-color;
 }
 
-.now-playing-spotify-embed iframe {
-  display: block;
-}
-
-.now-playing-spotify {
-  position: absolute;
-  right: 2.5rem;
-  bottom: 2.5rem;
-  background: rgba(0,0,0,0.85);
-  color: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.7rem 1.2rem 0.7rem 0.7rem;
-  z-index: 10;
-  min-width: 220px;
-  max-width: 320px;
-}
-
-.now-playing-album-art {
-  width: 48px;
-  height: 48px;
-  border-radius: 0.7rem;
-  object-fit: cover;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
-}
-
-.now-playing-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-width: 0;
-  z-index: 10;
-}
-
-.now-playing-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.now-playing-artist {
-  font-size: 0.95rem;
-  color: #b3b3b3;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.now-playing-spotify-logo {
-  margin-left: 0.5rem;
-  display: flex;
-  align-items: center;
-}
-}
-
-.vinyl-record {
+.parallax-gallery-image img {
   width: 100%;
-  height: 100%;
-  animation: spin 8s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.grid-content-right {
-  grid-column: 7 / 13;
-  background-color: var(--black);
-  color: var(--white);
-  padding: 4rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 2rem;
-  z-index: 10;
-}
-
-/* Section 2 specific styles */
-.section-2-left {
-  background-color: var(--black) !important;
-  position: relative;
-  overflow: hidden;
   width: 50vw;
+  height: auto;
+  object-fit: fill;
+  margin-top: 200%;
+  margin-right: 75%;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
 }
 
-.section-2-right {
-  background-color: var(--white) !important;
-  color: var(--black) !important;
-}
-.section-2-right h1 {
-  font-size: clamp(3rem, 6vw, 5rem);
-  line-height: 1.1;
-  margin: 0;
+/* ============================== 
+  Selected Works Section (Mobile)
+   ============================== */
+
+.selected-works-section {
+  padding: 2rem 1.5rem;
 }
 
-/* Random aligned images in section 2 */
-.random-img {
-  position: absolute;
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  border-radius: 50%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+.selected-works-header {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
 }
 
-
-@media (max-width: 600px) {
-  .section-2-left {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-    width: 100vw;
-    height: auto;
-    background: var(--black) !important;
-    overflow: visible;
-  }
-  .random-img {
-    position: static;
-    margin: 1.2rem 0;
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    transform: none;
-    z-index: 1;
-  }
-  .random-img-1,
-  .random-img-2,
-  .random-img-3,
-  .random-img-4 {
-    top: auto;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    z-index: 1;
-  }
+.selected-works-container {
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
 }
 
+.selected-works-left {
+  gap: 1.5rem;
+}
+
+.selected-works-right {
+  gap: 1.5rem;
+}
+
+.selected-works-left img {
+  height: 200px;
+}
+
+.selected-works-big-image {
+  transform: none !important;
+}
+
+.selected-works-big-image img {
+  height: 200px;
+  transform: none !important;
+}
+
+.selected-works-left figcaption,
+.selected-works-big-image figcaption {
+  font-size: 1.4rem;
+}
 
 /* ============================== 
    About (Mobile) 
@@ -809,249 +450,48 @@ p {
   padding: 2.2rem 0.7rem;
 }
 
-.about-content {
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto auto auto;
-  gap: 0.7rem 0;
-  max-width: 98vw;
-  margin: 0 auto;
-  align-items: center;
-  justify-items: center;
-}
-
-.about-title {
-  grid-column: 1;
-  grid-row: 1;
-  text-align: center;
-  margin-bottom: 0.3rem;
-}
-
-.about-title h1 {
-  font-size: 1.7rem;
-  margin: 0;
-  font-weight: 800;
-  line-height: 1.1;
-}
-
-.about-image {
-  grid-column: 1;
-  grid-row: 2;
-  width: 70vw;
-  max-width: 220px;
-  margin: 0 auto;
-}
-
-.about-image img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 0.5rem;
-}
-
 .about-text {
-  grid-column: 1;
-  grid-row: 3;
-  display: block;
-  align-items: center;
-  text-align: center;
-  font-size: 0.9rem;
-  margin-top: 0.3rem;
-  padding: 0 0.3rem;
+  text-align: justify;
+  hyphens: auto;
+  font-size: 1rem;
+  line-height: 1.7;
+  max-width: 90vw;
+  color: var(--black);
+  z-index: 12;
 }
 
 /* ============================== 
    Work (Mobile) 
    ============================== */
 
-
-.blog-section {
-  min-height: 100vh;
-  background-color: var(--white);
-  padding: 4rem 1.2rem;
-  display: block;
-  max-width: 900px;
-  margin: 0 auto;
+.expanded-item {
+  width: 90vw;
+  height: 70vh;
+  max-width: none;
 }
 
-.blog-header-sticky {
-  position: sticky;
-  top: 8rem;
-  height: fit-content;
+.project-title p {
+  font-size: 1.4rem;
+}
+
+.project-info {
+  position: fixed;
+  top: auto;
+  bottom: 10%;
   left: 50%;
+  right: auto;
   transform: translateX(-50%);
-  transform: translateY(-30%);
+  max-width: 90vw;
   text-align: center;
-  width: 100%;
-  z-index: 10;
-}
-  /* Make header static and right-aligned at top of page */
-  .blog-header-sticky {
-    position: static;
-    top: 0;
-    left: auto;
-    transform: none;
-    text-align: right;
-    width: 100%;
-    z-index: 10;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto auto;
-  gap: 1.2rem 1.2rem;
-  align-items: start;
 }
 
-.blog-article-image {
-  grid-column: 1 / 3;
-  .blog-article {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto auto;
-    gap: 1.2rem 1.2rem;
-    align-items: start;
-
-.blog-article-image img {
-  .blog-article-date {
-    grid-column: 1 / 2;
-    grid-row: 1;
-    font-size: 1rem;
-    color: var(--black);
-    opacity: 0.7;
-    align-self: center;
-  }
-
-  .blog-article-image {
-    grid-column: 1 / 3;
-    grid-row: 2;
-    width: 100%;
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    border-radius: 0.7rem;
-  }
+.project-description {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
 }
 
-.blog-article-description {
-  grid-column: 1 / 3;
-  grid-row: 2;
-  font-size: 1rem;
-  line-height: 1.5;
-  color: var(--black);
-  opacity: 0.85;
-  margin: 0;
-  text-align: left;
-}
-  .blog-article-title {
-    grid-column: 1 / 2;
-    grid-row: 3;
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: var(--black);
-    margin: 0;
-    line-height: 1.2;
-    align-self: center;
-  }
-
-  .blog-article-description {
-    grid-column: 2 / 3;
-    grid-row: 4;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: var(--black);
-    opacity: 0.85;
-    margin: 0;
-    text-align: left;
-  align-self: center;
+.project-link {
+  font-size: 1.1rem;
 }
 
-.blog-article-content {
-  grid-column: 2 / 3;
-  grid-row: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  align-items: flex-end;
-  justify-content: center;
-}
-
-/* Footer with the folders */
-
-.folders {
-  width: 100%;
-  height: 60vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  overflow: hidden;
-  padding: 0.5rem 0 0 0;
-  background-color: var(--black);
-  color: var(--white);
-}
-
-.folders h1 {
-  color: var(--white);
-  font-size: 1rem;
-  margin-top: 0.2rem;
-  margin-bottom: 0.2rem;
-}
-
-.folders .row {
-  position: relative;
-  width: 100%;
-  display: flex;
-  min-height: 120px;
-}
-
-.folders .folder {
-  position: relative;
-  flex: 1;
-  height: 110px;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-}
-
-.folders .row:nth-child(1) .folder {
-  height: 70px;
-}
-
-.folders .row:nth-child(2) .folder {
-  height: 100px;
-}
-
-.folders .folder-preview {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 14rem;
-  height: 100%;
-  pointer-events: none;
-}
-
-.folders .folder-preview-img {
-  position: absolute;
-  top: 50%;
-  width: 6rem;
-  height: 8rem;
-  border-radius: 0.7rem;
-  overflow: hidden;
-}
-
-.folders .folder-name h1 {
-  font-size: 0.7rem !important;
-  line-height: 1.1 !important;
-  margin: 0 !important;
-  font-weight: 700 !important;
-}
-
-.folders .folder-name h1 {
-  font-size: 0.7rem;
-}
-
-@media (max-width: 600px) {
-  .folders-header {
-    font-size: 2rem !important;
-    text-align: center !important;
-    margin: 0.5rem 0 1.2rem 0 !important;
-    display: block !important;
-    font-weight: 900 !important;
-  }
-}
+} /* End of @media (max-width: 430px) */

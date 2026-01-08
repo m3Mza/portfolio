@@ -366,7 +366,10 @@ IMAGE TRAILING HOVER EFFECT
       } else if (href.startsWith("#")) {
         document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
       } else if (isInternal) {
-        navigate(href);
+        // Use full page load for internal links on mobile
+        setTimeout(() => {
+          window.location.href = href;
+        }, 100);
       } else {
         window.location.href = href;
       }
