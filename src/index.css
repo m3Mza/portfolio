@@ -107,27 +107,6 @@ p {
   z-index: -1;
 }
 
-.highlight-underline-marker {
-  position: relative;
-  color: var(--black);
-  font-family: 'Grotesk', sans-serif;
-  font-weight: 600;
-  padding-bottom: 0.3rem;
-}
-
-.highlight-underline-marker::after {
-  content: '';
-  position: absolute;
-  bottom: -0.2rem;
-  left: 0;
-  width: 100%;
-  height: 1.4rem;
-  background-image: url('/highlight2.png');
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  z-index: -1;
-}
-
 .highlight-circle {
   color: var(--black);
   background-image: url('/highlight8.png');

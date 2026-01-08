@@ -893,7 +893,7 @@ PARALLAX GALLERY SECTION
         {/* Selected Works Section */}
       <section className="selected-works-section">
         <div className="selected-works-header">
-          <h3 className="selected-works-title">Some stuff I <span className="highlight-underline-marker">made.</span></h3>
+          <h3 className="selected-works-title">Some stuff I <span className="highlight-underline">made.</span></h3>
           <a href="/work" className="link">
             ALL OF MY WORK{" "}
             <svg

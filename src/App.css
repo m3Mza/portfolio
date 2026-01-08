@@ -341,7 +341,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   position: absolute;
   top: 5%;
   left: 0;
-  color: var(--black);
+  color: var(--white);
   font-size: 1.2rem;
    font-family: 'Grotesk', sans-serif;
   text-align: left;
@@ -368,7 +368,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   pointer-events: none;
   opacity: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  background-color: var(--accent-dark-grey);
   transition: opacity 0.3s ease;
 }
 
@@ -422,7 +421,7 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   position: absolute;
   top: 5%;
   left: 0;
-  color: var(--black);
+  color: var(--white);
   font-size: 1.4rem;
    font-family: 'Grotesk', sans-serif;
   text-align: left;
@@ -449,7 +448,6 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
   pointer-events: none;
   opacity: 0;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-  background-color: var(--accent-dark-grey);
   transition: opacity 0.3s ease;
 }
 
@@ -474,22 +472,22 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 /* Variant colors for overlay effects */
 .selected-works-left figure.variant-1::after,
 .selected-works-big-image.variant-1::after {
-  background-color: var(--accent-dark-grey);
+  background-color: #2c5639;
 }
 
 .selected-works-left figure.variant-2::after,
 .selected-works-big-image.variant-2::after {
-  background-color: var(--accent-yellow);
+  background-color: #a3a48c;
 }
 
 .selected-works-left figure.variant-3::after,
 .selected-works-big-image.variant-3::after {
-  background-color: #FF7C5F;
+  background-color: #5e4540;
 }
 
 .selected-works-left figure.variant-4::after,
 .selected-works-big-image.variant-4::after {
-  background-color: #11612f;
+  background-color: #556280;
 }
 
 

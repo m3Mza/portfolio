@@ -309,11 +309,8 @@ FOLDER HOVER ANIMATIONS
           </div>
           <div className="about-text">
             <p>
-              I'm a cook turned web developer with a BSc in Software Engineering.
-              {" "}I focus mainly on JavaScript and
-              all its' bells and whistles (<span className="highlight-underline">GSAP, React, TypeScript, Vue, Node{" "}
-              </span>
-              ). If you want to say hello: 
+              I'm a web developer with a BEng in Software Engineering.
+              {" "}I focus mainly on JavaScript and all its' bells and whistles. If you want to say hello: 
             </p>
             <a
               href="mailto:mirkomimap@gmail.com"
