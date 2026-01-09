@@ -286,31 +286,34 @@ FOLDER HOVER ANIMATIONS
         </div>
       </nav>
 
+
+       {/* Static Header */}
+      <div className="blog-header-sticky">
+        <h1>
+          about.
+          <img
+            src="/nier.gif"
+            alt=""
+            className="earth-gif"
+            style={{
+              display: "block",
+              width: "2.7rem",
+              height: "2.7rem",
+              position: "absolute",
+              left: "1.35rem",
+              top: "0.3rem",
+            }}
+          />
+        </h1>
+      </div>
+
       {/* About Section */}
       <section className="about-section">
         <div className="about-content">
-          <div className="about-title">
-            <h2 className="title">
-              about.
-              <img
-                src="/nier.gif"
-                alt=""
-                className="earth-gif"
-                style={{
-                  display: "inline-block",
-                  width: "10.1rem",
-                  height: "10.1rem",
-                  left: "39.6rem",
-                  top: "7.5rem",
-                  position: "absolute",
-                }}
-              />
-            </h2>
-          </div>
           <div className="about-text">
             <p>
-              I'm a front-end developer with a BEng in Software Engineering.
-              {" "}I focus mainly on JavaScript and all its' bells and whistles. If you want to say hello: 
+              I'm a front-end developer with a BEng in software engineering,
+              making websites that look cool. Say hello: 
             </p>
             <a
               href="mailto:mirkomimap@gmail.com"

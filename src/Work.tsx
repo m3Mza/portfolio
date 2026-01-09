@@ -1,170 +1,44 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import Lenis from "lenis";
 import "./App.css";
-import gsap from "gsap";
-import { CustomEase } from "gsap/CustomEase";
-
-gsap.registerPlugin(CustomEase);
-CustomEase.create("hop", "0.9, 0, 0.1, 1");
 
 const items = [
-  {
-    title: "Chromatic Loopscape",
-    description:
-      "An immersive exploration of color transitions and infinite patterns through generative art.",
-    link: "https://example.com/chromatic-loopscape",
-  },
-  {
-    title: "Solar Bloom",
-    description:
-      "Interactive visualization inspired by solar phenomena and organic growth patterns.",
-    link: "https://example.com/solar-bloom",
-  },
-  {
-    title: "Neon Handscape",
-    description:
-      "Digital art installation combining hand-drawn aesthetics with vibrant neon lighting.",
-    link: "https://example.com/neon-handscape",
-  },
-  {
-    title: "Echo Discs",
-    description:
-      "Sound-reactive visual experience featuring circular geometries and audio synthesis.",
-    link: "https://example.com/echo-discs",
-  },
-  {
-    title: "Void Gaze",
-    description:
-      "Contemplative piece exploring depth perception and negative space in digital environments.",
-    link: "https://example.com/void-gaze",
-  },
-  {
-    title: "Gravity Sync",
-    description:
-      "Physics-based animation showcasing gravitational forces and orbital mechanics.",
-    link: "https://example.com/gravity-sync",
-  },
-  {
-    title: "Heat Core",
-    description:
-      "Thermal-inspired generative artwork with dynamic temperature gradients.",
-    link: "https://example.com/heat-core",
-  },
-  {
-    title: "Fractal Mirage",
-    description:
-      "Self-similar patterns creating hypnotic visual illusions through recursive algorithms.",
-    link: "https://example.com/fractal-mirage",
-  },
-  {
-    title: "Nova Pulse",
-    description:
-      "Explosive energy patterns mimicking stellar phenomena and cosmic events.",
-    link: "https://example.com/nova-pulse",
-  },
-  {
-    title: "Sonic Horizon",
-    description:
-      "Audio-visual experience blending soundscapes with horizon-based compositions.",
-    link: "https://example.com/sonic-horizon",
-  },
-  {
-    title: "Dream Circuit",
-    description:
-      "Surreal digital landscape exploring the intersection of technology and imagination.",
-    link: "https://example.com/dream-circuit",
-  },
-  {
-    title: "Lunar Mesh",
-    description:
-      "3D wireframe exploration inspired by lunar topography and grid-based aesthetics.",
-    link: "https://example.com/lunar-mesh",
-  },
-  {
-    title: "Radiant Dusk",
-    description:
-      "Gradient-based composition capturing the ethereal beauty of twilight hours.",
-    link: "https://example.com/radiant-dusk",
-  },
-  {
-    title: "Pixel Drift",
-    description:
-      "Retro-inspired animation featuring pixel art and procedural movement patterns.",
-    link: "https://example.com/pixel-drift",
-  },
-  {
-    title: "Vortex Bloom",
-    description:
-      "Spiraling organic forms combining natural growth with mathematical precision.",
-    link: "https://example.com/vortex-bloom",
-  },
-  {
-    title: "Shadow Static",
-    description:
-      "Glitch art exploration using shadow manipulation and digital noise artifacts.",
-    link: "https://example.com/shadow-static",
-  },
-  {
-    title: "Crimson Phase",
-    description:
-      "Monochromatic red-toned experience exploring phase shifts and transitions.",
-    link: "https://example.com/crimson-phase",
-  },
-  {
-    title: "Retro Cascade",
-    description:
-      "Nostalgic journey through vintage computing aesthetics and cascading animations.",
-    link: "https://example.com/retro-cascade",
-  },
-  {
-    title: "Photon Fold",
-    description:
-      "Light-based installation examining the behavior of photons and optical phenomena.",
-    link: "https://example.com/photon-fold",
-  },
-  {
-    title: "Zenith Flow",
-    description:
-      "Meditative visual flow exploring peak moments and continuous movement.",
-    link: "https://example.com/zenith-flow",
-  },
+  { title: "z", image: "/img1.jpg", variant: 1, url: "https://example.com/project-z" },
+  { title: "LoveFrom,", image: "/img2.jpg", variant: 2, url: "https://example.com/lovefrom" },
+  { title: "ヨコオタロウさん", image: "/img3.jpg", variant: 3, url: "https://example.com/yoko-taro" },
+  { title: "JOHN YAKUZA", image: "/img4.jpg", variant: 1, url: "https://example.com/john-yakuza" },
+  { title: "red hot chilli peppers", image: "/img5.jpg", variant: 2, url: "https://example.com/red-hot" },
+  { title: "naughty cat", image: "/img6.jpg", variant: 3, url: "https://example.com/naughty-cat" },
+  { title: "design 2000", image: "/img7.jpg", variant: 1, url: "https://example.com/design-2000" },
+  { title: "hello_world", image: "/img8.jpg", variant: 2, url: "https://example.com/hello-world" },
+  { title: "idk", image: "/img9.jpg", variant: 3, url: "https://example.com/idk" },
 ];
 
 function Work() {
-  const [isMenuActive, setIsMenuActive] = useState(false); // Changed
+  const [isMenuActive, setIsMenuActive] = useState(false);
   const [isPageTransition, setIsPageTransition] = useState(() => {
     return sessionStorage.getItem("pageTransition") === "true";
   });
   const [isReturning, setIsReturning] = useState(false);
+  const [currentImage, setCurrentImage] = useState<string>("");
+  const [currentVariant, setCurrentVariant] = useState<number>(1);
   const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuActive(!isMenuActive);
   };
 
-  /* =======================
-==========================
-PAGE TRANSITION LOGIC
-==========================
-========================== */
-
   useEffect(() => {
     const isTransitioning = sessionStorage.getItem("pageTransition");
     if (isTransitioning === "true") {
       sessionStorage.removeItem("pageTransition");
-
-      // Hold at full screen for a short delay (already at full screen from initial state)
       setTimeout(() => {
-        // Return to original shape
-        setIsPageTransition(false);
         setIsReturning(true);
-
-        // Short delay after returning to original shape
         setTimeout(() => {
-          // Close menu (return to button)
+          setIsPageTransition(false);
           setIsReturning(false);
-          setIsMenuActive(false);
-        }, 900);
+        }, 700);
       }, 800);
     }
   }, []);
@@ -178,7 +52,6 @@ PAGE TRANSITION LOGIC
     const isInternal = href.startsWith("/");
     const currentPath = window.location.pathname;
 
-    // Check if clicking the same page - just refresh
     if (isInternal && currentPath === href) {
       setIsMenuActive(false);
       setTimeout(() => {
@@ -193,16 +66,19 @@ PAGE TRANSITION LOGIC
       setTimeout(() => {
         if (href.startsWith("http")) {
           window.open(href, "_blank");
-          sessionStorage.removeItem("pageTransition");
+          setTimeout(() => {
+            setIsPageTransition(false);
+            sessionStorage.removeItem("pageTransition");
+          }, 100);
         } else if (href.startsWith("#")) {
-          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-          sessionStorage.removeItem("pageTransition");
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
           setIsPageTransition(false);
-          setIsMenuActive(false);
+          sessionStorage.removeItem("pageTransition");
         } else if (isInternal) {
-          setIsMenuActive(false); // Close menu right before navigation
           navigate(href);
-          return;
         } else {
           window.location.href = href;
         }
@@ -212,569 +88,160 @@ PAGE TRANSITION LOGIC
       if (href.startsWith("http")) {
         window.open(href, "_blank");
       } else if (href.startsWith("#")) {
-        document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+        const element = document.querySelector(href);
+        if (element) element.scrollIntoView({ behavior: "smooth" });
       } else if (isInternal) {
         navigate(href);
-        return;
       } else {
         window.location.href = href;
       }
     }
   };
 
-  /* =======================
-==========================
-GALLERY STUFF AND INTERACTIONS
-==========================
-========================== */
+  const handleItemHover = (image: string, variant: number) => {
+    setCurrentImage(image);
+    setCurrentVariant(variant);
+  };
 
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const projectTitleRef = useRef<HTMLParagraphElement>(null);
+  const handleItemLeave = () => {
+    setCurrentImage("");
+  };
 
-  const [canDrag, setCanDrag] = useState(true);
-  const [isExpanded, setIsExpanded] = useState(false);
+  // State for dynamically cloned items
+  const [displayItems, setDisplayItems] = useState(() => {
+    // Start with 70 copies for ultra smooth infinite scroll
+    const copies = [];
+    for (let i = 0; i < 70; i++) {
+      copies.push(...items);
+    }
+    return copies;
+  });
 
-  const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const startYRef = useRef(0);
-  const targetXRef = useRef(0);
-  const targetYRef = useRef(0);
-  const currentXRef = useRef(0);
-  const currentYRef = useRef(0);
-  const dragVelocityXRef = useRef(0);
-  const dragVelocityYRef = useRef(0);
-  const mouseHasMovedRef = useRef(false);
-  const visibleItemsRef = useRef(new Set<string>());
-  const lastUpdateTimeRef = useRef(0);
-  const lastXRef = useRef(0);
-  const lastYRef = useRef(0);
-  const activeItemRef = useRef<HTMLElement | null>(null);
-  const originalPositionRef = useRef<any>(null);
-  const expandedItemRef = useRef<HTMLDivElement | null>(null);
-  const activeItemIdRef = useRef<string | null>(null);
-  const lastDragTimeRef = useRef(Date.now());
-  const titleWordsRef = useRef<HTMLSpanElement[]>([]);
-  const titleSplitRef = useRef<{
-    words: HTMLSpanElement[];
-    revert: () => void;
-  } | null>(null);
-  const titleAnimationRef = useRef<gsap.core.Tween | null>(null);
-  const descAnimationRef = useRef<gsap.core.Tween | null>(null);
-  const linkAnimationRef = useRef<gsap.core.Tween | null>(null);
-  const isExpandAnimationCompleteRef = useRef(false);
-
-  const itemCount = 20;
-  const itemGap = 150;
-  const itemWidth = 160;
-  const itemHeight = 200;
-
-  // Gallery hover animation
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const container = containerRef.current;
-    const overlay = overlayRef.current;
+    const container = document.querySelector('.work-list-container') as HTMLElement;
+    if (!container) return;
 
-    if (!canvas || !container || !overlay) return;
+    // Initialize Lenis
+    const lenis = new Lenis({
+      wrapper: container,
+      content: container.querySelector('.work-list-scroll') as HTMLElement,
+      smoothWheel: true,
+      duration: 2.0,
+      easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 0.3,
+      touchMultiplier: 1.0,
+      infinite: false,
+    });
 
-    const setAndAnimateTitle = (title: string) => {
-      if (titleSplitRef.current) {
-        titleSplitRef.current.revert();
+    // Limit scroll velocity more strictly
+    let scrollVelocity = 0;
+    const maxVelocity = 1700; // Maximum pixels per second (reduced even more)
+
+    lenis.on('scroll', ({ velocity }: { velocity: number }) => {
+      scrollVelocity = Math.abs(velocity);
+      
+      // If velocity exceeds max, slow it down
+      if (scrollVelocity > maxVelocity) {
+        lenis.velocity = Math.sign(velocity) * maxVelocity;
       }
-      if (projectTitleRef.current) {
-        projectTitleRef.current.textContent = title;
+    });
 
-        // Split text into words
-        const words = title.split(" ");
-        projectTitleRef.current.innerHTML = "";
-        titleWordsRef.current = [];
+    let isCloning = false;
+    let lastCloneTime = 0;
 
-        words.forEach((word) => {
-          const span = document.createElement("span");
-          span.className = "word";
-          span.textContent = word;
-          span.style.display = "inline-block";
-          span.style.marginRight = "0.3em";
-          projectTitleRef.current?.appendChild(span);
-          titleWordsRef.current.push(span);
-        });
-
-        titleSplitRef.current = {
-          words: titleWordsRef.current,
-          revert: () => {
-            if (projectTitleRef.current) {
-              projectTitleRef.current.innerHTML = "";
-            }
-            titleWordsRef.current = [];
-          },
-        };
-
-        gsap.set(titleWordsRef.current, { y: "150%" });
-      }
-    };
-
-    const setProjectInfo = (description: string, link: string) => {
-      const descElement = document.querySelector(".project-description");
-      const linkElement = document.querySelector(
-        ".project-link"
-      ) as HTMLAnchorElement;
-
-      if (descElement) {
-        descElement.textContent = description;
-        gsap.set(descElement, { opacity: 0, y: 20 });
-      }
-
-      if (linkElement) {
-        linkElement.href = link;
-        gsap.set(linkElement, { opacity: 0, y: 20 });
-      }
-    };
-
-    const animateProjectInfoOut = () => {
-      const descElement = document.querySelector(".project-description");
-      const linkElement = document.querySelector(".project-link");
-
-      gsap.to([descElement, linkElement], {
-        opacity: 0,
-        y: 20,
-        duration: 0.4,
-        ease: "power3.out",
-      });
-    };
-
-    const animateTitleIn = () => {
-      gsap.to(titleWordsRef.current, {
-        y: "0%",
-        duration: 0.9,
-        ease: "power3.out",
-        stagger: 0.1,
-      });
-    };
-
-    const animateTitleOut = () => {
-      gsap.to(titleWordsRef.current, {
-        y: "-150%",
-        duration: 0.7,
-        ease: "power3.out",
-        stagger: 0.05,
-      });
-    };
-
-    const updateVisibleItems = () => {
-      const buffer = 2.5;
-      const viewWidth = window.innerWidth * (1 + buffer);
-      const viewHeight = window.innerHeight * (1 + buffer);
-      const movingRight = targetXRef.current > currentXRef.current;
-      const movingDown = targetYRef.current > currentYRef.current;
-      const directionBufferX = movingRight ? -300 : 300;
-      const directionBufferY = movingDown ? -300 : 300;
-
-      const startCol = Math.floor(
-        (-currentXRef.current -
-          viewWidth / 2 +
-          (movingRight ? directionBufferX : 0)) /
-          (itemWidth + itemGap)
-      );
-      const endCol = Math.ceil(
-        (-currentXRef.current +
-          viewWidth * 1.5 +
-          (!movingRight ? directionBufferX : 0)) /
-          (itemWidth + itemGap)
-      );
-      const startRow = Math.floor(
-        (-currentYRef.current -
-          viewHeight / 2 +
-          (movingDown ? directionBufferY : 0)) /
-          (itemHeight + itemGap)
-      );
-      const endRow = Math.ceil(
-        (-currentYRef.current +
-          viewHeight * 1.5 +
-          (!movingDown ? directionBufferY : 0)) /
-          (itemHeight + itemGap)
-      );
-
-      const currentItems = new Set<string>();
-
-      for (let row = startRow; row <= endRow; row++) {
-        for (let col = startCol; col <= endCol; col++) {
-          const itemId = `${col},${row}`;
-          currentItems.add(itemId);
-
-          if (visibleItemsRef.current.has(itemId)) continue;
-          if (activeItemIdRef.current === itemId && isExpanded) continue;
-
-          const item = document.createElement("div");
-          item.className = "item";
-          item.id = itemId;
-          item.style.left = `${col * (itemWidth + itemGap)}px`;
-          item.style.top = `${row * (itemHeight + itemGap)}px`;
-
-          const img = document.createElement("img");
-          const imgNum = ((Math.abs(col) + Math.abs(row)) % itemCount) + 1;
-          img.src = `/img${imgNum}.jpg`;
-          img.alt = `Gallery item ${imgNum}`;
-          img.draggable = false;
-          img.ondragstart = () => false;
-          item.appendChild(img);
-
-          item.addEventListener("click", () => {
-            if (!mouseHasMovedRef.current && !isExpanded) {
-              expandItem(item);
-            }
-          });
-
-          canvas.appendChild(item);
-          visibleItemsRef.current.add(itemId);
-        }
-      }
-
-      visibleItemsRef.current.forEach((itemId) => {
-        if (
-          !currentItems.has(itemId) ||
-          (activeItemIdRef.current === itemId && isExpanded)
-        ) {
-          const item = document.getElementById(itemId);
-          if (item) {
-            canvas.removeChild(item);
-            visibleItemsRef.current.delete(itemId);
-          }
-        }
-      });
-    };
-
-    const expandItem = (item: HTMLElement) => {
-      setIsExpanded(true);
-      isExpandAnimationCompleteRef.current = false;
-      activeItemRef.current = item;
-      activeItemIdRef.current = item.id;
-      expandedItemRef.current = item as HTMLDivElement;
-      setCanDrag(false);
-      if (container) container.style.cursor = "auto";
-
-      const imgSrc = item.querySelector("img")?.src || "";
-      const imgMatch = imgSrc.match(/img(\d+)\.jpg$/);
-      const imgNum = imgMatch ? parseInt(imgMatch[1]) : 1;
-      const projectIndex = (imgNum - 1) % items.length;
-      const project = items[projectIndex];
-
-      setAndAnimateTitle(project.title);
-      setProjectInfo(project.description, project.link);
-
-      item.style.visibility = "hidden";
-
-      const rect = item.getBoundingClientRect();
-
-      originalPositionRef.current = {
-        id: item.id,
-        rect: rect,
-        imgSrc: imgSrc,
-      };
-
-      overlay.classList.add("active");
-
-      const expandedItem = document.createElement("div");
-      expandedItem.className = "expanded-item";
-      expandedItem.style.width = `${itemWidth}px`;
-      expandedItem.style.height = `${itemHeight}px`;
-
-      const img = document.createElement("img");
-      img.src = imgSrc;
-      img.alt = "Expanded Image";
-      expandedItem.appendChild(img);
-      expandedItem.addEventListener("click", closeExpandedItem);
-      document.body.appendChild(expandedItem);
-      expandedItemRef.current = expandedItem;
-
-      document.querySelectorAll(".item").forEach((el) => {
-        if (el !== item) {
-          gsap.to(el, {
-            opacity: 0,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-        }
-      });
-
-      const viewportWidth = window.innerWidth;
-      const targetWidth = viewportWidth * 0.4;
-      const targetHeight = targetWidth * 1.2;
-
-      titleAnimationRef.current = gsap.delayedCall(0.7, animateTitleIn);
-      descAnimationRef.current = gsap.delayedCall(0.8, () => {
-        const descElement = document.querySelector(".project-description");
-        const linkElement = document.querySelector(".project-link");
-
-        gsap.to(descElement, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        });
-
-        linkAnimationRef.current = gsap.to(linkElement, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          delay: 0.2,
-          ease: "power3.out",
-        });
-      });
-
-      gsap.fromTo(
-        expandedItem,
-        {
-          width: itemWidth,
-          height: itemHeight,
-          x: rect.left + itemWidth / 2 - window.innerWidth / 2,
-          y: rect.top + itemHeight / 2 - window.innerHeight / 2,
-        },
-        {
-          width: targetWidth,
-          height: targetHeight,
-          x: 0,
-          y: 0,
-          duration: 1,
-          ease: "hop",
-          onComplete: () => {
-            isExpandAnimationCompleteRef.current = true;
-          },
-        }
-      );
-    };
-
-    const closeExpandedItem = () => {
-      if (
-        !expandedItemRef.current ||
-        !originalPositionRef.current ||
-        !isExpandAnimationCompleteRef.current
-      )
-        return;
-
-      // Kill any pending animations
-      if (titleAnimationRef.current) {
-        titleAnimationRef.current.kill();
-        titleAnimationRef.current = null;
-      }
-      if (descAnimationRef.current) {
-        descAnimationRef.current.kill();
-        descAnimationRef.current = null;
-      }
-      if (linkAnimationRef.current) {
-        linkAnimationRef.current.kill();
-        linkAnimationRef.current = null;
-      }
-
-      animateTitleOut();
-      animateProjectInfoOut();
-
-      // Clear title text after animation
-      setTimeout(() => {
-        if (projectTitleRef.current) {
-          projectTitleRef.current.innerHTML = "";
-        }
-      }, 450);
-
-      overlay.classList.remove("active");
-      const originalRect = originalPositionRef.current.rect;
-
-      document.querySelectorAll(".item").forEach((el) => {
-        if (el.id !== activeItemIdRef.current) {
-          gsap.to(el, {
-            opacity: 1,
-            duration: 0.5,
-            ease: "power2.out",
-          });
-        }
-      });
-
-      const originalItem = document.getElementById(
-        activeItemIdRef.current || ""
-      );
-
-      gsap.to(expandedItemRef.current, {
-        width: itemWidth,
-        height: itemHeight,
-        x: originalRect.left + itemWidth / 2 - window.innerWidth / 2,
-        y: originalRect.top + itemHeight / 2 - window.innerHeight / 2,
-        duration: 1,
-        ease: "hop",
-        onComplete: () => {
-          if (expandedItemRef.current && expandedItemRef.current.parentNode) {
-            expandedItemRef.current.parentNode.removeChild(
-              expandedItemRef.current
-            );
-          }
-
-          if (originalItem) {
-            originalItem.style.visibility = "visible";
-          }
-
-          expandedItemRef.current = null;
-          setIsExpanded(false);
-          activeItemRef.current = null;
-          originalPositionRef.current = null;
-          activeItemIdRef.current = null;
-          setCanDrag(true);
-          if (container) container.style.cursor = "grab";
-          dragVelocityXRef.current = 0;
-          dragVelocityYRef.current = 0;
-        },
-      });
-    };
-
-    const animate = () => {
-      if (canDrag) {
-        const ease = 0.075;
-        currentXRef.current +=
-          (targetXRef.current - currentXRef.current) * ease;
-        currentYRef.current +=
-          (targetYRef.current - currentYRef.current) * ease;
-
-        canvas.style.transform = `translate(${currentXRef.current}px, ${currentYRef.current}px)`;
-
-        const now = Date.now();
-        const distMoved = Math.sqrt(
-          Math.pow(currentXRef.current - lastXRef.current, 2) +
-            Math.pow(currentYRef.current - lastYRef.current, 2)
-        );
-
-        if (distMoved > 100 || now - lastUpdateTimeRef.current > 100) {
-          updateVisibleItems();
-          lastXRef.current = currentXRef.current;
-          lastYRef.current = currentYRef.current;
-          lastUpdateTimeRef.current = now;
-        }
-      }
-
-      requestAnimationFrame(animate);
-    };
-
-    const handleMouseDown = (e: MouseEvent) => {
-      if (!canDrag) return;
-      isDraggingRef.current = true;
-      mouseHasMovedRef.current = false;
-      startXRef.current = e.clientX;
-      startYRef.current = e.clientY;
-      container.style.cursor = "grabbing";
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!isDraggingRef.current || !canDrag) return;
-
-      const dx = e.clientX - startXRef.current;
-      const dy = e.clientY - startYRef.current;
-
-      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-        mouseHasMovedRef.current = true;
-      }
-
+    const handleScroll = () => {
+      if (isCloning) return;
+      
       const now = Date.now();
-      const dt = Math.max(10, now - lastDragTimeRef.current);
-      lastDragTimeRef.current = now;
+      // Throttle cloning operations to every 150ms minimum
+      if (now - lastCloneTime < 150) return;
 
-      dragVelocityXRef.current = dx / dt;
-      dragVelocityYRef.current = dy / dt;
+      const scrollTop = lenis.scroll || container.scrollTop;
+      const scrollHeight = container.scrollHeight;
+      const clientHeight = container.clientHeight;
 
-      targetXRef.current += dx;
-      targetYRef.current += dy;
-
-      startXRef.current = e.clientX;
-      startYRef.current = e.clientY;
-    };
-
-    const handleMouseUp = () => {
-      if (!isDraggingRef.current) return;
-      isDraggingRef.current = false;
-
-      if (canDrag) {
-        container.style.cursor = "grab";
-      }
-
-      if (
-        Math.abs(dragVelocityXRef.current) > 0.1 ||
-        Math.abs(dragVelocityYRef.current) > 0.1
-      ) {
-        const momentumFactor = 200;
-        targetXRef.current += dragVelocityXRef.current * momentumFactor;
-        targetYRef.current += dragVelocityYRef.current * momentumFactor;
-      }
-    };
-
-    const handleTouchStart = (e: TouchEvent) => {
-      if (!canDrag) return;
-      isDraggingRef.current = true;
-      mouseHasMovedRef.current = false;
-      startXRef.current = e.touches[0].clientX;
-      startYRef.current = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      if (!isDraggingRef.current || !canDrag) return;
-
-      const dx = e.touches[0].clientX - startXRef.current;
-      const dy = e.touches[0].clientY - startYRef.current;
-
-      if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
-        mouseHasMovedRef.current = true;
-      }
-
-      targetXRef.current += dx;
-      targetYRef.current += dy;
-
-      startXRef.current = e.touches[0].clientX;
-      startYRef.current = e.touches[0].clientY;
-    };
-
-    const handleTouchEnd = () => {
-      isDraggingRef.current = false;
-    };
-
-    const handleOverlayClick = () => {
-      if (isExpanded) closeExpandedItem();
-    };
-
-    const handleResize = () => {
-      if (isExpanded && expandedItemRef.current) {
-        const viewportWidth = window.innerWidth;
-        const targetWidth = viewportWidth * 0.4;
-        const targetHeight = targetWidth * 1.2;
-
-        gsap.to(expandedItemRef.current, {
-          width: targetWidth,
-          height: targetHeight,
-          duration: 0.3,
-          ease: "power2.out",
+      // When near the bottom (30000px buffer), add more items
+      if (scrollTop + clientHeight >= scrollHeight - 30000) {
+        isCloning = true;
+        lastCloneTime = now;
+        setDisplayItems(prev => {
+          const newItems = [...prev];
+          // Clone 20 copies at once
+          for (let i = 0; i < 20; i++) {
+            newItems.push(...items);
+          }
+          return newItems;
         });
-      } else {
-        updateVisibleItems();
+        setTimeout(() => { isCloning = false; }, 100);
+      }
+
+      // When near the top (30000px buffer), prepend items and adjust scroll
+      if (scrollTop <= 30000) {
+        isCloning = true;
+        lastCloneTime = now;
+        const itemsHeight = (scrollHeight / displayItems.length) * items.length * 20;
+        
+        setDisplayItems(prev => {
+          const newItems = [];
+          // Clone 20 copies at once
+          for (let i = 0; i < 20; i++) {
+            newItems.push(...items);
+          }
+          newItems.push(...prev);
+          return newItems;
+        });
+        
+        // Adjust scroll position to maintain visual position with double RAF for smoothness
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const newPosition = container.scrollTop + itemsHeight;
+            container.scrollTop = newPosition;
+            lenis.scrollTo(newPosition, { immediate: true, force: true });
+          });
+        });
+        setTimeout(() => { isCloning = false; }, 100);
+      }
+
+      // Trim items if too many (keep between 70-140 copies)
+      if (displayItems.length > items.length * 140) {
+        isCloning = true;
+        lastCloneTime = now;
+        const midPoint = Math.floor(displayItems.length / 2);
+        const itemsToKeep = items.length * 105;
+        const startIndex = midPoint - Math.floor(itemsToKeep / 2);
+        
+        setDisplayItems(prev => prev.slice(startIndex, startIndex + itemsToKeep));
+        // Adjust scroll to middle with double RAF
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            container.scrollTop = container.scrollHeight / 2;
+            lenis.scrollTo(container.scrollHeight / 2, { immediate: true, force: true });
+          });
+        });
+        setTimeout(() => { isCloning = false; }, 100);
       }
     };
 
-    container.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
-    container.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchmove", handleTouchMove);
-    window.addEventListener("touchend", handleTouchEnd);
-    overlay.addEventListener("click", handleOverlayClick);
-    window.addEventListener("resize", handleResize);
+    lenis.on('scroll', handleScroll);
 
-    updateVisibleItems();
-    animate();
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+    
+    // Set initial scroll position to middle
+    setTimeout(() => {
+      const initialPosition = container.scrollHeight / 2;
+      container.scrollTop = initialPosition;
+      lenis.scrollTo(initialPosition, { immediate: true });
+    }, 100);
 
     return () => {
-      container.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-      container.removeEventListener("touchstart", handleTouchStart);
-      window.removeEventListener("touchmove", handleTouchMove);
-      window.removeEventListener("touchend", handleTouchEnd);
-      overlay.removeEventListener("click", handleOverlayClick);
-      window.removeEventListener("resize", handleResize);
+      lenis.destroy();
     };
-  }, [canDrag, isExpanded]);
+  }, [displayItems.length]);
 
   return (
     <>
@@ -835,49 +302,30 @@ GALLERY STUFF AND INTERACTIONS
         </h1>
       </div>
 
-      {/* Gallery */}
-      <div className="work-container" ref={containerRef}>
-        <div className="work-canvas" ref={canvasRef}></div>
-        <div className="work-overlay" ref={overlayRef}></div>
-      </div>
-
-      {/* Project Title */}
-      <div className="project-title">
-        <p ref={projectTitleRef}></p>
-      </div>
-
-      {/* Project Info */}
-      <div className="project-info">
-        <p className="project-description"></p>
-        <a
-          className="project-link"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          VISIT
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="23"
-            height="23"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{
-              marginLeft: "6px",
-              marginBottom: "4px",
-              display: "inline-block",
-              verticalAlign: "middle",
-            }}
-            className="ai ai-ArrowUpRight"
-          >
-            <path d="M18 6L6 18" />
-            <path d="M8 6h10v10" />
-          </svg>
-        </a>
+      {/* Work List Container */}
+      <div className="work-list-container">
+        <div className="work-list-scroll">
+          {displayItems.map((item, index) => (
+            <a
+              key={index}
+              href={item.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="work-header-link"
+              onMouseEnter={() => handleItemHover(item.image, item.variant)}
+              onMouseLeave={handleItemLeave}
+            >
+              {item.title}
+            </a>
+          ))}
+        </div>
+        
+        {/* Image Display */}
+        {currentImage && (
+          <div className={`work-image-display variant-${currentVariant}`}>
+            <img src={currentImage} alt="Work preview" />
+          </div>
+        )}
       </div>
     </>
   );

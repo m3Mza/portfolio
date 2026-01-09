@@ -602,7 +602,7 @@ PARALLAX GALLERY SECTION
       if (!parallaxSection || !textElement || !imageElement)
         return;
 
-      const OVERLAY_COLOR = "rgba(255, 255, 255, 1)";
+      const OVERLAY_COLOR = "rgba(255, 255, 255, 0.8)";
 
       // Create parallax effect for image (moves up slower)
       gsap.to(imageElement, {
