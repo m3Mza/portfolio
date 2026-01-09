@@ -781,10 +781,8 @@ PARALLAX GALLERY SECTION
             </div>
             <div className="hero-grid-text">
               <p>
-                Hi. I'm a{" "}
-                code-based web
-                developer who makes websites{" "}
-                <span className="highlight-marker">f#*&#@g</span> cool.
+                Hello, I'm a{" "}
+                <span className="highlight-underline">front-end</span> developer.{" "}
               </p>
             </div>
             <div className="hero-grid-cta">
@@ -843,6 +841,7 @@ PARALLAX GALLERY SECTION
               <path d="M5 13l7 7 7-7" />
             </svg>
           </h2>
+         
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
@@ -878,10 +877,10 @@ PARALLAX GALLERY SECTION
         >
           <div className="parallax-gallery-text">
             <h3>
-              I am a web developer based in{" "}
-              <span className="highlight-scribble">Serbia</span>. I aim to
-              create timeless web experiences that are memorable and keep users
-              coming back for more.
+              I'm a developer based in{" "}
+              <span className="highlight-scribble">Serbia</span>, aiming to
+              create web experiences that effectively represent your brand on the internet.
+
             </h3>
           </div>
           <div className="parallax-gallery-image">
@@ -893,7 +892,7 @@ PARALLAX GALLERY SECTION
         {/* Selected Works Section */}
       <section className="selected-works-section">
         <div className="selected-works-header">
-          <h3 className="selected-works-title">Some stuff I <span className="highlight-underline">made.</span></h3>
+          <h3 className="selected-works-title">Some stuff I made.</h3>
           <a href="/work" className="link">
             ALL OF MY WORK{" "}
             <svg

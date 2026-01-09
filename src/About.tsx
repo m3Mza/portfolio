@@ -309,7 +309,7 @@ FOLDER HOVER ANIMATIONS
           </div>
           <div className="about-text">
             <p>
-              I'm a web developer with a BEng in Software Engineering.
+              I'm a front-end developer with a BEng in Software Engineering.
               {" "}I focus mainly on JavaScript and all its' bells and whistles. If you want to say hello: 
             </p>
             <a

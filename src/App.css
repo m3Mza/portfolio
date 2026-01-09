@@ -232,8 +232,8 @@ CSS for components used in App.tsx, Work.tsx, About.tsx
 
 .parallax-gallery-text h3 {
   hyphens: auto;
-  text-align: justify;
-  min-width: 65vw;
+  text-align: left;
+  min-width: 72vw;
   font-size: 3.6rem;
   will-change: background-image, -webkit-background-clip, -webkit-text-fill-color;
 }
