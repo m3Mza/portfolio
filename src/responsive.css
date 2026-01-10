@@ -464,34 +464,19 @@
    Work (Mobile) 
    ============================== */
 
-.expanded-item {
-  width: 90vw;
-  height: 70vh;
-  max-width: none;
+.blog-header-sticky h1 {
+  font-size: 2rem;
 }
 
-.project-title p {
-  font-size: 1.4rem;
+.work-header-link {
+  font-size: 1.5rem;
 }
 
-.project-info {
-  position: fixed;
-  top: auto;
-  bottom: 10%;
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  max-width: 90vw;
-  text-align: center;
+.work-image-display {
+  display: none !important;
 }
 
-.project-description {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+.earth-gif {
+  display: none !important;
 }
 
-.project-link {
-  font-size: 1.1rem;
-}
-
-} /* End of @media (max-width: 430px) */
