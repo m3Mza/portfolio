@@ -254,7 +254,7 @@ function Work() {
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "CLOSE" : "MENU"}
+            {isMenuActive ? "close" : "menu"}
           </button>
         </div>
       </header>

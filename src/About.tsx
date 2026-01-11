@@ -258,7 +258,7 @@ FOLDER HOVER ANIMATIONS
             onClick={toggleMenu}
             aria-label="Toggle navigation menu"
           >
-            {isMenuActive ? "CLOSE" : "MENU"}
+            {isMenuActive ? "close" : "menu"}
           </button>
         </div>
       </header>
@@ -438,17 +438,17 @@ FOLDER HOVER ANIMATIONS
         
         <div className="footer-bottom">
           <p>© made with <span className="highlight-circle">love</span>, mirko, 2026.</p>
-          <h1 className="footer-logo">mirko</h1>
+          <h1 className="footer-logo" style={{position: 'relative'}}>mirko</h1>
           <img
                   src="/nier.gif"
                   alt=""
                   className="earth-gif"
                   style={{
                     display: "block",
-                    width: "14rem",
-                    height: "14rem",
+                    width: "16rem",
+                    height: "16rem",
                     position: "absolute",
-                    left: "27.5rem",
+                    left: "26.5rem",
                     bottom: "14rem",
                   }}
                 />
