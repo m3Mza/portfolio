@@ -744,9 +744,6 @@ PARALLAX GALLERY SECTION
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
             <span>home</span>
           </a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            <span>about</span>
-          </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
             <span>work</span>
           </a>
@@ -781,8 +778,8 @@ PARALLAX GALLERY SECTION
             </div>
             <div className="hero-grid-text">
               <p>
-                Hello, I'm a{" "}
-                <span className="highlight-underline">front-end</span> developer.{" "}
+                I'm a front-end developer helping
+                brands establish a strong online presence.
               </p>
             </div>
             <div className="hero-grid-cta">
@@ -793,7 +790,7 @@ PARALLAX GALLERY SECTION
                   (window.location.href = "mailto:mirkomimap@gmail.com")
                 }
               >
-                SAY HELLO{" "}
+                Got a project?{" "}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="23"
@@ -877,9 +874,9 @@ PARALLAX GALLERY SECTION
         >
           <div className="parallax-gallery-text">
             <h3>
-              I'm a developer based in{" "}
-              <span className="highlight-scribble">Serbia</span>, aiming to
-              create web experiences that effectively represent your brand on the internet.
+              I analyze human behavioral patterns to develop websites that are
+              intuitive, pleasing to the eye and help brands maintain a powerful
+              online presence.
 
             </h3>
           </div>
@@ -894,7 +891,7 @@ PARALLAX GALLERY SECTION
         <div className="selected-works-header">
           <h3 className="selected-works-title">Some stuff I made.</h3>
           <a href="/work" className="link">
-            ALL OF MY WORK{" "}
+            All of my work{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="23"
@@ -932,7 +929,7 @@ PARALLAX GALLERY SECTION
               </div>
               <figcaption>placeholder 01.</figcaption>
             </figure>
-            <figure className="variant-2">
+            <figure className="variant-1">
               <a
                 href="https://example.com/residency"
                 target="_blank"
@@ -945,7 +942,7 @@ PARALLAX GALLERY SECTION
               </div>
               <figcaption>placeholder 02.</figcaption>
             </figure>
-            <figure className="variant-3">
+            <figure className="variant-1">
               <a
                 href="https://example.com/nier"
                 target="_blank"
@@ -958,7 +955,7 @@ PARALLAX GALLERY SECTION
               </div>
               <figcaption>placeholder 04.</figcaption>
             </figure>
-            <figure className="variant-4">
+            <figure className="variant-1">
               <a
                 href="https://example.com/placeholder"
                 target="_blank"
@@ -986,7 +983,7 @@ PARALLAX GALLERY SECTION
               </div>
               <figcaption>placeholder 03.</figcaption>
             </figure>
-            <figure className="selected-works-big-image variant-2">
+            <figure className="selected-works-big-image variant-1">
               <a
                 href="https://example.com/placeholder"
                 target="_blank"
@@ -999,7 +996,7 @@ PARALLAX GALLERY SECTION
               </div>
               <figcaption>placeholder 05.</figcaption>
             </figure>
-            <figure className="selected-works-big-image variant-3">
+            <figure className="selected-works-big-image variant-1">
               <a
                 href="https://example.com/featured-project"
                 target="_blank"
@@ -1023,7 +1020,6 @@ PARALLAX GALLERY SECTION
           <div className="footer-column">
             <a href="/" className="link">home</a>
             <a href="/work" className="link">work</a>
-            <a href="/about" className="link">about</a>
     
           </div>
           
@@ -1052,7 +1048,6 @@ PARALLAX GALLERY SECTION
                 </svg>
             </a>
             <a href="https://x.com/mirkosayshello" className="link">x</a>
-            <a href="https://github.com/m3Mza/portfolio" className="link">github</a>
 
           </div>
         </div>

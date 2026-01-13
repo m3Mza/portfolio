@@ -440,27 +440,6 @@
 }
 
 /* ============================== 
-   About (Mobile) 
-   ============================== */
-
-
-.about-section {
-  min-height: 60vh;
-  background-color: var(--white);
-  padding: 2.2rem 0.7rem;
-}
-
-.about-text {
-  text-align: justify;
-  hyphens: auto;
-  font-size: 1rem;
-  line-height: 1.7;
-  max-width: 90vw;
-  color: var(--black);
-  z-index: 12;
-}
-
-/* ============================== 
    Work (Mobile) 
    ============================== */
 

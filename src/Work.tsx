@@ -270,9 +270,6 @@ function Work() {
           <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
             home
           </a>
-          <a href="/about" onClick={(e) => handleLinkClick(e, "/about")}>
-            about
-          </a>
           <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
             work
           </a>
@@ -323,7 +320,7 @@ function Work() {
         {/* Image Display */}
         {currentImage && (
           <div className={`work-image-display variant-${currentVariant}`}>
-            <img src={currentImage} alt="Work preview" />
+            <img src={currentImage}/>
           </div>
         )}
       </div>
