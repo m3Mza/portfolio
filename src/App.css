@@ -63,7 +63,7 @@
 }
 
 .hero-grid-cta {
-  grid-column: 10 / 13;
+  grid-column: 8 / 13;
   grid-row: 1;
   display: flex;
   align-items: flex-start;
@@ -449,6 +449,7 @@
 .blog-header-sticky h1 {
   font-size: 2rem;
   margin: 0;
+  font-weight: 600;
 }
 
 .work-list-container {
