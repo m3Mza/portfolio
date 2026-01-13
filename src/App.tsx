@@ -172,8 +172,8 @@ function App() {
             </div>
             <div className="hero-grid-text">
               <p>
-                I'm a front-end developer helping
-                brands establish a strong online presence.
+                I'm a front-end developer helping folks
+                establish a web presence.
               </p>
             </div>
             <div className="hero-grid-cta">
@@ -236,16 +236,16 @@ function App() {
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
-            <img src="/circle6.jpg" alt="Picture 1" />
+            <img src="/img1.jpeg" alt="Picture 1" />
           </div>
           <div className="komparacija-img">
-            <img src="/img6.jpg" alt="Picture 2" />
+            <img src="/img6.jpeg" alt="Picture 2" />
           </div>
           <div className="komparacija-img">
-            <img src="/circle2.jpg" alt="Picture 3" />
+            <img src="/img2.jpeg" alt="Picture 3" />
           </div>
           <div className="komparacija-img">
-            <img src="/circle1.jpg" alt="Picture 4" />
+            <img src="/img3.jpeg" alt="Picture 4" />
           </div>
         </div>
       </section>
@@ -268,14 +268,14 @@ function App() {
         >
           <div className="parallax-gallery-text">
             <h3>
-              I analyze human behavioral patterns to develop websites that are
-              intuitive, pleasing to the eye and help brands maintain a powerful
-              online presence.
+              I create intuitive and engaging user experiences,
+              that won't have them leaving after a few scrolls by using
+              human behavioral psychology tricks and well planned web layouts.
 
             </h3>
           </div>
           <div className="parallax-gallery-image">
-            <img src="/circle5.jpg" alt="Gallery placeholder" />
+            <img src="/img5.jpeg" alt="Gallery placeholder" />
           </div>
         </div>
       </section>
@@ -316,7 +316,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle3.jpg" alt="Screening project" />
+                <img src="/img3.jpeg" alt="Screening project" />
               </a>
               <div className="figure-description">
                 john yakuza estates // REAL ESTATE // JAN 2026
@@ -329,7 +329,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle2.jpg" alt="Residency project" />
+                <img src="/img2.jpeg" alt="Residency project" />
               </a>
               <div className="figure-description">
                 ANOTHER PROJECT DESCRIPTION HERE // FILM // FEB 2026
@@ -342,7 +342,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle5.jpg" alt="Project" />
+                <img src="/img5.jpeg" alt="Project" />
               </a>
               <div className="figure-description">
                 COOL MAN // MOTORCYCLE // MAR 2027
@@ -355,7 +355,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle1.jpg" alt="Featured project" />
+                <img src="/img1.jpeg" alt="Featured project" />
               </a>
               <div className="figure-description">
                 TRAIN SPOTTED // TRANSPORT // APR 2028
@@ -370,7 +370,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle4.jpg" alt="Featured project" />
+                <img src="/img4.jpeg" alt="Featured project" />
               </a>
               <div className="figure-description">
                 GREATEST WEBSITE IN THE HISTORY OF WEBSITES // EMIL // FEB 2017
@@ -383,7 +383,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle1.jpg" alt="Featured project" />
+                <img src="/img3.jpeg" alt="Featured project" />
               </a>
               <div className="figure-description">
                 TRAIN SPOTTED // TRANSPORT // APR 2028
@@ -396,7 +396,7 @@ function App() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <img src="/circle6.jpg" alt="Featured project" />
+                <img src="/img6.jpeg" alt="Featured project" />
               </a>
               <div className="figure-description">
                 "he is walking" / fitness / jun 2026

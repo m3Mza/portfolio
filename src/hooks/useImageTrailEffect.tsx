@@ -24,7 +24,7 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
     };
 
     const images = Array.from({ length: config.imageCount }, (_, i) => 
-      `/img${(i % 6) + 1}.jpg`
+      `/img${(i % 6) + 1}.jpeg`
     );
 
     const trail: Array<{

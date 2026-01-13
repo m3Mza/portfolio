@@ -197,8 +197,8 @@
 
 .parallax-gallery-text h3 {
   hyphens: auto;
-  text-align: left;
-  min-width: 72vw;
+  text-align: justify;
+  min-width: 70vw;
   font-size: 3.6rem;
   will-change: background-image, -webkit-background-clip, -webkit-text-fill-color;
 }

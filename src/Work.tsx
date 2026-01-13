@@ -3,15 +3,15 @@ import "./App.css";
 import InfiniteWorkList from "./components/InfiniteWorkList";
 
 const items = [
-  { title: "z", image: "/img1.jpg", variant: 1, url: "https://example.com/project-z" },
-  { title: "LoveFrom,", image: "/img2.jpg", variant: 2, url: "https://example.com/lovefrom" },
-  { title: "ヨコオタロウさん", image: "/img3.jpg", variant: 3, url: "https://example.com/yoko-taro" },
-  { title: "JOHN YAKUZA", image: "/img4.jpg", variant: 1, url: "https://example.com/john-yakuza" },
-  { title: "red hot chilli peppers", image: "/img5.jpg", variant: 2, url: "https://example.com/red-hot" },
-  { title: "naughty cat", image: "/img6.jpg", variant: 3, url: "https://example.com/naughty-cat" },
-  { title: "design 2000", image: "/img7.jpg", variant: 1, url: "https://example.com/design-2000" },
-  { title: "hello_world", image: "/img8.jpg", variant: 2, url: "https://example.com/hello-world" },
-  { title: "idk", image: "/img9.jpg", variant: 3, url: "https://example.com/idk" },
+  { title: "z", image: "/img1.jpeg", variant: 1, url: "https://example.com/project-z" },
+  { title: "LoveFrom,", image: "/img2.jpeg", variant: 2, url: "https://example.com/lovefrom" },
+  { title: "ヨコオタロウさん", image: "/img3.jpeg", variant: 3, url: "https://example.com/yoko-taro" },
+  { title: "JOHN YAKUZA", image: "/img4.jpeg", variant: 1, url: "https://example.com/john-yakuza" },
+  { title: "red hot chilli peppers", image: "/img5.jpeg", variant: 2, url: "https://example.com/red-hot" },
+  { title: "naughty cat", image: "/img6.jpeg", variant: 3, url: "https://example.com/naughty-cat" },
+  { title: "design 2000", image: "/img7.jpeg", variant: 1, url: "https://example.com/design-2000" },
+  { title: "hello_world", image: "/img8.jpeg", variant: 2, url: "https://example.com/hello-world" },
+  { title: "idk", image: "/img9.jpeg", variant: 3, url: "https://example.com/idk" },
 ];
 
 function Work() {
