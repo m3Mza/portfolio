@@ -105,8 +105,6 @@ function Work() {
 
   return (
     <>
-      <div className="grain-overlay"></div>
-      
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
@@ -144,19 +142,6 @@ function Work() {
       <div className="blog-header-sticky">
         <h1>
           work.
-          <img
-            src="/nier.gif"
-            alt=""
-            className="earth-gif"
-            style={{
-              display: "block",
-              width: "2.7rem",
-              height: "2.7rem",
-              position: "absolute",
-              left: "0.8rem",
-              top: "0.3rem",
-            }}
-          />
         </h1>
       </div>
 

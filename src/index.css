@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Archivo:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700');
 
 @font-face {
   font-family: 'Grotesk';
@@ -87,68 +87,6 @@ p {
   color: var(--black);
   box-shadow: inset 400px 0 0 0 var(--accent-yellow);
 }
-
-
-
-/* Grain Overlay Background Effect */
-
-.grain-overlay {
-  position: fixed;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  pointer-events: none;
-  z-index: 10;
-  opacity: 0.5;
-  background-image: url('https://grainy-gradients.vercel.app/noise.svg');
-  animation: grain 8s steps(10) infinite;
-  background-color: var(--white);
-}
-
-@keyframes grain {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-
-  10% {
-    transform: translate3d(-2%, -3%, 0);
-  }
-
-  20% {
-    transform: translate3d(-4%, 2%, 0);
-  }
-
-  30% {
-    transform: translate3d(3%, -5%, 0);
-  }
-
-  40% {
-    transform: translate3d(-2%, 5%, 0);
-  }
-
-  50% {
-    transform: translate3d(-3%, 3%, 0);
-  }
-
-  60% {
-    transform: translate3d(4%, 0%, 0);
-  }
-
-  70% {
-    transform: translate3d(0%, 4%, 0);
-  }
-
-  80% {
-    transform: translate3d(1%, 6%, 0);
-  }
-
-  90% {
-    transform: translate3d(-3%, 2%, 0);
-  }
-}
-
 
 /* =======================
 ==========================

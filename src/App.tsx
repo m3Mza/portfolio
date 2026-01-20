@@ -7,7 +7,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useLenisScroll from "./hooks/useLenisScroll";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
 import useKomparacijaAnimation from "./hooks/useKomparacijaAnimation";
-import useSelectedWorksParallax from "./hooks/useSelectedWorksParallax";
 import useParallaxGallery from "./hooks/useParallaxGallery";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -108,12 +107,142 @@ function App() {
   useLenisScroll();
   useImageTrailEffect({ containerRef: heroContainerRef });
   useKomparacijaAnimation();
-  useSelectedWorksParallax();
   useParallaxGallery();
+
+  // Selected works data
+  const selectedWorks = [
+  {
+    title: "Lumeo",
+    type: "Creative Agency",
+    client: "Ava Collins",
+    year: "2026",
+    link: "https://lovefrom.com",
+    img: "/img1.jpeg",
+  },
+  {
+    title: "NexaWorks",
+    type: "Design Studio",
+    client: "Kai Johnson",
+    year: "2025",
+    link: "https://example.com/entrance",
+    img: "/img2.jpeg",
+  },
+  {
+    title: "Fiorenza",
+    type: "Public",
+    client: "Marco Rossi",
+    year: "2024",
+    link: "https://example.com/fitness",
+    img: "/img3.jpeg",
+  },
+  {
+    title: "Skydeck",
+    type: "Architecture",
+    client: "Liam Parker",
+    year: "2023",
+    link: "https://example.com/rooftop",
+    img: "/img4.jpeg",
+  },
+  {
+    title: "Ember",
+    type: "Branding",
+    client: "Zara Nguyen",
+    year: "2018",
+    link: "https://example.com/befimmo",
+    img: "/img5.jpeg",
+  },
+  {
+    title: "Co-Lab Hub",
+    type: "Offices",
+    client: "Global Corp",
+    year: "2022",
+    link: "https://example.com/coworking",
+    img: "/img6.jpeg",
+  },
+  {
+    title: "CraftPoint",
+    type: "Offices",
+    client: "Pixel Labs",
+    year: "2025",
+    link: "https://example.com/craftit",
+    img: "/img1.jpeg",
+  },
+  {
+    title: "Joybuy Nexus",
+    type: "Offices",
+    client: "Joybuy International",
+    year: "2026",
+    link: "https://example.com/joybuy",
+    img: "/img2.jpeg",
+  },
+  {
+    title: "Louise Horizon",
+    type: "Offices",
+    client: "Silversquare Group",
+    year: "2024",
+    link: "https://example.com/louise",
+    img: "/img3.jpeg",
+  },
+  {
+    title: "Shake-Spike Hub",
+    type: "Offices",
+    client: "Spike Innovations",
+    year: "2025",
+    link: "https://example.com/shake",
+    img: "/img4.jpeg",
+  },
+  {
+    title: "A-Tower Alpha",
+    type: "Offices",
+    client: "Silversquare",
+    year: "2023",
+    link: "https://example.com/atower",
+    img: "/img5.jpeg",
+  },
+  {
+    title: "Guillemins HQ",
+    type: "Offices",
+    client: "Silversquare",
+    year: "2023",
+    link: "https://example.com/guillemins",
+    img: "/img6.jpeg",
+  },
+  {
+    title: "Louvain Nova",
+    type: "Offices",
+    client: "Silversquare",
+    year: "2024",
+    link: "https://example.com/louvain",
+    img: "/img1.jpeg",
+  }
+]
+
+  // Hover image state
+  const [hoverImg, setHoverImg] = useState<string | null>(null);
+  const [hoverPos, setHoverPos] = useState<{ x: number; y: number }>({
+    x: 0,
+    y: 0,
+  });
+
+  // Handle hover to show image at random position
+  const handleWorkHover = (img: string) => {
+    const section = document.querySelector(".selected-works-section");
+    if (section) {
+      const rect = section.getBoundingClientRect();
+      // Random position within section bounds
+      const x = Math.floor(Math.random() * (rect.width - 240));
+      const y = Math.floor(Math.random() * (rect.height + -240));
+      setHoverPos({ x, y });
+      setHoverImg(img);
+    }
+  };
+  const handleWorkLeave = () => {
+    setHoverImg(null);
+  };
 
   return (
     <>
-      <div className="grain-overlay"></div>
+      
       {/* Navigation Header */}
       <header className="nav-header">
         <div className="nav-header-content">
@@ -146,7 +275,7 @@ function App() {
           </a>
         </div>
       </nav>
-      
+
       {/* Hero Grid Section */}
 
       <section className="hero-grid-section" ref={heroContainerRef}>
@@ -155,19 +284,6 @@ function App() {
             <div className="hero-grid-header">
               <h1 className="title" style={{ position: "relative" }}>
                 mirko.
-                <img
-                  src="/nier.gif"
-                  alt=""
-                  className="earth-gif"
-                  style={{
-                    display: "block",
-                    width: "8rem",
-                    height: "8rem",
-                    position: "absolute",
-                    left: "10.7rem",
-                    top: "0rem",
-                  }}
-                />
               </h1>
             </div>
             <div className="hero-grid-text">
@@ -232,7 +348,6 @@ function App() {
               <path d="M5 13l7 7 7-7" />
             </svg>
           </h2>
-         
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
@@ -281,7 +396,7 @@ function App() {
       </section>
 
         {/* Selected Works Section */}
-      <section className="selected-works-section">
+      <section className="selected-works-section" style={{ position: 'relative', minHeight: '100vh' }}>
         <div className="selected-works-header">
           <h3 className="selected-works-title">Some stuff I made.</h3>
           <a href="/work" className="link">
@@ -297,10 +412,10 @@ function App() {
               strokeLinecap="round"
               strokeLinejoin="round"
               style={{
-                marginLeft: "1px",
-                marginBottom: "4px",
-                display: "inline-block",
-                verticalAlign: "middle",
+                marginLeft: '1px',
+                marginBottom: '4px',
+                display: 'inline-block',
+                verticalAlign: 'middle',
               }}
             >
               <path d="M18 6L6 18" />
@@ -308,102 +423,48 @@ function App() {
             </svg>
           </a>
         </div>
-        <div className="selected-works-container">
-          <div className="selected-works-left">
-            <figure className="variant-1">
-              <a
-                href="https://example.com/screening"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img3.jpeg" alt="Screening project" />
-              </a>
-              <div className="figure-description">
-                john yakuza estates // REAL ESTATE // JAN 2026
-              </div>
-              <figcaption>placeholder 01.</figcaption>
-            </figure>
-            <figure className="variant-1">
-              <a
-                href="https://example.com/residency"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img2.jpeg" alt="Residency project" />
-              </a>
-              <div className="figure-description">
-                ANOTHER PROJECT DESCRIPTION HERE // FILM // FEB 2026
-              </div>
-              <figcaption>placeholder 02.</figcaption>
-            </figure>
-            <figure className="variant-1">
-              <a
-                href="https://example.com/nier"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img5.jpeg" alt="Project" />
-              </a>
-              <div className="figure-description">
-                COOL MAN // MOTORCYCLE // MAR 2027
-              </div>
-              <figcaption>placeholder 04.</figcaption>
-            </figure>
-            <figure className="variant-1">
-              <a
-                href="https://example.com/placeholder"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img1.jpeg" alt="Featured project" />
-              </a>
-              <div className="figure-description">
-                TRAIN SPOTTED // TRANSPORT // APR 2028
-              </div>
-              <figcaption>placeholder 05.</figcaption>
-            </figure>
-          </div>
-          <div className="selected-works-right">
-            <figure className="selected-works-big-image variant-1">
-              <a
-                href="https://example.com/jony-ive"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img4.jpeg" alt="Featured project" />
-              </a>
-              <div className="figure-description">
-                GREATEST WEBSITE IN THE HISTORY OF WEBSITES // EMIL // FEB 2017
-              </div>
-              <figcaption>placeholder 03.</figcaption>
-            </figure>
-            <figure className="selected-works-big-image variant-1">
-              <a
-                href="https://example.com/placeholder"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img3.jpeg" alt="Featured project" />
-              </a>
-              <div className="figure-description">
-                TRAIN SPOTTED // TRANSPORT // APR 2028
-              </div>
-              <figcaption>placeholder 05.</figcaption>
-            </figure>
-            <figure className="selected-works-big-image variant-1">
-              <a
-                href="https://example.com/featured-project"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <img src="/img6.jpeg" alt="Featured project" />
-              </a>
-              <div className="figure-description">
-                "he is walking" / fitness / jun 2026
-              </div>
-              <figcaption>placeholder 06.</figcaption>
-            </figure>
-          </div>
+        <div className="selected-works-simple-list" style={{ width: '100%', marginTop: '2rem' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '1.4rem' }}>
+            <tbody>
+              {selectedWorks.map((work, idx) => (
+                <tr key={idx}>
+                  <td style={{ padding: '0.7rem 0', fontWeight: 'bold' }}>
+                    <a
+                      href={work.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="link"
+                      style={{ color: 'var(--black)', cursor: 'pointer' }}
+                      onMouseEnter={() => handleWorkHover(work.img)}
+                      onMouseLeave={handleWorkLeave}
+                    >
+                      {work.title}
+                    </a>
+                  </td>
+                  <td style={{ padding: '0.7rem 0', color: 'var(--black)' }}>{work.type}</td>
+                  <td style={{ padding: '0.7rem 0', color: 'var(--black)' }}>{work.client}</td>
+                  <td style={{ padding: '0.7rem 0', color: 'var(--black)' }}>{work.year}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {hoverImg && (
+            <img
+              src={hoverImg}
+              alt="Preview"
+              style={{
+                position: 'absolute',
+                left: hoverPos.x,
+                top: hoverPos.y,
+                width: '300px',
+                height: '300px',
+                pointerEvents: 'none',
+                zIndex: 100,
+                transition: 'opacity 0.2s',
+                opacity: 1,
+              }}
+            />
+          )}
         </div>
       </section>
 
@@ -451,19 +512,6 @@ function App() {
         <div className="footer-bottom">
           <p>© made with <span className="highlight-circle">love</span>, mirko, 2026.</p>
           <h1 className="footer-logo" style={{position: 'relative'}}>mirko</h1>
-          <img
-                  src="/nier.gif"
-                  alt=""
-                  className="earth-gif"
-                  style={{
-                    display: "block",
-                    width: "16rem",
-                    height: "16rem",
-                    position: "absolute",
-                    left: "26.5rem",
-                    bottom: "14rem",
-                  }}
-                />
         </div>
       </footer>
     </>

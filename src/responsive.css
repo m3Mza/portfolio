@@ -249,9 +249,7 @@
   line-height: 0.85;
 }
 
-.footer-bottom .earth-gif {
-  display: none !important;
-}
+
 
 
 /* ============================== 
@@ -262,9 +260,7 @@
   display: none !important;
 }
 
-   .earth-gif {
-    display: none !important;
-  }
+
 
 .hero-grid-section {
   min-height: 25vh;
@@ -455,7 +451,4 @@
   display: none !important;
 }
 
-.earth-gif {
-  display: none !important;
-}
 
