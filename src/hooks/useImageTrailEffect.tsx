@@ -16,7 +16,7 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
       removalDelay: 50,
       mouseThreshold: 100,
       scrollThreshold: 100,
-      idleCursorInterval: 1000,
+      idleCursorinterval: 1000,
       inDuration: 750,
       outDuration: 1000,
       inEasing: "cubic-bezier(.07, .5, .5, 1)",
@@ -110,7 +110,7 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
         return;
       }
 
-      if (!isMoving && (now - lastSteadyImageTime) >= config.idleCursorInterval) {
+      if (!isMoving && (now - lastSteadyImageTime) >= config.idleCursorinterval) {
         lastSteadyImageTime = now;
         createImage();
       }

@@ -27,7 +27,6 @@
   display: grid;
   grid-template-columns: repeat(12, 1fr);
   grid-template-rows: auto auto auto;
-  gap: 0rem;
   align-items: end;
   min-height: 50vh;
 }
@@ -42,7 +41,7 @@
 
 .hero-grid-header h1 {
   color: var(--black);
-  line-height: 1.1;
+  line-height: 1;
   margin: 0;
   font-weight: 600;
 }
@@ -53,8 +52,16 @@
   display: flex;
   align-items: center;
   margin-top: 0;
-  margin-left: 4%;
+  margin-left: 3.6%;
   z-index: 12;
+}
+
+.hero-grid-small-text {
+  grid-column: 12;
+  grid-row: 3;
+  font-size: 0.9rem;
+  color: var(--black);
+
 }
 
 .hero-grid-text p {
@@ -116,7 +123,6 @@
   font-size: 1.4rem;
   color: var(--black);
   margin: 0;
-  line-height: 1.2;
 }
 
 .komparacija-slike {
@@ -150,85 +156,7 @@
 
 /* =======================
 ==========================
-3. PARALLAX GALLERY
-==========================
-========================== */
-
-.parallax-gallery {
-  width: 100vw;
-  height: 100vh;
-  color: var(--black);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  box-sizing: border-box;
-  z-index: 12;
-  position: relative;
-  overflow-x: hidden;
-  contain: layout style paint;
-}
-
-
-.parallax-gallery-inner {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  justify-content: flex-start;
-  width: 100vw;
-  height: 100vh;
-  padding: 4vw 6vw;
-  box-sizing: border-box;
-  gap: 3vw;
-  position: relative;
-  z-index: 1;
-  overflow-x: hidden;
-
-}
-
-.parallax-gallery-text {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  z-index: 9999;
-}
-
-.parallax-gallery-text h3 {
-  hyphens: auto;
-  text-align: justify;
-  min-width: 70vw;
-  font-size: 3.6rem;
-  will-change: background-image, -webkit-background-clip, -webkit-text-fill-color;
-}
-
-
-.parallax-gallery-image {
-  flex: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  z-index: 9998;
-}
-
-.parallax-gallery-image img {
-  width: 100%;
-  width: 40vw;
-  height: auto;
-  object-fit: fill;
-  margin-top: 45%;
-  margin-right: 79%;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-}
-
-
-
-
-/* =======================
-==========================
-4. SELECTED WORKS SECTION
+3. SELECTED WORKS SECTION
 ==========================
 ========================== */
 
@@ -249,7 +177,7 @@
 }
 
 .selected-works-title {
-  
+
   color: var(--black);
   margin: 0;
 }
@@ -259,7 +187,7 @@
 
 /* =======================
 ==========================
-5. WORK SECTION
+4. WORK SECTION
 ==========================
 ========================== */
 

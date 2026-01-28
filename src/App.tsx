@@ -7,7 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useLenisScroll from "./hooks/useLenisScroll";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
 import useKomparacijaAnimation from "./hooks/useKomparacijaAnimation";
-import useParallaxGallery from "./hooks/useParallaxGallery";
+
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -107,7 +107,6 @@ function App() {
   useLenisScroll();
   useImageTrailEffect({ containerRef: heroContainerRef });
   useKomparacijaAnimation();
-  useParallaxGallery();
 
   // Selected works data
   const selectedWorks = [
@@ -117,7 +116,7 @@ function App() {
     client: "Ava Collins",
     year: "2026",
     link: "https://lovefrom.com",
-    img: "/img1.jpeg",
+    imgs: ["/img1.jpeg", "/img2.jpeg", "/img3.jpeg"],
   },
   {
     title: "NexaWorks",
@@ -125,7 +124,7 @@ function App() {
     client: "Kai Johnson",
     year: "2025",
     link: "https://example.com/entrance",
-    img: "/img2.jpeg",
+    imgs: ["/img4.jpeg", "/img2.jpeg",],
   },
   {
     title: "Fiorenza",
@@ -133,7 +132,7 @@ function App() {
     client: "Marco Rossi",
     year: "2024",
     link: "https://example.com/fitness",
-    img: "/img3.jpeg",
+    imgs: ["/img3.jpeg", "/img2.jpeg", "/img1.jpeg"],
   },
   {
     title: "Skydeck",
@@ -141,7 +140,7 @@ function App() {
     client: "Liam Parker",
     year: "2023",
     link: "https://example.com/rooftop",
-    img: "/img4.jpeg",
+    imgs: ["/img4.jpeg", "/img2.jpeg", "/img3.jpeg"],
   },
   {
     title: "Ember",
@@ -149,7 +148,7 @@ function App() {
     client: "Zara Nguyen",
     year: "2018",
     link: "https://example.com/befimmo",
-    img: "/img5.jpeg",
+    imgs: ["/img5.jpeg", "/img2.jpeg", "/img3.jpeg"],
   },
   {
     title: "Co-Lab Hub",
@@ -157,7 +156,7 @@ function App() {
     client: "Global Corp",
     year: "2022",
     link: "https://example.com/coworking",
-    img: "/img6.jpeg",
+    imgs: ["/img6.jpeg", "/img3.jpeg"],
   },
   {
     title: "CraftPoint",
@@ -165,7 +164,7 @@ function App() {
     client: "Pixel Labs",
     year: "2025",
     link: "https://example.com/craftit",
-    img: "/img1.jpeg",
+    imgs: ["/img1.jpeg", "/img2.jpeg", "/img3.jpeg"],
   },
   {
     title: "Joybuy Nexus",
@@ -173,71 +172,33 @@ function App() {
     client: "Joybuy International",
     year: "2026",
     link: "https://example.com/joybuy",
-    img: "/img2.jpeg",
+    imgs: ["/img2.jpeg", "/img3.jpeg"],
   },
-  {
-    title: "Louise Horizon",
-    type: "Offices",
-    client: "Silversquare Group",
-    year: "2024",
-    link: "https://example.com/louise",
-    img: "/img3.jpeg",
-  },
-  {
-    title: "Shake-Spike Hub",
-    type: "Offices",
-    client: "Spike Innovations",
-    year: "2025",
-    link: "https://example.com/shake",
-    img: "/img4.jpeg",
-  },
-  {
-    title: "A-Tower Alpha",
-    type: "Offices",
-    client: "Silversquare",
-    year: "2023",
-    link: "https://example.com/atower",
-    img: "/img5.jpeg",
-  },
-  {
-    title: "Guillemins HQ",
-    type: "Offices",
-    client: "Silversquare",
-    year: "2023",
-    link: "https://example.com/guillemins",
-    img: "/img6.jpeg",
-  },
-  {
-    title: "Louvain Nova",
-    type: "Offices",
-    client: "Silversquare",
-    year: "2024",
-    link: "https://example.com/louvain",
-    img: "/img1.jpeg",
-  }
 ]
 
   // Hover image state
-  const [hoverImg, setHoverImg] = useState<string | null>(null);
-  const [hoverPos, setHoverPos] = useState<{ x: number; y: number }>({
-    x: 0,
-    y: 0,
-  });
+  const [hoverImgs, setHoverImgs] = useState<string[] | null>(null);
+  const [hoverImgPositions, setHoverImgPositions] = useState<{ x: number; y: number }[] | null>(null);
 
-  // Handle hover to show image at random position
-  const handleWorkHover = (img: string) => {
+  // Handle hover to show each image at its own random position
+  const handleWorkHover = (imgs: string[]) => {
     const section = document.querySelector(".selected-works-section");
     if (section) {
       const rect = section.getBoundingClientRect();
-      // Random position within section bounds
-      const x = Math.floor(Math.random() * (rect.width - 240));
-      const y = Math.floor(Math.random() * (rect.height + -240));
-      setHoverPos({ x, y });
-      setHoverImg(img);
+      const positions = imgs.map(() => {
+        const x = Math.floor(Math.random() * (rect.width - 140)); // 140px for image width
+        const minY = rect.height / 3;
+        const maxY = (rect.height * 2) / 3;
+        const y = Math.floor(Math.random() * (maxY - minY) + minY);
+        return { x, y };
+      });
+      setHoverImgs(imgs);
+      setHoverImgPositions(positions);
     }
   };
   const handleWorkLeave = () => {
-    setHoverImg(null);
+    setHoverImgs(null);
+    setHoverImgPositions(null);
   };
 
   return (
@@ -283,13 +244,13 @@ function App() {
           <div className="hero-grid">
             <div className="hero-grid-header">
               <h1 className="title" style={{ position: "relative" }}>
-                mirko.
+                MIRKO
               </h1>
             </div>
             <div className="hero-grid-text">
               <p>
-                I'm a front-end developer helping folks
-                establish a web presence.
+                I'm a front-end developer helping people & brands
+                establish a strong internet presence.
               </p>
             </div>
             <div className="hero-grid-cta">
@@ -324,18 +285,12 @@ function App() {
                 </svg>
               </a>
             </div>
-          </div>
-        </div>
-      </section>
-      {/* Scroll Animation Section */}
-      <section className="komparacija">
-        <div className="komparacija-header">
-          <h2>
+            <h2 className="hero-grid-small-text">
             Scroll down{" "}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
+              width="0.6rem"
+              height="0.6rem"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -348,6 +303,19 @@ function App() {
               <path d="M5 13l7 7 7-7" />
             </svg>
           </h2>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Scroll Animation Section */}
+      <section className="komparacija">
+        <div className="komparacija-header">
+
+          <h3 style={{ marginTop: "50vh" }}> Did you know that 75% of visitors will leave 
+            a website after only 3 seconds? Let's fix that.
+          </h3>
+          
         </div>
         <div className="komparacija-slike">
           <div className="komparacija-img">
@@ -365,40 +333,11 @@ function App() {
         </div>
       </section>
 
-      {/* Grid background in white with parallax effect. */}
-      <section className="parallax-gallery">
-        <div
-          style={{
-            zIndex: 11,
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-          }}
-        />
-        <div
-          className="parallax-gallery-inner"
-          style={{ position: "relative", zIndex: 11 }}
-        >
-          <div className="parallax-gallery-text">
-            <h3>
-              I create intuitive and engaging user experiences,
-              that won't have them leaving after a few scrolls by using
-              human behavioral psychology tricks and well planned web layouts.
-
-            </h3>
-          </div>
-          <div className="parallax-gallery-image">
-            <img src="/img5.jpeg" alt="Gallery placeholder" />
-          </div>
-        </div>
-      </section>
-
+     
         {/* Selected Works Section */}
       <section className="selected-works-section" style={{ position: 'relative', minHeight: '100vh' }}>
         <div className="selected-works-header">
-          <h3 className="selected-works-title">Some stuff I made.</h3>
+          <h3 className="selected-works-title">Some websites I made</h3>
           <a href="/work" className="link">
             All of my work{" "}
             <svg
@@ -435,7 +374,7 @@ function App() {
                       rel="noopener noreferrer"
                       className="link"
                       style={{ color: 'var(--black)', cursor: 'pointer' }}
-                      onMouseEnter={() => handleWorkHover(work.img)}
+                      onMouseEnter={() => handleWorkHover(work.imgs)}
                       onMouseLeave={handleWorkLeave}
                     >
                       {work.title}
@@ -448,34 +387,38 @@ function App() {
               ))}
             </tbody>
           </table>
-          {hoverImg && (
-            <img
-              src={hoverImg}
-              alt="Preview"
-              style={{
-                position: 'absolute',
-                left: hoverPos.x,
-                top: hoverPos.y,
-                width: '300px',
-                height: '300px',
-                pointerEvents: 'none',
-                zIndex: 100,
-                transition: 'opacity 0.2s',
-                opacity: 1,
-              }}
-            />
-          )}
+          {hoverImgs && hoverImgPositions && (
+  <>
+    {hoverImgs.map((img, i) => (
+      <img
+        key={i}
+        src={img}
+        alt="Preview"
+        style={{
+          position: 'absolute',
+          left: hoverImgPositions[i].x,
+          top: hoverImgPositions[i].y,
+          width: '200px',
+          height: '180px',
+          objectFit: 'cover',
+          opacity: 1,
+          transition: 'opacity 0.2s',
+          pointerEvents: 'none',
+          zIndex: 100,
+        }}
+      />
+    ))}
+  </>
+)}
         </div>
       </section>
 
-      
       {/* Footer */}
       <footer className="footer-section">
         <div className="footer-links">
           <div className="footer-column">
             <a href="/" className="link">home</a>
             <a href="/work" className="link">work</a>
-    
           </div>
           
           <div className="footer-column">
@@ -503,15 +446,43 @@ function App() {
                 </svg>
             </a>
             <a href="https://x.com/mirkosayshello" className="link">x</a>
-
           </div>
         </div>
-        
-  
+
+        <a
+          className="link"
+          style={{ fontSize: "2.7rem", marginLeft: "1.6rem", marginTop: "-18%", width: "fit-content", padding: "0.5rem 0" }}
+          onClick={() =>
+            (window.location.href = "mailto:mirkomimap@gmail.com")
+          }
+        >
+          Got an idea? Get in touch{" "}
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="2.7rem"
+            height="2.7rem"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              marginLeft: "1px",
+              marginBottom: "4px",
+              display: "inline-block",
+              verticalAlign: "middle",
+            }}
+            className="ai ai-ArrowUpRight"
+          >
+            <path d="M18 6L6 18" />
+            <path d="M8 6h10v10" />
+          </svg>
+        </a>
         
         <div className="footer-bottom">
-          <p>© made with <span className="highlight-circle">love</span>, mirko, 2026.</p>
-          <h1 className="footer-logo" style={{position: 'relative'}}>mirko</h1>
+          <p>© made with <span className="highlight-circle">love</span>, 2026.</p>
+          <h1 className="footer-logo">MIRKO</h1>
         </div>
       </footer>
     </>

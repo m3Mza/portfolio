@@ -141,7 +141,7 @@ function Work() {
       {/* Static Header */}
       <div className="blog-header-sticky">
         <h1>
-          work.
+          WORK
         </h1>
       </div>
 
