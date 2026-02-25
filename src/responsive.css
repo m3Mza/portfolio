@@ -208,20 +208,19 @@
 }
 
 /* ============================== 
-   Footer (Mobile)
+   Footer
    ============================== */
 
 .footer-section {
   padding: 2rem 1.5rem 1.5rem 1.5rem;
-  min-height: 70vh;
+  min-height: 100vh;
 }
 
 .footer-links {
   flex-direction: row;
   gap: 3rem;
   align-self: flex-start;
-  margin: 0;
-  margin-top: 10rem;
+  margin-top: 32rem;
 }
 
 .footer-column {
@@ -229,21 +228,22 @@
 }
 
 .footer-column .link {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   padding: 0.3rem 0;
 }
 
-.footer-bottom {
-  gap: 1.5rem;
+.footer-links + a.link {
+  display: none !important;
 }
 
 .footer-bottom p {
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   order: 1;
+  margin-bottom: 2rem;
 }
 
 .footer-logo {
-  font-size: 8rem;
+  font-size: 6rem;
   order: 2;
   margin-bottom: 0;
   line-height: 0.85;
@@ -253,24 +253,21 @@
 
 
 /* ============================== 
-   Hero Section (Mobile) + A bit of the comparison scroll effect
+   Hero Section
    ============================== */
 
 .trail-img {
   display: none !important;
 }
 
-
-
 .hero-grid-section {
-  min-height: 25vh;
+  min-height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--white);
   padding: 1.2rem;
-  margin-top: 2rem;
 }
 
 .hero-grid-container {
@@ -285,162 +282,77 @@
   grid-template-rows: auto auto;
   gap: 0.5rem;
   align-items: start;
-  min-height: 22vh;
 }
 
-/* Header spans both columns in first row */
 .hero-grid-header {
-  grid-column: 1 / 3;
-  grid-row: 1 / 2;
+  grid-column: 1;
+  grid-row: 1;
   display: flex;
   align-items: flex-end;
   justify-content: center;
+  
 }
 
 .hero-grid-header h1 {
   color: var(--black);
   line-height: 1.1;
   margin: 0;
-  font-size: 8rem;
+  font-size: 6rem;
   font-weight: 900;
 }
 
-/* Text in first column, second row */
 .hero-grid-text {
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
+  grid-column: 1;
+  grid-row: 2;
   display: flex;
   align-items: center;
-  margin-top: 0.5rem;
+  margin-top: -4rem;
 }
 
 .hero-grid-text p {
   color: var(--black);
   margin: 0;
-  font-size: 1rem;
+  font-size: 1.2rem;
 }
 
-/* Button in second column, second row */
+
 .hero-grid-cta {
-  grid-column: 2 / 3;
-  grid-row: 2 / 3;
+  grid-column: 1;
+  grid-row: 3;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
 
-.button {
-  align-self: flex-start;
-  padding: 0.5rem 1rem;
-  background-color: var(--accent-yellow);
-  color: var(--black);
-  border: none;
-  border-radius: 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
+.hero-grid-cta a {
+  font-size: 2rem;
 }
 
-.komparacija-header {
-  text-align: center;
-  position: relative;
-  width: 100%;
-  max-width: 1000px;
-  z-index: 12;
-  padding: 2rem;
-  margin-top: -35rem;
-
+.hero-grid-small-text
+{
+ display: none !important;
 }
 
-.komparacija-img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 270px !important;
-  height: 270px !important;
-  transform: translate(-50%, -50%);
-  will-change: transform;
-  opacity: 0;
-  z-index: 14;
-}
 
 /* ============================== 
-  Parallax text effect (Mobile)
+   Komparacija section is hidden
    ============================== */
 
-  .parallax-gallery-text h3 {
-  text-align: left;
-  min-width: 75vw;
-  font-size: 2.7rem;
-  margin-left: 2%;
-  will-change: background-image, -webkit-background-clip, -webkit-text-fill-color;
+.komparacija {
+  display: none !important;
 }
 
-.parallax-gallery-image img {
-  width: 100%;
-  width: 50vw;
-  height: auto;
-  object-fit: fill;
-  margin-top: 200%;
-  margin-right: 75%;
-  will-change: transform;
-  transform: translate3d(0, 0, 0);
-}
-
-/* ============================== 
-  Selected Works Section (Mobile)
+* ============================== 
+   Selected works
    ============================== */
-
-.selected-works-section {
-  padding: 2rem 1.5rem;
-}
-
-.selected-works-header {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.selected-works-container {
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-
-.selected-works-left {
-  gap: 1.5rem;
-}
-
-.selected-works-right {
-  gap: 1.5rem;
-}
-
-.selected-works-left img {
-  height: 200px;
-}
-
-.selected-works-big-image {
-  transform: none !important;
-}
-
-.selected-works-big-image img {
-  height: 200px;
-  transform: none !important;
-}
-
-.selected-works-left figcaption,
-.selected-works-big-image figcaption {
-  font-size: 1.4rem;
-}
+  
 
 /* ============================== 
-   Work (Mobile) 
+   Work
    ============================== */
 
 .blog-header-sticky h1 {
-  font-size: 2rem;
+  display: none !important
 }
 
 .work-header-link {
@@ -451,4 +363,29 @@
   display: none !important;
 }
 
+/* ============================== 
+   Selected works table - hide last 2 columns
+   ============================== */
+
+.selected-works-section table th:nth-child(3),
+.selected-works-section table th:nth-child(4),
+.selected-works-section table td:nth-child(3),
+.selected-works-section table td:nth-child(4) {
+  display: none;
+}
+.selected-works-section table th,
+.selected-works-section table td {
+  padding-right: 2rem !important;
+}
+.selected-works-section th {
+  font-size: 1rem !important;
+}
+
+.selected-works-section td {
+  font-size: 1.2rem !important;
+}
+
+.selected-works-section .link {
+  font-size: 1.2rem !important;
+}
 

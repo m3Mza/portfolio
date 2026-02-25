@@ -6,7 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useLenisScroll from "./hooks/useLenisScroll";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
-import useKomparacijaAnimation from "./hooks/useKomparacijaAnimation";
+import ScrambleHover from "./components/ScrambleHover";
 
 
 gsap.registerPlugin(ScrollTrigger);
@@ -106,7 +106,7 @@ function App() {
   // Initialize all effects
   useLenisScroll();
   useImageTrailEffect({ containerRef: heroContainerRef });
-  useKomparacijaAnimation();
+
 
   // Selected works data
   const selectedWorks = [
@@ -244,46 +244,18 @@ function App() {
           <div className="hero-grid">
             <div className="hero-grid-header">
               <h1 className="title" style={{ position: "relative" }}>
-                MIRKO
+                <span className="mirk-text">MIRK</span>
+                <span className="shared-o-wrapper">
+                  <span className="shared-o">O</span>
+                  <span className="vertical-before">POP</span>
+                  <span className="vertical-after">VIC</span>
+                </span>
               </h1>
             </div>
-            <div className="hero-grid-text">
-              <p>
-                I'm a front-end developer helping people & brands
-                establish a strong internet presence.
-              </p>
-            </div>
-            <div className="hero-grid-cta">
-              <a
-                className="link"
-                style={{ fontSize: "2.7rem" }}
-                onClick={() =>
-                  (window.location.href = "mailto:mirkomimap@gmail.com")
-                }
-              >
-                Got a project?{" "}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="2.7rem"
-                  height="2.7rem"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{
-                    marginLeft: "1px",
-                    marginBottom: "4px",
-                    display: "inline-block",
-                    verticalAlign: "middle",
-                  }}
-                  className="ai ai-ArrowUpRight"
-                >
-                  <path d="M18 6L6 18" />
-                  <path d="M8 6h10v10" />
-                </svg>
-              </a>
+            <div className="hero-grid-description">
+              <p>Making websites that help</p>
+              <p>brands establish a strong</p>
+              <p>internet presence.</p>
             </div>
             <h2 className="hero-grid-small-text">
             Scroll down{" "}
@@ -298,6 +270,7 @@ function App() {
               strokeLinecap="round"
               strokeLinejoin="round"
               className="ai ai-ArrowDown"
+              style={{ display: "inline-block", marginLeft: "0.3rem" }}
             >
               <path d="M12 20V4" />
               <path d="M5 13l7 7 7-7" />
@@ -307,73 +280,29 @@ function App() {
         </div>
       </section>
 
-
-      {/* Scroll Animation Section */}
-      <section className="komparacija">
-        <div className="komparacija-header">
-
-          <h3 style={{ marginTop: "50vh" }}> Did you know that 75% of visitors will leave 
-            a website after only 3 seconds? Let's fix that.
-          </h3>
-          
-        </div>
-        <div className="komparacija-slike">
-          <div className="komparacija-img">
-            <img src="/img1.jpeg" alt="Picture 1" />
-          </div>
-          <div className="komparacija-img">
-            <img src="/img6.jpeg" alt="Picture 2" />
-          </div>
-          <div className="komparacija-img">
-            <img src="/img2.jpeg" alt="Picture 3" />
-          </div>
-          <div className="komparacija-img">
-            <img src="/img3.jpeg" alt="Picture 4" />
-          </div>
-        </div>
-      </section>
-
-     
+    
         {/* Selected Works Section */}
       <section className="selected-works-section" style={{ position: 'relative', minHeight: '100vh' }}>
-        <div className="selected-works-header">
-          <h3 className="selected-works-title">Some websites I made</h3>
-          <a href="/work" className="link">
-            All of my work{" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="1.4rem"
-              height="1.4rem"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{
-                marginLeft: '1px',
-                marginBottom: '4px',
-                display: 'inline-block',
-                verticalAlign: 'middle',
-              }}
-            >
-              <path d="M18 6L6 18" />
-              <path d="M8 6h10v10" />
-            </svg>
-          </a>
-        </div>
         <div className="selected-works-simple-list" style={{ width: '100%', marginTop: '2rem' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '1.4rem' }}>
+            <thead>
+              <tr>
+                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Project</th>
+                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Type</th>
+                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Client</th>
+                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Year</th>
+              </tr>
+            </thead>
             <tbody>
               {selectedWorks.map((work, idx) => (
                 <tr key={idx}>
-                  <td style={{ padding: '0.7rem 0', fontWeight: 'bold' }}>
+                  <td style={{ padding: '0.7rem 0',  }}>
                     <a
                       href={work.link}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="link"
-                      style={{ color: 'var(--black)', cursor: 'pointer' }}
+                      style={{ color: 'var(--black)', cursor: 'pointer', margin: 0, padding: 0 }}
                       onMouseEnter={() => handleWorkHover(work.imgs)}
                       onMouseLeave={handleWorkLeave}
                     >
@@ -411,77 +340,113 @@ function App() {
   </>
 )}
         </div>
-      </section>
+        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '2rem'}}>
+          <a href="/work" className="link">
+            <ScrambleHover text="All of my work" scrambleSpeed={50} maxIterations={8}>
+              {" "}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1.4rem"
+                height="1.4rem"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                style={{
+                  marginLeft: '1px',
+                  marginBottom: '4px',
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                }}
+              >
+                <path d="M18 6L6 18" />
+                <path d="M8 6h10v10" />
+              </svg>
+            </ScrambleHover>
+          </a>
+        </div>      </section>
 
       {/* Footer */}
       <footer className="footer-section">
         <div className="footer-links">
           <div className="footer-column">
-            <a href="/" className="link">home</a>
-            <a href="/work" className="link">work</a>
+            <a href="/" className="link">
+              <ScrambleHover text="home" scrambleSpeed={50} maxIterations={8} />
+            </a>
+            <a href="/work" className="link">
+              <ScrambleHover text="work" scrambleSpeed={50} maxIterations={8} />
+            </a>
           </div>
           
           <div className="footer-column">
-            <a href="mailto:mirkomimap@gmail.com" className="link">mail
-              <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1.4rem"
-                  height="1.4rem"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  style={{
-                    marginLeft: "2px",
-                    marginBottom: "3.5px",
-                    display: "inline-block",
-                    verticalAlign: "middle",
-                  }}
-                  className="ai ai-ArrowUpRight"
-                >
-                  <path d="M18 6L6 18" />
-                  <path d="M8 6h10v10" />
-                </svg>
+            <a href="mailto:mirkomimap@gmail.com" className="link">
+              <ScrambleHover text="mail" scrambleSpeed={50} maxIterations={8}>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="1.4rem"
+                    height="1.4rem"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{
+                      marginLeft: "2px",
+                      marginBottom: "3.5px",
+                      display: "inline-block",
+                      verticalAlign: "middle",
+                    }}
+                    className="ai ai-ArrowUpRight"
+                  >
+                    <path d="M18 6L6 18" />
+                    <path d="M8 6h10v10" />
+                  </svg>
+              </ScrambleHover>
             </a>
-            <a href="https://x.com/mirkosayshello" className="link">x</a>
+            <a href="https://x.com/mirkosayshello" className="link">
+              <ScrambleHover text="x" scrambleSpeed={50} maxIterations={8} />
+            </a>
           </div>
         </div>
 
         <a
           className="link"
-          style={{ fontSize: "2.7rem", marginLeft: "1.6rem", marginTop: "-18%", width: "fit-content", padding: "0.5rem 0" }}
+          style={{ fontSize: "2.7rem", marginLeft: "1.4rem", marginTop: "-18%", width: "fit-content", padding: "0.5rem 0" }}
           onClick={() =>
             (window.location.href = "mailto:mirkomimap@gmail.com")
           }
         >
-          Got an idea? Get in touch{" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="2.7rem"
-            height="2.7rem"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            style={{
-              marginLeft: "1px",
-              marginBottom: "4px",
-              display: "inline-block",
-              verticalAlign: "middle",
-            }}
-            className="ai ai-ArrowUpRight"
-          >
-            <path d="M18 6L6 18" />
-            <path d="M8 6h10v10" />
-          </svg>
+          <ScrambleHover text="Got an idea? Get in touch" scrambleSpeed={50} maxIterations={8}>
+            {" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="2.7rem"
+              height="2.7rem"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                marginLeft: "1px",
+                marginBottom: "4px",
+                display: "inline-block",
+                verticalAlign: "middle",
+              }}
+              className="ai ai-ArrowUpRight"
+            >
+              <path d="M18 6L6 18" />
+              <path d="M8 6h10v10" />
+            </svg>
+          </ScrambleHover>
         </a>
         
         <div className="footer-bottom">
-          <p>© made with <span className="highlight-circle">love</span>, 2026.</p>
+          <p>made with love, 2026.</p>
           <h1 className="footer-logo">MIRKO</h1>
         </div>
       </footer>

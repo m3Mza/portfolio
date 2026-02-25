@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Lenis from "lenis";
+import ScrambleHover from "./ScrambleHover";
 
 interface WorkItem {
   title: string;
@@ -172,7 +173,11 @@ function InfiniteWorkList({
             onMouseEnter={() => onItemHover(item.image, item.variant)}
             onMouseLeave={onItemLeave}
           >
-            {item.title}
+            <ScrambleHover 
+              text={item.title} 
+              scrambleSpeed={50} 
+              maxIterations={8}
+            />
           </a>
         ))}
       </div>
