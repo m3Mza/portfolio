@@ -1,15 +1,46 @@
 import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./responsive.css";
-import "lenis/dist/lenis.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import useLenisScroll from "./hooks/useLenisScroll";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
 import ScrambleHover from "./components/ScrambleHover";
 
 
 gsap.registerPlugin(ScrollTrigger);
+
+const baseProjects = [
+  {
+    title: "zsemicolon.com",
+    year: "2026",
+    link: "",
+    img: "/z.mov",
+  },
+  {
+    title: "miyajlo.com",
+    year: "2025",
+    link: "https://miyajlo.vercel.app/",
+    img: "/miyalo.gif",
+  },
+  {
+    title: "placeholder.com",
+    year: "2024",
+    link: "https://example.com/3",
+    img: "/img3.jpeg",
+  },
+  {
+    title: "placeholder2.com",
+    year: "2024",
+    link: "https://example.com/3",
+    img: "/img3.jpeg",
+  },
+  {
+    title: "placeholder3.com",
+    year: "2024",
+    link: "https://example.com/3",
+    img: "/img3.jpeg",
+  },
+];
 
 function App() {
   const [isMenuActive, setIsMenuActive] = useState(false);
@@ -18,6 +49,10 @@ function App() {
   });
   const [isReturning, setIsReturning] = useState(false);
   const heroContainerRef = useRef<HTMLDivElement>(null);
+  const [formData, setFormData] = useState({
+    subject: "",
+    message: ""
+  });
 
   useEffect(() => {
     const isTransitioning = sessionStorage.getItem("pageTransition");
@@ -36,170 +71,104 @@ function App() {
     }
   }, []);
 
-  const handleLinkClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    href: string
-  ) => {
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const isDesktop = window.innerWidth >= 768;
-    const isInternal = href.startsWith("/");
-    const currentPath = window.location.pathname;
-
-    if (isInternal && currentPath === href) {
-      setIsMenuActive(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
-      return;
-    }
-
-    if (isDesktop && isInternal) {
-      setIsPageTransition(true);
-      sessionStorage.setItem("pageTransition", "true");
-
-      setTimeout(() => {
-        window.location.href = href;
-      }, 800);
-    } else if (isDesktop) {
-      setIsPageTransition(true);
-      sessionStorage.setItem("pageTransition", "true");
-
-      setTimeout(() => {
-        if (href.startsWith("http")) {
-          window.open(href, "_blank");
-          sessionStorage.removeItem("pageTransition");
-          setIsPageTransition(false);
-          setIsMenuActive(false);
-        } else if (href.startsWith("#")) {
-          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-          sessionStorage.removeItem("pageTransition");
-          setIsPageTransition(false);
-          setIsMenuActive(false);
-        } else {
-          window.location.href = href;
-        }
-      }, 800);
-    } else {
-      setIsMenuActive(false);
-      if (href.startsWith("http")) {
-        window.open(href, "_blank");
-      } else if (href.startsWith("#")) {
-        if (href === "#contact") {
-          window.location.href = "mailto:mirkomimap@gmail.com";
-        } else {
-          document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
-        }
-      } else if (isInternal) {
-        setTimeout(() => {
-          window.location.href = href;
-        }, 100);
-      } else {
-        window.location.href = href;
-      }
-    }
+    
+    const subject = encodeURIComponent(formData.subject);
+    const body = encodeURIComponent(formData.message);
+    window.location.href = `mailto:mirkomimap@gmail.com?subject=${subject}&body=${body}`;
+    
+    setFormData({ subject: "", message: "" });
+    setIsMenuActive(false);
   };
 
   const toggleMenu = () => {
+    // On mobile, directly open mailto
+    if (window.innerWidth <= 768) {
+      window.location.href = 'mailto:mirkomimap@gmail.com';
+      return;
+    }
     setIsMenuActive(!isMenuActive);
   };
 
-  // Initialize all effects
-  useLenisScroll();
   useImageTrailEffect({ containerRef: heroContainerRef });
-
-
-  // Selected works data
-  const selectedWorks = [
-  {
-    title: "Lumeo",
-    type: "Creative Agency",
-    client: "Ava Collins",
-    year: "2026",
-    link: "https://lovefrom.com",
-    imgs: ["/img1.jpeg", "/img2.jpeg", "/img3.jpeg"],
-  },
-  {
-    title: "NexaWorks",
-    type: "Design Studio",
-    client: "Kai Johnson",
-    year: "2025",
-    link: "https://example.com/entrance",
-    imgs: ["/img4.jpeg", "/img2.jpeg",],
-  },
-  {
-    title: "Fiorenza",
-    type: "Public",
-    client: "Marco Rossi",
-    year: "2024",
-    link: "https://example.com/fitness",
-    imgs: ["/img3.jpeg", "/img2.jpeg", "/img1.jpeg"],
-  },
-  {
-    title: "Skydeck",
-    type: "Architecture",
-    client: "Liam Parker",
-    year: "2023",
-    link: "https://example.com/rooftop",
-    imgs: ["/img4.jpeg", "/img2.jpeg", "/img3.jpeg"],
-  },
-  {
-    title: "Ember",
-    type: "Branding",
-    client: "Zara Nguyen",
-    year: "2018",
-    link: "https://example.com/befimmo",
-    imgs: ["/img5.jpeg", "/img2.jpeg", "/img3.jpeg"],
-  },
-  {
-    title: "Co-Lab Hub",
-    type: "Offices",
-    client: "Global Corp",
-    year: "2022",
-    link: "https://example.com/coworking",
-    imgs: ["/img6.jpeg", "/img3.jpeg"],
-  },
-  {
-    title: "CraftPoint",
-    type: "Offices",
-    client: "Pixel Labs",
-    year: "2025",
-    link: "https://example.com/craftit",
-    imgs: ["/img1.jpeg", "/img2.jpeg", "/img3.jpeg"],
-  },
-  {
-    title: "Joybuy Nexus",
-    type: "Offices",
-    client: "Joybuy International",
-    year: "2026",
-    link: "https://example.com/joybuy",
-    imgs: ["/img2.jpeg", "/img3.jpeg"],
-  },
-]
-
-  // Hover image state
-  const [hoverImgs, setHoverImgs] = useState<string[] | null>(null);
-  const [hoverImgPositions, setHoverImgPositions] = useState<{ x: number; y: number }[] | null>(null);
-
-  // Handle hover to show each image at its own random position
-  const handleWorkHover = (imgs: string[]) => {
-    const section = document.querySelector(".selected-works-section");
-    if (section) {
-      const rect = section.getBoundingClientRect();
-      const positions = imgs.map(() => {
-        const x = Math.floor(Math.random() * (rect.width - 140)); // 140px for image width
-        const minY = rect.height / 3;
-        const maxY = (rect.height * 2) / 3;
-        const y = Math.floor(Math.random() * (maxY - minY) + minY);
-        return { x, y };
+  
+  const [projects, setProjects] = useState(() => {
+    const result: Array<typeof baseProjects[0] & { id: number }> = [];
+    const isMobile = window.innerWidth <= 768;
+    const repeatCount = isMobile ? 1 : 20; // Only show base projects once on mobile
+    
+    for (let i = 0; i < repeatCount; i++) {
+      baseProjects.forEach((project, idx) => {
+        result.push({ ...project, id: i * baseProjects.length + idx });
       });
-      setHoverImgs(imgs);
-      setHoverImgPositions(positions);
     }
+    return result;
+  });
+
+  const [hoverImg, setHoverImg] = useState<string | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
+  const handleWorkHover = (img: string) => {
+    // Disable hover effect on mobile
+    if (window.innerWidth <= 768) return;
+    setHoverImg(img);
   };
+  
   const handleWorkLeave = () => {
-    setHoverImgs(null);
-    setHoverImgPositions(null);
+    // Disable hover effect on mobile
+    if (window.innerWidth <= 768) return;
+    setHoverImg(null);
   };
+
+  useEffect(() => {
+    if (hoverImg?.endsWith('.mov') && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [hoverImg]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+
+    // Disable infinite scroll on mobile
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile) return;
+
+    const checkScroll = () => {
+      if (!container) return;
+
+      const { scrollTop, scrollHeight, clientHeight } = container;
+      
+      if (scrollHeight - scrollTop - clientHeight <= clientHeight * 0.5) {
+        setProjects(prev => {
+          const newProjects = [...prev];
+          const currentLength = newProjects.length;
+          baseProjects.forEach((project, idx) => {
+            newProjects.push({
+              ...project,
+              id: currentLength + idx
+            });
+          });
+          return newProjects;
+        });
+      }
+    };
+
+    container.addEventListener('scroll', checkScroll);
+
+    return () => {
+      container.removeEventListener('scroll', checkScroll);
+    };
+  }, []);
 
   return (
     <>
@@ -210,14 +179,14 @@ function App() {
           <button
             className="nav-menu-toggle"
             onClick={toggleMenu}
-            aria-label="Toggle navigation menu"
+            aria-label="Toggle contact form"
           >
-            {isMenuActive ? "Close" : "Menu"}
+            {isMenuActive ? "close" : "send mail"}
           </button>
         </div>
       </header>
 
-      {/* Spotlight Menu Overlay */}
+      {/* Contact Form Overlay */}
       <nav
         className={`nav-spotlight-menu ${isMenuActive ? "active" : ""} ${
           isPageTransition ? "page-transition" : ""
@@ -225,25 +194,94 @@ function App() {
       >
         <div className="nav-spotlight-background"></div>
         <div className="nav-spotlight-links">
-          <a href="/" onClick={(e) => handleLinkClick(e, "/")}>
-            <span>home</span>
-          </a>
-          <a href="/work" onClick={(e) => handleLinkClick(e, "/work")}>
-            <span>work</span>
-          </a>
-          <a href="mailto:mirkomimap@gmail.com">
-            <span>contact</span>
-          </a>
+          <form onSubmit={handleFormSubmit} style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '2rem',
+            width: '100%',
+            maxWidth: '600px',
+            opacity: isMenuActive ? 1 : 0,
+            transform: isMenuActive ? 'translateX(0)' : 'translateX(50px)',
+            transition: 'opacity 0.3s ease, transform 0.3s ease',
+            transitionDelay: isMenuActive ? '0.95s' : '0s',
+            alignItems: 'flex-start'
+          }}>
+            
+            <input
+              type="text"
+              id="subject"
+              name="subject"
+              placeholder="type subject here..."
+              value={formData.subject}
+              onChange={handleFormChange}
+              required
+              className="contact-form-input"
+              style={{
+                padding: '0.5rem',
+                fontSize: '1.8rem',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: '0',
+                color: 'var(--black)',
+                fontFamily: 'inherit',
+                width: '100%',
+                outline: 'none'
+              }}
+            />
+            
+            <textarea
+              id="message"
+              name="message"
+              placeholder="type message here..."
+              value={formData.message}
+              onChange={handleFormChange}
+              required
+              rows={4}
+              className="contact-form-input"
+              style={{
+                padding: '0.5rem',
+                fontSize: '1.8rem',
+                background: 'transparent',
+                border: 'none',
+                borderRadius: '0',
+                color: 'var(--black)',
+                fontFamily: 'inherit',
+                resize: 'none',
+                width: '100%',
+                outline: 'none'
+              }}
+            />
+            
+            <button
+              type="submit"
+              className="link"
+              style={{
+                padding: '0',
+                fontSize: '1.8rem',
+                background: 'transparent',
+                color: 'var(--black)',
+                border: 'none',
+                cursor: 'pointer',
+                fontFamily: 'inherit',
+                textTransform: 'none',
+                letterSpacing: 'normal',
+                alignSelf: 'flex-start'
+              }}
+            >
+              <ScrambleHover text="click to send" scrambleSpeed={50} maxIterations={8} />
+            </button>
+          </form>
         </div>
       </nav>
 
       {/* Hero Grid Section */}
-
       <section className="hero-grid-section" ref={heroContainerRef}>
-        <div className="hero-grid-container">
-          <div className="hero-grid">
+        <div className="hero-split-container">
+          <div className="hero-left-side">
             <div className="hero-grid-header">
-              <h1 className="title" style={{ position: "relative" }}>
+              <h1 className="title" style={{ 
+                position: "relative"
+              }}>
                 <span className="mirk-text">MIRK</span>
                 <span className="shared-o-wrapper">
                   <span className="shared-o">O</span>
@@ -253,101 +291,15 @@ function App() {
               </h1>
             </div>
             <div className="hero-grid-description">
-              <p>Making websites that help</p>
-              <p>brands establish a strong</p>
-              <p>internet presence.</p>
+              <p>i make websites,</p>
+              <p>sometimes apps.</p>
             </div>
-            <h2 className="hero-grid-small-text">
-            Scroll down{" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="0.6rem"
-              height="0.6rem"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="ai ai-ArrowDown"
-              style={{ display: "inline-block", marginLeft: "0.3rem" }}
-            >
-              <path d="M12 20V4" />
-              <path d="M5 13l7 7 7-7" />
-            </svg>
-          </h2>
-          </div>
-        </div>
-      </section>
-
-    
-        {/* Selected Works Section */}
-      <section className="selected-works-section" style={{ position: 'relative', minHeight: '100vh' }}>
-        <div className="selected-works-simple-list" style={{ width: '100%', marginTop: '2rem' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '1.4rem' }}>
-            <thead>
-              <tr>
-                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Project</th>
-                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Type</th>
-                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Client</th>
-                <th style={{ padding: '0.7rem 0', textAlign: 'left', textDecoration: 'underline', fontSize: '0.9rem'}}>Year</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedWorks.map((work, idx) => (
-                <tr key={idx}>
-                  <td style={{ padding: '0.7rem 0',  }}>
-                    <a
-                      href={work.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="link"
-                      style={{ color: 'var(--black)', cursor: 'pointer', margin: 0, padding: 0 }}
-                      onMouseEnter={() => handleWorkHover(work.imgs)}
-                      onMouseLeave={handleWorkLeave}
-                    >
-                      {work.title}
-                    </a>
-                  </td>
-                  <td style={{ padding: '0.7rem 0', color: 'var(--black)' }}>{work.type}</td>
-                  <td style={{ padding: '0.7rem 0', color: 'var(--black)' }}>{work.client}</td>
-                  <td style={{ padding: '0.7rem 0', color: 'var(--black)' }}>{work.year}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {hoverImgs && hoverImgPositions && (
-  <>
-    {hoverImgs.map((img, i) => (
-      <img
-        key={i}
-        src={img}
-        alt="Preview"
-        style={{
-          position: 'absolute',
-          left: hoverImgPositions[i].x,
-          top: hoverImgPositions[i].y,
-          width: '200px',
-          height: '180px',
-          objectFit: 'cover',
-          opacity: 1,
-          transition: 'opacity 0.2s',
-          pointerEvents: 'none',
-          zIndex: 100,
-        }}
-      />
-    ))}
-  </>
-)}
-        </div>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-end', marginTop: '2rem'}}>
-          <a href="/work" className="link">
-            <ScrambleHover text="All of my work" scrambleSpeed={50} maxIterations={8}>
-              {" "}
+            <a className="hero-grid-small-text" href="https://x.com/mirkosayshello" target="_blank" rel="noopener noreferrer">
+              <ScrambleHover text="follow me on X " scrambleSpeed={50} maxIterations={8} />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="1.4rem"
-                height="1.4rem"
+                width="0.9rem"
+                height="0.9rem"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -356,7 +308,7 @@ function App() {
                 strokeLinejoin="round"
                 style={{
                   marginLeft: '1px',
-                  marginBottom: '4px',
+                  marginBottom: '2px',
                   display: 'inline-block',
                   verticalAlign: 'middle',
                 }}
@@ -364,92 +316,78 @@ function App() {
                 <path d="M18 6L6 18" />
                 <path d="M8 6h10v10" />
               </svg>
-            </ScrambleHover>
-          </a>
-        </div>      </section>
-
-      {/* Footer */}
-      <footer className="footer-section">
-        <div className="footer-links">
-          <div className="footer-column">
-            <a href="/" className="link">
-              <ScrambleHover text="home" scrambleSpeed={50} maxIterations={8} />
-            </a>
-            <a href="/work" className="link">
-              <ScrambleHover text="work" scrambleSpeed={50} maxIterations={8} />
             </a>
           </div>
-          
-          <div className="footer-column">
-            <a href="mailto:mirkomimap@gmail.com" className="link">
-              <ScrambleHover text="mail" scrambleSpeed={50} maxIterations={8}>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="1.4rem"
-                    height="1.4rem"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    style={{
-                      marginLeft: "2px",
-                      marginBottom: "3.5px",
-                      display: "inline-block",
-                      verticalAlign: "middle",
-                    }}
-                    className="ai ai-ArrowUpRight"
-                  >
-                    <path d="M18 6L6 18" />
-                    <path d="M8 6h10v10" />
-                  </svg>
-              </ScrambleHover>
-            </a>
-            <a href="https://x.com/mirkosayshello" className="link">
-              <ScrambleHover text="x" scrambleSpeed={50} maxIterations={8} />
-            </a>
-          </div>
-        </div>
-
-        <a
-          className="link"
-          style={{ fontSize: "2.7rem", marginLeft: "1.4rem", marginTop: "-18%", width: "fit-content", padding: "0.5rem 0" }}
-          onClick={() =>
-            (window.location.href = "mailto:mirkomimap@gmail.com")
-          }
-        >
-          <ScrambleHover text="Got an idea? Get in touch" scrambleSpeed={50} maxIterations={8}>
-            {" "}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="2.7rem"
-              height="2.7rem"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              style={{
-                marginLeft: "1px",
-                marginBottom: "4px",
-                display: "inline-block",
-                verticalAlign: "middle",
-              }}
-              className="ai ai-ArrowUpRight"
+          <div className="projects-right-side">
+            <div 
+              className="projects-scroll-container" 
+              ref={scrollContainerRef}
             >
-              <path d="M18 6L6 18" />
-              <path d="M8 6h10v10" />
-            </svg>
-          </ScrambleHover>
-        </a>
-        
-        <div className="footer-bottom">
-          <p>made with love, 2026.</p>
-          <h1 className="footer-logo">MIRKO</h1>
+              <p style={{
+                fontSize: '0.9rem',
+                color: 'var(--black)',
+                marginBottom: '1rem',
+                textDecoration: 'underline',
+              }}>
+                {typeof window !== 'undefined' && window.innerWidth <= 768 ? 'projects:' : 'projects (try scrolling):'} 
+              </p>
+              <div className="projects-list">
+                {projects.map((work) => (
+                  <div key={work.id} className="project-item">
+                    <a
+                      href={work.link || "#"}
+                      className="project-link"
+                      onMouseEnter={() => handleWorkHover(work.img)}
+                      onMouseLeave={handleWorkLeave}
+                    >
+                      <span className="project-name">
+                        <ScrambleHover 
+                          text={`${work.title} (${work.year})`} 
+                          scrambleSpeed={50} 
+                          maxIterations={8} 
+                        />
+                      </span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="1.2rem"
+                        height="1.2rem"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="project-arrow"
+                      >
+                        <path d="M18 6L6 18" />
+                        <path d="M8 6h10v10" />
+                      </svg>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          {hoverImg && (
+            <div className="hover-preview-left">
+              {hoverImg.endsWith('.mov') ? (
+                <video
+                  ref={videoRef}
+                  src={hoverImg}
+                  muted
+                  loop
+                  autoPlay
+                  playsInline
+                />
+              ) : (
+                <img src={hoverImg} alt="Preview" />
+              )}
+            </div>
+          )}
         </div>
-      </footer>
+      </section>
+
+
     </>
   );
 }

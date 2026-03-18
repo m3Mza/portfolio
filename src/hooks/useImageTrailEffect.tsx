@@ -7,6 +7,11 @@ interface ImageTrailEffectProps {
 
 function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
   useEffect(() => {
+    // Disable on mobile devices
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      return;
+    }
+    
     const container = containerRef.current;
     if (!container) return;
 
@@ -23,8 +28,8 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
       outEasing: "cubic-bezier(.8, 0, .15, 1)"
     };
 
-    const images = Array.from({ length: config.imageCount }, (_, i) => 
-      `/img${(i % 6) + 1}.jpeg`
+    const images = Array.from({ length: config.imageCount }, () => 
+      `/m.png`
     );
 
     const trail: Array<{
@@ -68,6 +73,10 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
     };
 
     const createImage = () => {
+      // Don't create images in the right 40% of the viewport (where projects list is)
+      const viewportWidth = window.innerWidth;
+      if (mouseX > viewportWidth * 0.6) return;
+
       const img = document.createElement('img');
       img.classList.add("trail-img");
 

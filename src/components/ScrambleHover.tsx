@@ -95,7 +95,7 @@ const ScrambleHover = ({
       style={{ 
         display: 'inline-block',
         width: fixedWidth ? `${fixedWidth}px` : 'auto',
-        whiteSpace: 'nowrap'
+        whiteSpace: 'nowrap',
       }}
     >
       {displayText}

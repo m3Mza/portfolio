@@ -1,391 +1,205 @@
-/* Excuse the mess I am very very bad at responsive design */
 
-@media (max-width: 600px) {
-
-/* ============================== 
-   Animated Navigation Menu (Mobile) 
-   ============================== */
-
-/* Main nav header bar (fixed at top) - pointer-events: none disables interaction except for children */
-.nav-header {
-  position: fixed; /* Sticks nav to top of viewport */
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: transparent; /* Allows background to show through */
-  z-index: 9999; /* Ensures nav is above most elements */
-  pointer-events: none; /* Only children with pointer-events: auto are clickable */
-}
-
-/* Container for nav content (logo, toggle button) - pointer-events: auto enables interaction */
-.nav-header-content {
-  padding: 0; /* Remove default padding */
-  display: flex; /* Horizontal layout */
-  justify-content: flex-start; /* Align items to left */
-  pointer-events: auto; /* Enable interaction */
-  z-index: 9999;
-}
-
-/* Hamburger/toggle button for opening nav menu - Large touch area, bold style */
-.nav-menu-toggle {
-  background: var(--accent-yellow); /* Button color */
-  color: var(--black); /* Text/icon color */
-  border: none; /* No border */
-  padding: 1rem 2rem; /* Large tap area */
-  font-size: 1rem; /* Button text size */
-  font-weight: 700; /* Bold text */
-  letter-spacing: 0.1em; /* Spaced out letters */
-  cursor: pointer; /* Pointer on hover */
-  transition: transform 0.3s ease; /* Smooth scale on hover */
-  border-bottom-right-radius: 1rem; /* Rounded corner for style */
-  position: relative; /* For stacking context */
-  z-index: 9999; /* Above overlay */
-  outline: none; /* Remove default outline */
-}
-
-/* Button hover effect: scale up slightly */
-.nav-menu-toggle:hover {
-  transform: scale(1.1); /* Slightly larger on hover */
-  background: var(--accent-yellow);
-}
-
-/* Button focus effect: keep background, remove outline */
-.nav-menu-toggle:focus {
-  outline: none;
-  background: var(--accent-yellow);
-}
-
-/* Spotlight Menu Overlay - Covers viewport, disables pointer events unless active */
-.nav-spotlight-menu {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 9997;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.nav-spotlight-menu.active {
-  pointer-events: auto;
-}
-
-/* Animated yellow background for spotlight menu - Uses clip-path for reveal animation */
-.nav-spotlight-background {
-  position: fixed; /* Overlay covers viewport, fixed for circle center */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--accent-yellow); /* Animated color */
-  pointer-events: none;
-  /*
-    Initial state: Tiny circle at nav toggle location (top left, 60px right, 24px down)
-    Adjust 24px to match your nav toggle's vertical position
-  */
-  clip-path: circle(0% at 60px 24px);
-  transition: clip-path 0.7s cubic-bezier(0.6, 0, 0.175, 1);
-  transition-delay: 0.1s;
-}
-
-/* When menu is active, background expands diagonally from top-right toward center-left */
-.nav-spotlight-menu.active .nav-spotlight-background {
-  /* Open state: Fullscreen circle expanding from nav toggle location */
-  clip-path: circle(150vmax at 60px 24px);
-  transition-delay: 0s;
-}
-
-/* Fullscreen transition for page change - Polygon covers entire viewport */
-.nav-spotlight-menu.page-transition .nav-spotlight-background {
-  clip-path: polygon(-10% -10%, 110% -10%, 110% 110%, -10% 110%);
-  transition: clip-path 0.8s cubic-bezier(0.6, 0, 0.175, 1);
-  transition-delay: 0s;
-}
-
-/* Returning state for background animation - Match active state for smooth reverse */
-.nav-spotlight-menu.returning .nav-spotlight-background {
-  /* Returning state: Fullscreen circle for smooth reverse */
-  clip-path: circle(150vmax at 60px 24px);
-  transition: clip-path 0.6s cubic-bezier(0.6, 0, 0.175, 1);
-  transition-delay: 0s;
-}
-
-/* Container for nav links - Positioned in lower right area */
-.nav-spotlight-links {
-  position: fixed;
-  top: 60vh; /* Center vertically in viewport */
-  left: 50vw; /* Center horizontally in viewport */
-  transform: translate(-50%, -70%); /* Perfect center */
-  width: 100vw;
-  z-index: 10002; /* Above the yellow circle */
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Center links horizontally */
-  gap: 4rem; /* More space between links for touch */
-  pointer-events: none; /* Only enable when menu is open */
-}
-
-.nav-spotlight-menu.active .nav-spotlight-links {
-  pointer-events: auto;
-}
-
-/* Nav links - Large, bold, right-aligned, hidden by default */
-.nav-spotlight-links a {
-  color: var(--black); /* Link color */
-  text-decoration: none; /* No underline */
-  font-size: 2.5rem; /* Large text for touch */
-  font-weight: 700; /* Bold */
-  letter-spacing: -0.02em; /* Tighten spacing */
-  border-bottom: none; /* Remove underline */
-  opacity: 0; /* Hidden by default */
-  transform: translateX(50px); /* Slide in from right */
-  transition: opacity 0.2s ease, transform 0.3s ease; /* Smooth in */
-}
-
-/* Each link text is inline-block for animation */
-.nav-spotlight-links a span {
-  display: inline-block;
-}
-
-/* Staggered animation delays for each link (exit animation) */
-.nav-spotlight-links a:nth-child(1) {
-  transition-delay: 0.4s;
-}
-
-.nav-spotlight-links a:nth-child(2) {
-  transition-delay: 0.3s;
-}
-
-.nav-spotlight-links a:nth-child(3) {
-  transition-delay: 0.2s;
-}
-
-.nav-spotlight-links a:nth-child(4) {
-  transition-delay: 0.1s;
-}
-
-.nav-spotlight-links a:nth-child(5) {
-  transition-delay: 0s;
-}
-
-/* When menu is active, links become visible and slide in */
-.nav-spotlight-menu.active .nav-spotlight-links a {
-  opacity: 1;
-  transform: translateX(0);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  transition-delay: 0s;
-}
-
-/* Staggered delays for links when menu is active (entrance animation) */
-.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(1) {
-  transition-delay: 0.95s;
-}
-
-.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(2) {
-  transition-delay: 1.05s;
-}
-
-.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(3) {
-  transition-delay: 1.15s;
-}
-
-.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(4) {
-  transition-delay: 1.25s;
-}
-
-.nav-spotlight-menu.active .nav-spotlight-links a:nth-child(5) {
-  transition-delay: 1.35s;
-}
-
-/* On hover, keep links fully visible */
-.nav-spotlight-menu.active .nav-spotlight-links:hover a {
-  opacity: 1;
-}
-
-.nav-spotlight-menu.active .nav-spotlight-links a:hover {
-  opacity: 1;
-}
-
-/* ============================== 
-   Footer
-   ============================== */
-
-.footer-section {
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
-  min-height: 100vh;
-}
-
-.footer-links {
-  flex-direction: row;
-  gap: 3rem;
-  align-self: flex-start;
-  margin-top: 32rem;
-}
-
-.footer-column {
-  gap: 0;
-}
-
-.footer-column .link {
-  font-size: 1.4rem;
-  padding: 0.3rem 0;
-}
-
-.footer-links + a.link {
-  display: none !important;
-}
-
-.footer-bottom p {
-  font-size: 0.6rem;
-  order: 1;
-  margin-bottom: 2rem;
-}
-
-.footer-logo {
-  font-size: 6rem;
-  order: 2;
-  margin-bottom: 0;
-  line-height: 0.85;
-}
-
-
-
-
-/* ============================== 
-   Hero Section
-   ============================== */
-
-.trail-img {
-  display: none !important;
-}
-
-.hero-grid-section {
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--white);
-  padding: 1.2rem;
-}
-
-.hero-grid-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 0.5rem;
-  align-items: start;
-}
-
-.hero-grid-header {
-  grid-column: 1;
-  grid-row: 1;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
+@media (max-width: 768px) {
   
-}
-
-.hero-grid-header h1 {
-  color: var(--black);
-  line-height: 1.1;
-  margin: 0;
-  font-size: 6rem;
-  font-weight: 900;
-}
-
-.hero-grid-text {
-  grid-column: 1;
-  grid-row: 2;
-  display: flex;
-  align-items: center;
-  margin-top: -4rem;
-}
-
-.hero-grid-text p {
-  color: var(--black);
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-
-.hero-grid-cta {
-  grid-column: 1;
-  grid-row: 3;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-
-.hero-grid-cta a {
-  font-size: 2rem;
-}
-
-.hero-grid-small-text
-{
- display: none !important;
-}
-
-
-/* ============================== 
-   Komparacija section is hidden
-   ============================== */
-
-.komparacija {
-  display: none !important;
-}
-
-* ============================== 
-   Selected works
-   ============================== */
+  html {
+    scroll-behavior: smooth;
+  }
   
+  .nav-menu-toggle {
+    transition: none !important;
+    animation: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+  }
+  
+  .nav-spotlight-background {
+    transition: none !important;
+    animation: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+  }
+  
+  .nav-spotlight-menu.active .nav-spotlight-background {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+  }
+  
+  .nav-spotlight-links a {
+    transition: none !important;
+    animation: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+  }
+  
+  .nav-spotlight-menu.active .nav-spotlight-links a {
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    transition-delay: 0s !important;
+  }
+  
+  .nav-spotlight-links form {
+    transition: none !important;
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+  }
+  
+  .hero-grid-section {
+    min-height: auto;
+    overflow: visible;
+  }
+  
+  .hero-split-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .hero-left-side {
+    width: 100%;
+    height: 100vh;
+    padding: 2rem 1.5rem;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .hero-grid-header {
+    margin-left: 0;
+    margin-bottom: auto;
+    margin-top: 40vh;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .hero-grid-header h1 {
+    font-size: clamp(9.5rem, 25vw, 11rem);
+    text-align: center;
+    mix-blend-mode: normal;
+    color: var(--black);
+  }
 
-/* ============================== 
-   Work
-   ============================== */
+  .hero-grid-description {
+    margin-top: auto;
+    align-items: flex-start;
+    padding-left: 0;
+    align-self: flex-start;
+  }
+  
+  .hero-grid-description p {
+    font-size: 1.1rem;
+    mix-blend-mode: normal;
+    color: var(--black);
+  }
+  
+  .hero-grid-small-text {
+    padding-left: 0;
+    font-size: 0.7rem;
+    mix-blend-mode: normal;
+    color: var(--black);
+    align-self: flex-start;
+    margin-bottom: 2rem;
+  }
+  
+  .projects-right-side {
+    display: flex;
+    width: 100%;
+    height: auto;
+    min-height: 50vh;
+    padding: 3rem 1.5rem;
+    z-index: 1;
+  }
+  
+  .projects-scroll-container {
+    display: block;
+    overflow-y: visible;
+    height: auto;
+  }
+  
+  .projects-scroll-container > p {
+    font-size: 0.85rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .projects-list {
+    gap: 0.5rem;
+  }
+  
+  .project-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .project-link {
+    font-size: 1rem;
+    pointer-events: auto;
+    color: var(--black);
+  }
+  
+  .project-link:active {
+    opacity: 0.7;
+  }
+  
+  .project-arrow {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .hover-preview-left {
+    display: none !important;
+  }
+  
+  .trail-img {
+    display: none !important;
+  }
 
-.blog-header-sticky h1 {
-  display: none !important
+  .hero-grid-section .trail-img {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  
+  .nav-menu-toggle {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  
+  .nav-spotlight-menu {
+    display: none !important;
+  }
+  
+  .nav-spotlight-links form {
+    display: none !important;
+  }
+  
+  .nav-spotlight-links {
+    display: none;
+  }
+  
+  .contact-form-input {
+    display: none !important;
+  }
 }
 
-.work-header-link {
-  font-size: 1.5rem;
+@media (max-width: 480px) {
+  .hero-grid-header h1 {
+    font-size: clamp(6rem, 24vw, 8.5rem);
+  }
+  
+  .hero-grid-description p {
+    font-size: 1rem;
+  }
+  
+  .hero-grid-small-text {
+    font-size: 0.65rem;
+  }
+  
+  .nav-spotlight-links a {
+    font-size: 2rem;
+  }
+  
+  .project-link {
+    font-size: 0.95rem;
+  }
 }
-
-.work-image-display {
-  display: none !important;
-}
-
-/* ============================== 
-   Selected works table - hide last 2 columns
-   ============================== */
-
-.selected-works-section table th:nth-child(3),
-.selected-works-section table th:nth-child(4),
-.selected-works-section table td:nth-child(3),
-.selected-works-section table td:nth-child(4) {
-  display: none;
-}
-.selected-works-section table th,
-.selected-works-section table td {
-  padding-right: 2rem !important;
-}
-.selected-works-section th {
-  font-size: 1rem !important;
-}
-
-.selected-works-section td {
-  font-size: 1.2rem !important;
-}
-
-.selected-works-section .link {
-  font-size: 1.2rem !important;
-}
-
