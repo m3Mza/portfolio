@@ -1,102 +1,29 @@
 import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./responsive.css";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
 import ScrambleHover from "./components/ScrambleHover";
-
-
-gsap.registerPlugin(ScrollTrigger);
+import LenisScrollContainer from "./components/LenisScrollContainer";
+import type { LenisScrollRef } from "./components/LenisScrollContainer";
+import 'lenis/dist/lenis.css';
 
 const baseProjects = [
+ 
   {
-    title: "zsemicolon.com",
-    year: "2026",
-    link: "",
-    img: "/z.mov",
-  },
-  {
-    title: "miyajlo.com",
+    title: "miyajlo.vercel.app",
     year: "2025",
     link: "https://miyajlo.vercel.app/",
     img: "/miyalo.gif",
-  },
-  {
-    title: "placeholder.com",
-    year: "2024",
-    link: "https://example.com/3",
-    img: "/img3.jpeg",
-  },
-  {
-    title: "placeholder2.com",
-    year: "2024",
-    link: "https://example.com/3",
-    img: "/img3.jpeg",
-  },
-  {
-    title: "placeholder3.com",
-    year: "2024",
-    link: "https://example.com/3",
-    img: "/img3.jpeg",
+    type: "portfolio website",
+    whatIDid: ["web design", "web development"],
+    client: "miyajlo",
+    clientYear: "2025",
+    role: "solo developer",
   },
 ];
 
 function App() {
-  const [isMenuActive, setIsMenuActive] = useState(false);
-  const [isPageTransition, setIsPageTransition] = useState(() => {
-    return sessionStorage.getItem("pageTransition") === "true";
-  });
-  const [isReturning, setIsReturning] = useState(false);
   const heroContainerRef = useRef<HTMLDivElement>(null);
-  const [formData, setFormData] = useState({
-    subject: "",
-    message: ""
-  });
-
-  useEffect(() => {
-    const isTransitioning = sessionStorage.getItem("pageTransition");
-    if (isTransitioning === "true") {
-      sessionStorage.removeItem("pageTransition");
-
-      setTimeout(() => {
-        setIsPageTransition(false);
-        setIsReturning(true);
-
-        setTimeout(() => {
-          setIsReturning(false);
-          setIsMenuActive(false);
-        }, 900);
-      }, 800);
-    }
-  }, []);
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const subject = encodeURIComponent(formData.subject);
-    const body = encodeURIComponent(formData.message);
-    window.location.href = `mailto:mirkomimap@gmail.com?subject=${subject}&body=${body}`;
-    
-    setFormData({ subject: "", message: "" });
-    setIsMenuActive(false);
-  };
-
-  const toggleMenu = () => {
-    // On mobile, directly open mailto
-    if (window.innerWidth <= 768) {
-      window.location.href = 'mailto:mirkomimap@gmail.com';
-      return;
-    }
-    setIsMenuActive(!isMenuActive);
-  };
 
   useImageTrailEffect({ containerRef: heroContainerRef });
   
@@ -114,17 +41,18 @@ function App() {
   });
 
   const [hoverImg, setHoverImg] = useState<string | null>(null);
+  const [selectedProject, setSelectedProject] = useState<typeof baseProjects[0] | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const detailVideoRef = useRef<HTMLVideoElement>(null);
+  const scrollContainerRef = useRef<LenisScrollRef>(null);
+  const detailScrollRef = useRef<LenisScrollRef>(null);
   
   const handleWorkHover = (img: string) => {
-    // Disable hover effect on mobile
     if (window.innerWidth <= 768) return;
     setHoverImg(img);
   };
   
   const handleWorkLeave = () => {
-    // Disable hover effect on mobile
     if (window.innerWidth <= 768) return;
     setHoverImg(null);
   };
@@ -135,149 +63,143 @@ function App() {
     }
   }, [hoverImg]);
 
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
-
-    // Disable infinite scroll on mobile
+  const handleProjectListScroll = () => {
     const isMobile = window.innerWidth <= 768;
-    if (isMobile) return;
+    if (isMobile || !scrollContainerRef.current) return;
 
-    const checkScroll = () => {
-      if (!container) return;
-
-      const { scrollTop, scrollHeight, clientHeight } = container;
-      
-      if (scrollHeight - scrollTop - clientHeight <= clientHeight * 0.5) {
-        setProjects(prev => {
-          const newProjects = [...prev];
-          const currentLength = newProjects.length;
-          baseProjects.forEach((project, idx) => {
-            newProjects.push({
-              ...project,
-              id: currentLength + idx
-            });
+    const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
+    
+    if (scrollHeight - scrollTop - clientHeight <= clientHeight * 0.5) {
+      setProjects(prev => {
+        const newProjects = [...prev];
+        const currentLength = newProjects.length;
+        baseProjects.forEach((project, idx) => {
+          newProjects.push({
+            ...project,
+            id: currentLength + idx
           });
-          return newProjects;
         });
-      }
-    };
+        return newProjects;
+      });
+    }
+  };
 
-    container.addEventListener('scroll', checkScroll);
-
-    return () => {
-      container.removeEventListener('scroll', checkScroll);
-    };
-  }, []);
+  useEffect(() => {
+    if (selectedProject?.img.endsWith('.mov') && detailVideoRef.current) {
+      detailVideoRef.current.play().catch(() => {});
+    }
+  }, [selectedProject]);
 
   return (
     <>
-      
-      {/* Navigation Header */}
-      <header className="nav-header">
-        <div className="nav-header-content">
-          <button
-            className="nav-menu-toggle"
-            onClick={toggleMenu}
-            aria-label="Toggle contact form"
-          >
-            {isMenuActive ? "close" : "send mail"}
-          </button>
-        </div>
-      </header>
-
-      {/* Contact Form Overlay */}
-      <nav
-        className={`nav-spotlight-menu ${isMenuActive ? "active" : ""} ${
-          isPageTransition ? "page-transition" : ""
-        } ${isReturning ? "returning" : ""}`}
-      >
-        <div className="nav-spotlight-background"></div>
-        <div className="nav-spotlight-links">
-          <form onSubmit={handleFormSubmit} style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '2rem',
-            width: '100%',
-            maxWidth: '600px',
-            opacity: isMenuActive ? 1 : 0,
-            transform: isMenuActive ? 'translateX(0)' : 'translateX(50px)',
-            transition: 'opacity 0.3s ease, transform 0.3s ease',
-            transitionDelay: isMenuActive ? '0.95s' : '0s',
-            alignItems: 'flex-start'
-          }}>
-            
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              placeholder="type subject here..."
-              value={formData.subject}
-              onChange={handleFormChange}
-              required
-              className="contact-form-input"
-              style={{
-                padding: '0.5rem',
-                fontSize: '1.8rem',
-                background: 'transparent',
-                border: 'none',
-                borderRadius: '0',
-                color: 'var(--black)',
-                fontFamily: 'inherit',
-                width: '100%',
-                outline: 'none'
-              }}
-            />
-            
-            <textarea
-              id="message"
-              name="message"
-              placeholder="type message here..."
-              value={formData.message}
-              onChange={handleFormChange}
-              required
-              rows={4}
-              className="contact-form-input"
-              style={{
-                padding: '0.5rem',
-                fontSize: '1.8rem',
-                background: 'transparent',
-                border: 'none',
-                borderRadius: '0',
-                color: 'var(--black)',
-                fontFamily: 'inherit',
-                resize: 'none',
-                width: '100%',
-                outline: 'none'
-              }}
-            />
-            
-            <button
-              type="submit"
-              className="link"
-              style={{
-                padding: '0',
-                fontSize: '1.8rem',
-                background: 'transparent',
-                color: 'var(--black)',
-                border: 'none',
-                cursor: 'pointer',
-                fontFamily: 'inherit',
-                textTransform: 'none',
-                letterSpacing: 'normal',
-                alignSelf: 'flex-start'
-              }}
-            >
-              <ScrambleHover text="click to send" scrambleSpeed={50} maxIterations={8} />
-            </button>
-          </form>
-        </div>
-      </nav>
-
       {/* Hero Grid Section */}
       <section className="hero-grid-section" ref={heroContainerRef}>
         <div className="hero-split-container">
-          <div className="hero-left-side">
+          {/* Project Detail Overlay */}
+          {selectedProject && (
+            <div className="project-detail-overlay">
+              <LenisScrollContainer
+                ref={detailScrollRef}
+                className="project-detail-scroll-container"
+              >
+                <div className="project-detail-header">
+                  <div className="project-info-grid">
+                    <div className="project-info-item">
+                      <p className="project-info-label">(1) job/project</p>
+                      <p className="project-info-value">{selectedProject.title}</p>
+                    </div>
+                    <div className="project-info-item">
+                      <p className="project-info-label">(2) what i did</p>
+                      <p className="project-info-value">{selectedProject.role}</p>
+                    </div>
+                    <div className="project-info-item">
+                      <p className="project-info-label">(3) year</p>
+                      <p className="project-info-value">{selectedProject.year}</p>
+                    </div>
+                    <div className="project-info-item">
+                      <p className="project-info-label">(4) link</p>
+                      {selectedProject.link ? (
+                        <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="project-info-link">
+                          {selectedProject.link.replace(/^https?:\/\//, '')}
+                        </a>
+                      ) : (
+                        <p className="project-info-value">—</p>
+                      )}
+                    </div>
+                  </div>
+                  <button 
+                    className="project-detail-close-btn"
+                    onClick={() => setSelectedProject(null)}
+                  >
+                    [X]
+                  </button>
+                </div>
+                <div className="project-detail-content">
+                  {/* Image 1 - Top Left */}
+                  <div className="project-image" style={{ top: '300px', left: '10%' }}>
+                    {selectedProject.img.endsWith('.mov') ? (
+                      <video
+                        ref={detailVideoRef}
+                        src={selectedProject.img}
+                        muted
+                        loop
+                        autoPlay
+                        playsInline
+                      />
+                    ) : (
+                      <img src={selectedProject.img} alt={selectedProject.title} />
+                    )}
+                  </div>
+                  {/* Image 2 - Middle Right */}
+                  <div className="project-image" style={{ top: '800px', left: '50%' }}>
+                    {selectedProject.img.endsWith('.mov') ? (
+                      <video
+                        src={selectedProject.img}
+                        muted
+                        loop
+                        autoPlay
+                        playsInline
+                      />
+                    ) : (
+                      <img src={selectedProject.img} alt={selectedProject.title} />
+                    )}
+                  </div>
+                  {/* Image 3 - Lower Left */}
+                  <div className="project-image" style={{ top: '1400px', left: '15%' }}>
+                    {selectedProject.img.endsWith('.mov') ? (
+                      <video
+                        src={selectedProject.img}
+                        muted
+                        loop
+                        autoPlay
+                        playsInline
+                      />
+                    ) : (
+                      <img src={selectedProject.img} alt={selectedProject.title} />
+                    )}
+                  </div>
+                  {/* Image 4 - Bottom Right */}
+                  <div className="project-image" style={{ top: '2000px', left: '45%' }}>
+                    {selectedProject.img.endsWith('.mov') ? (
+                      <video
+                        src={selectedProject.img}
+                        muted
+                        loop
+                        autoPlay
+                        playsInline
+                      />
+                    ) : (
+                      <img src={selectedProject.img} alt={selectedProject.title} />
+                    )}
+                  </div>
+                  {/* Spacer to ensure scroll height */}
+                  <div style={{ height: '2500px' }}></div>
+                </div>
+              </LenisScrollContainer>
+            </div>
+          )}
+          
+          <div className="hero-left-side" style={{ opacity: selectedProject ? 0 : 1, pointerEvents: selectedProject ? 'none' : 'auto' }}>
             <div className="hero-grid-header">
               <h1 className="title" style={{ 
                 position: "relative"
@@ -295,78 +217,72 @@ function App() {
               <p>sometimes apps.</p>
             </div>
             <a className="hero-grid-small-text" href="https://x.com/mirkosayshello" target="_blank" rel="noopener noreferrer">
-              <ScrambleHover text="follow me on X " scrambleSpeed={50} maxIterations={8} />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="0.9rem"
-                height="0.9rem"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+              <img 
+                src="/arrow-elbow-down-right.svg" 
+                alt="arrow" 
                 style={{
-                  marginLeft: '1px',
+                  width: '0.9rem',
+                  height: '0.9rem',
+                  marginRight: '4px',
                   marginBottom: '2px',
                   display: 'inline-block',
                   verticalAlign: 'middle',
+                  filter: 'invert(1) brightness(2)',
                 }}
-              >
-                <path d="M18 6L6 18" />
-                <path d="M8 6h10v10" />
-              </svg>
+              />
+              <ScrambleHover text="follow me on X" scrambleSpeed={50} maxIterations={8} />
+            </a>
+            <a className="hero-grid-small-text" href="mailto:mirkomimap@gmail.com" target="_blank" rel="noopener noreferrer">
+              <img 
+                src="/arrow-elbow-down-right.svg" 
+                alt="arrow" 
+                style={{
+                  width: '0.9rem',
+                  height: '0.9rem',
+                  marginRight: '4px',
+                  marginBottom: '2px',
+                  display: 'inline-block',
+                  verticalAlign: 'middle',
+                  filter: 'invert(1) brightness(2)',
+                }}
+              />
+              <ScrambleHover text="mail: mirkomimap@gmail.com" scrambleSpeed={50} maxIterations={8} />
             </a>
           </div>
           <div className="projects-right-side">
-            <div 
-              className="projects-scroll-container" 
+            <LenisScrollContainer
               ref={scrollContainerRef}
+              className="projects-scroll-container"
+              onScroll={handleProjectListScroll}
             >
-              <p style={{
-                fontSize: '0.9rem',
-                color: 'var(--black)',
-                marginBottom: '1rem',
-                textDecoration: 'underline',
-              }}>
-                {typeof window !== 'undefined' && window.innerWidth <= 768 ? 'projects:' : 'projects (try scrolling):'} 
-              </p>
               <div className="projects-list">
                 {projects.map((work) => (
                   <div key={work.id} className="project-item">
                     <a
-                      href={work.link || "#"}
+                      href="#"
                       className="project-link"
                       onMouseEnter={() => handleWorkHover(work.img)}
                       onMouseLeave={handleWorkLeave}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const baseProject = baseProjects.find(p => p.title === work.title);
+                        if (baseProject) {
+                          setSelectedProject(baseProject);
+                        }
+                      }}
                     >
                       <span className="project-name">
                         <ScrambleHover 
                           text={`${work.title} (${work.year})`} 
-                          scrambleSpeed={50} 
-                          maxIterations={8} 
+                          scrambleSpeed={75} 
+                          maxIterations={5} 
                         />
                       </span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="1.2rem"
-                        height="1.2rem"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className="project-arrow"
-                      >
-                        <path d="M18 6L6 18" />
-                        <path d="M8 6h10v10" />
-                      </svg>
                     </a>
                   </div>
                 ))}
               </div>
-            </div>
+            </LenisScrollContainer>
           </div>
           {hoverImg && (
             <div className="hover-preview-left">
@@ -386,8 +302,6 @@ function App() {
           )}
         </div>
       </section>
-
-
     </>
   );
 }

@@ -19,7 +19,7 @@
 }
 
 .hero-left-side {
-  width: 60%;
+  width: 70%;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -28,6 +28,7 @@
   padding: 2rem;
   padding-bottom: 2rem;
   position: relative;
+  transition: opacity 0.3s ease;
 }
 
 .hero-grid-header {
@@ -46,13 +47,14 @@
   font-weight: 600;
   display: flex;
   align-items: flex-start;
-  font-size: clamp(5rem, 11vw, 10rem);
+  font-size: clamp(5rem, 10.5vw, 9.5rem);
   mix-blend-mode: difference;
 }
 
 .hero-grid-header .mirk-text {
-  display: inline-block;
+  transform: translateX(40%);
 }
+
 
 .hero-grid-header .shared-o-wrapper {
   display: inline-block;
@@ -62,13 +64,13 @@
 .hero-grid-header .shared-o {
   display: inline-block;
   position: relative;
+  left: 120%;
 }
 
 .hero-grid-header .vertical-before,
 .hero-grid-header .vertical-after {
   position: absolute;
-  transform: translateX(-48%);
-  left: 24%;
+  left: 120%;
   writing-mode: vertical-rl;
   text-orientation: mixed;
   font-size: 1em;
@@ -77,12 +79,12 @@
 }
 
 .hero-grid-header .vertical-before {
-  bottom: 110%;
+  bottom: 100%;
   transform-origin: center bottom;
 }
 
 .hero-grid-header .vertical-after {
-  top: 90%;
+  top: 100%;
   transform-origin: center top;
 }
 
@@ -96,22 +98,19 @@
 .hero-grid-description p {
   color: var(--white);
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
+  font-weight: 600;
   line-height: 1.4;
   mix-blend-mode: difference;
 }
 
 .hero-grid-small-text {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: var(--white);
   display: flex;
   align-items: center;
-  text-decoration: underline;
   mix-blend-mode: difference;
 }
-
-
-
 
 
 
@@ -122,21 +121,21 @@
 
 
 .projects-right-side {
-  width: 40%;
+  width: 30%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 2rem;
+  padding: 4rem;
   position: relative;
   z-index: 13;
+  background-color: var(--white);
 }
 
 .projects-scroll-container {
   width: 100%;
   height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
   position: relative;
 }
 
@@ -147,7 +146,9 @@
 }
 
 .project-item {
-  padding: 0.8rem 0;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 1px var(--black) solid;
 }
 
 .project-link {
@@ -155,11 +156,12 @@
   align-items: center;
   justify-content: space-between;
   text-decoration: none;
-  color: var(--black);
-  font-size: 1.2rem;
+  color: var(--white);
+  font-size: 0.9rem;
   transition: opacity 0.2s ease;
   width: 100%;
-  gap: 0.8rem;
+  gap: 1rem;
+  mix-blend-mode: difference;
 }
 
 .project-name {
@@ -170,7 +172,7 @@
   position: fixed;
   left: 0;
   top: 0;
-  width: 60vw;
+  width: 70vw;
   height: 100vh;
   z-index: -1;
   pointer-events: none;
@@ -195,7 +197,106 @@
 }
 
 .hero-split-container .trail-img {
-  clip-path: polygon(0 0, 60% 0, 60% 100%, 0 100%);
+  clip-path: polygon(0 0, 70% 0, 70% 100%, 0 100%);
+}
+
+/* PROJECT DETAIL OVERLAY */
+
+.project-detail-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 70%;
+  height: 100vh;
+  background-color: var(--white);
+  z-index: 100;
+}
+
+.project-detail-scroll-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.project-detail-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem;
+  z-index: 101;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  color: var(--white);
+  mix-blend-mode: difference;
+}
+
+.project-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem 2rem;
+  max-width: 400px;
+}
+
+.project-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.project-info-label {
+  font-size: 0.9rem;
+  color: var(--white);
+  margin: 0;
+  font-weight: 600;
+}
+
+.project-info-value {
+  font-size: 0.9rem;
+  color: var(--white);
+  margin: 0;
+  font-weight: 500;
+}
+
+.project-info-link {
+  font-size: 0.9rem;
+  color: var(--white);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.project-detail-close-btn {
+  background: none;
+  border: none;
+  font-size: 0.9rem;
+  color: var(--white);
+  mix-blend-mode: difference;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+}
+
+.project-detail-content {
+  position: relative;
+  width: 100%;
+  padding: 2rem;
+}
+
+.project-image {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.project-image video,
+.project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
