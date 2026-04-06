@@ -176,11 +176,11 @@ const ScrambleHover = ({
 
     return {
       display: 'inline-block' as const,
-      width: '60px',
+      width: '20px',
       height: '0.6em',
       backgroundColor: '#a0a0a0',
       backgroundImage,
-      backgroundSize: patternType === 'dots' ? '6px 6px' : undefined,
+      backgroundSize: patternType === 'dots' ? '8px 8px' : undefined,
       verticalAlign: 'middle',
       margin: '0 2px',
     };

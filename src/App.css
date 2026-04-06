@@ -29,6 +29,7 @@
   padding-bottom: 2rem;
   position: relative;
   transition: opacity 0.3s ease;
+  box-sizing: border-box;
 }
 
 .hero-grid-header {
@@ -36,7 +37,7 @@
   align-items: center;
   justify-content: flex-start;
   position: relative;
-  margin-bottom: 8rem;
+  margin-bottom: 10rem;
   margin-left: 16rem;
 }
 
@@ -130,6 +131,7 @@
   position: relative;
   z-index: 13;
   background-color: var(--white);
+  box-sizing: border-box;
 }
 
 .projects-scroll-container {
@@ -286,8 +288,7 @@
 
 .project-image {
   position: absolute;
-  width: 400px;
-  height: 400px;
+  max-width: 500px;
   overflow: hidden;
   border-radius: 4px;
 }
@@ -295,8 +296,8 @@
 .project-image video,
 .project-image img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  display: block;
 }
 
 
