@@ -103,6 +103,7 @@
   font-weight: 600;
   line-height: 1.4;
   mix-blend-mode: difference;
+  max-width: 700px;
 }
 
 .hero-grid-small-text {
@@ -111,6 +112,12 @@
   display: flex;
   align-items: center;
   mix-blend-mode: difference;
+  text-decoration: none;
+  transition: text-decoration 0s;
+}
+
+.hero-grid-small-text:hover {
+  text-decoration: underline;
 }
 
 
@@ -141,33 +148,60 @@
   position: relative;
 }
 
-.projects-list {
+.menu-list {
   display: flex;
   flex-direction: column;
   gap: 0;
 }
 
-.project-item {
-  padding-top: 0.6rem;
-  padding-bottom: 0.6rem;
-  border-bottom: 1px var(--black) solid;
+.menu-section {
+  margin-bottom: 2rem;
 }
 
-.project-link {
+.menu-header {
+  color: var(--white);
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  mix-blend-mode: difference;
+  text-transform: uppercase;
+}
+
+.menu-header-link {
   display: flex;
   align-items: center;
   justify-content: space-between;
   text-decoration: none;
+  cursor: pointer;
+}
+
+.menu-header-link:hover {
+  text-decoration: underline;
+}
+
+.download-icon {
+  width: 1rem;
+  height: 1rem;
+  filter: invert(1) brightness(2);
+  margin-left: 0.5rem;
+}
+
+.menu-item {
+  padding-left: 2rem;
+  padding-top: 0.4rem;
+  padding-bottom: 0.4rem;
+}
+
+.menu-link {
+  display: inline-block;
+  text-decoration: none;
   color: var(--white);
   font-size: 0.9rem;
-  transition: opacity 0.2s ease;
-  width: 100%;
-  gap: 1rem;
   mix-blend-mode: difference;
 }
 
-.project-name {
-  flex: 1;
+.menu-link:hover {
+  text-decoration: underline;
 }
 
 .hover-preview-left {

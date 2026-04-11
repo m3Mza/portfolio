@@ -10,7 +10,7 @@
 
 
 * {
-  font-family: 'Grotesk', sans-serif;
+  font-family: 'Grotesk', sans-serif !important;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -26,18 +26,11 @@
 
 }
 
-h1 {
-  font-family: 'Grotesk', sans-serif;
-}
-
 p {
   line-height: 1.6;
   letter-spacing: 1.8;
 }
 
-.title {
-  font-family: 'Grotesk', serif;
-}
 
 .link {
   display: inline-block;

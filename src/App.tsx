@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import "./responsive.css";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
-import ScrambleHover from "./components/ScrambleHover";
 import LenisScrollContainer from "./components/LenisScrollContainer";
 import type { LenisScrollRef } from "./components/LenisScrollContainer";
 import 'lenis/dist/lenis.css';
@@ -22,18 +21,44 @@ const loadProjectImages = (folderName: string): string[] => {
 };
 
 const baseProjects = [
- 
   {
-    title: "miyajlo.vercel.app",
+    title: "miyajlo's website",
     year: "2025",
     link: "https://miyajlo.vercel.app/",
     img: "/miyajlo/miyajlo.mov",
-    type: "portfolio website",
-    whatIDid: ["web design", "web development"],
     client: "miyajlo",
     clientYear: "2025",
     role: "solo project, made a website for miyajlo, ui designer and a game developer",
+    detailImages: "miyajlo", // Folder name to load images from
   },
+  {
+    title: "macOS file sorter",
+    year: "2026",
+    link: "https://github.com/m3Mza/file-sorter-mac",
+    img: "/m.png",
+    client: "miyajlo",
+    clientYear: "2026",
+    role: "solo project, made a simple c++ script for macOS that sorts the files in the downloads folder into smaller subfolders",
+    detailImages: "filesorter",
+  },
+];
+
+const menuSections = [
+  {
+    header: "[1.0] selected projects",
+    items: [
+      { title: "[1.0.1] miyajlo", img: "/miyajlo/miyajlo.mov" },
+      { title: "[1.0.2] macOS file sorter", img: "/m.png" },
+    ]
+  },
+  {
+    header: "[2.0] download resume",
+    items: []
+  },
+  {
+    header: "[3.0] information",
+    items: []
+  }
 ];
 
 function App() {
@@ -44,14 +69,13 @@ function App() {
   // Load project images dynamically
   const [projectImages, setProjectImages] = useState<string[]>([]);
   
-  const [projects, setProjects] = useState(() => {
-    const result: Array<typeof baseProjects[0] & { id: number }> = [];
-    const isMobile = window.innerWidth <= 768;
-    const repeatCount = isMobile ? 1 : 20; // Only show base projects once on mobile
+  const [menuItems, setMenuItems] = useState(() => {
+    const result: Array<{ header: string; items: any[]; id: number }> = [];
+    const repeatCount = 20; // Infinite scrolling for all devices
     
     for (let i = 0; i < repeatCount; i++) {
-      baseProjects.forEach((project, idx) => {
-        result.push({ ...project, id: i * baseProjects.length + idx });
+      menuSections.forEach((section, idx) => {
+        result.push({ ...section, id: i * menuSections.length + idx });
       });
     }
     return result;
@@ -59,6 +83,7 @@ function App() {
 
   const [hoverImg, setHoverImg] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<typeof baseProjects[0] | null>(null);
+  const [showInformation, setShowInformation] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const detailVideoRef = useRef<HTMLVideoElement>(null);
   const scrollContainerRef = useRef<LenisScrollRef>(null);
@@ -80,23 +105,22 @@ function App() {
     }
   }, [hoverImg]);
 
-  const handleProjectListScroll = () => {
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile || !scrollContainerRef.current) return;
+  const handleMenuScroll = () => {
+    if (!scrollContainerRef.current) return;
 
     const { scrollTop, scrollHeight, clientHeight } = scrollContainerRef.current;
     
     if (scrollHeight - scrollTop - clientHeight <= clientHeight * 0.5) {
-      setProjects(prev => {
-        const newProjects = [...prev];
-        const currentLength = newProjects.length;
-        baseProjects.forEach((project, idx) => {
-          newProjects.push({
-            ...project,
+      setMenuItems(prev => {
+        const newItems = [...prev];
+        const currentLength = newItems.length;
+        menuSections.forEach((section, idx) => {
+          newItems.push({
+            ...section,
             id: currentLength + idx
           });
         });
-        return newProjects;
+        return newItems;
       });
     }
   };
@@ -108,9 +132,25 @@ function App() {
     
     // Load images from the project folder when a project is selected
     if (selectedProject) {
-      const folderName = selectedProject.client; // Using client name as folder name
-      const images = loadProjectImages(folderName);
-      setProjectImages(images);
+      // Clear old images first
+      setProjectImages([]);
+      
+      const detailImages = (selectedProject as any).detailImages;
+      
+      if (Array.isArray(detailImages)) {
+        // Static array of images
+        setProjectImages(detailImages);
+      } else if (typeof detailImages === 'string') {
+        // Folder name - load images dynamically
+        const images = loadProjectImages(detailImages);
+        setProjectImages(images);
+      } else {
+        // Fallback to empty array
+        setProjectImages([]);
+      }
+    } else {
+      // Clear images when no project is selected
+      setProjectImages([]);
     }
   }, [selectedProject]);
 
@@ -160,12 +200,16 @@ function App() {
                 </div>
                 <div className="project-detail-content">
                   {/* Dynamically render images from folder */}
-                  {projectImages.slice(0, 3).map((imagePath, index) => {
+                  {projectImages.map((imagePath, index) => {
+                    const isMobile = window.innerWidth <= 768;
                     const positions = [
                       { top: '300px', left: '10%' },
                       { top: '800px', left: '50%' },
                       { top: '1400px', left: '15%' }
                     ];
+                    
+                    // On mobile, show all images; on desktop, show first 3 with absolute positioning
+                    const style = isMobile ? {} : (index < 3 ? positions[index] : { display: 'none' });
                     
                     const isVideo = imagePath.endsWith('.mov') || imagePath.endsWith('.mp4');
                     
@@ -173,7 +217,7 @@ function App() {
                       <div 
                         key={imagePath} 
                         className="project-image" 
-                        style={positions[index]}
+                        style={style}
                       >
                         {isVideo ? (
                           <video
@@ -190,8 +234,8 @@ function App() {
                       </div>
                     );
                   })}
-                  {/* Spacer to ensure scroll height */}
-                  <div style={{ height: '2000px' }}></div>
+                  {/* Spacer to ensure scroll height on desktop */}
+                  {window.innerWidth > 768 && <div style={{ height: '2000px' }}></div>}
                 </div>
               </LenisScrollContainer>
             </div>
@@ -211,56 +255,140 @@ function App() {
               </h1>
             </div>
             <div className="hero-grid-description">
-              <p>i make websites occasionally,</p>
-              <p>currently learning embedded engineering.</p>
+              {showInformation ? (
+                <p>i'm mirko, a developer who makes websites and apps, currently focusing on c++ and embedded programming, get in touch:</p>
+              ) : (
+                <>
+                  <p>i make websites occasionally,</p>
+                  <p>currently learning embedded engineering.</p>
+                </>
+              )}
             </div>
-            <a className="hero-grid-small-text" href="mailto:mirkomimap@gmail.com" target="_blank" rel="noopener noreferrer">
-              <img 
-                src="/arrow-elbow-down-right.svg" 
-                alt="arrow" 
-                style={{
-                  width: '0.9rem',
-                  height: '0.9rem',
-                  marginRight: '4px',
-                  marginBottom: '2px',
-                  display: 'inline-block',
-                  verticalAlign: 'middle',
-                  filter: 'invert(1) brightness(2)',
-                }}
-              />
-              <ScrambleHover text="mail: mirkomimap@gmail.com" scrambleSpeed={50} maxIterations={8} />
-            </a>
+            {showInformation ? (
+              <>
+                <a className="hero-grid-small-text" href="mailto:mirkomimap@gmail.com" target="_blank" rel="noopener noreferrer">
+                  <img 
+                    src="/arrow-elbow-down-right.svg" 
+                    alt="arrow" 
+                    style={{
+                      width: '0.9rem',
+                      height: '0.9rem',
+                      marginRight: '4px',
+                      marginBottom: '2px',
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      filter: 'invert(1) brightness(2)',
+                    }}
+                  />
+                  mail: mirkomimap@gmail.com
+                </a>
+                <a className="hero-grid-small-text" href="https://www.linkedin.com/in/mirko-popovi%C4%87-b058823bb/" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.5rem' }}>
+                  <img 
+                    src="/arrow-elbow-down-right.svg" 
+                    alt="arrow" 
+                    style={{
+                      width: '0.9rem',
+                      height: '0.9rem',
+                      marginRight: '4px',
+                      marginBottom: '2px',
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      filter: 'invert(1) brightness(2)',
+                    }}
+                  />
+                  linkedin
+                </a>
+              </>
+            ) : (
+              <a className="hero-grid-small-text" href="mailto:mirkomimap@gmail.com" target="_blank" rel="noopener noreferrer">
+                <img 
+                  src="/arrow-elbow-down-right.svg" 
+                  alt="arrow" 
+                  style={{
+                    width: '0.9rem',
+                    height: '0.9rem',
+                    marginRight: '4px',
+                    marginBottom: '2px',
+                    display: 'inline-block',
+                    verticalAlign: 'middle',
+                    filter: 'invert(1) brightness(2)',
+                  }}
+                />
+                mail: mirkomimap@gmail.com
+              </a>
+            )}
           </div>
           <div className="projects-right-side">
             <LenisScrollContainer
               ref={scrollContainerRef}
               className="projects-scroll-container"
-              onScroll={handleProjectListScroll}
+              onScroll={handleMenuScroll}
             >
-              <div className="projects-list">
-                {projects.map((work) => (
-                  <div key={work.id} className="project-item">
-                    <a
-                      href="#"
-                      className="project-link"
-                      onMouseEnter={() => handleWorkHover(work.img)}
-                      onMouseLeave={handleWorkLeave}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        const baseProject = baseProjects.find(p => p.title === work.title);
-                        if (baseProject) {
-                          setSelectedProject(baseProject);
-                        }
-                      }}
-                    >
-                      <span className="project-name">
-                        <ScrambleHover 
-                          text={`${work.title} (${work.year})`} 
-                          scrambleSpeed={75} 
-                          maxIterations={5} 
+              <div className="menu-list">
+                {menuItems.map((section) => (
+                  <div key={section.id} className="menu-section">
+                    {section.header.toLowerCase().includes('resume') ? (
+                      <a 
+                        href="/mirko-popovic-resume.pdf" 
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="menu-header menu-header-link"
+                      >
+                        {section.header}
+                        <img 
+                          src="/download-simple.svg" 
+                          alt="download" 
+                          className="download-icon"
                         />
-                      </span>
-                    </a>
+                      </a>
+                    ) : section.header.toLowerCase().includes('information') ? (
+                      window.innerWidth <= 768 ? (
+                        <a 
+                          href="mailto:mirkomimap@gmail.com"
+                          className="menu-header menu-header-link"
+                        >
+                          {section.header}
+                        </a>
+                      ) : (
+                        <div 
+                          className="menu-header menu-header-link"
+                          onClick={() => setShowInformation(!showInformation)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {section.header}
+                        </div>
+                      )
+                    ) : (
+                      <div className="menu-header">{section.header}</div>
+                    )}
+                    {section.items.map((item, idx) => (
+                      <div key={`${section.id}-${idx}`} className="menu-item">
+                        <a
+                          href="#"
+                          className="menu-link"
+                          onMouseEnter={() => handleWorkHover(item.img)}
+                          onMouseLeave={handleWorkLeave}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            const isMobile = window.innerWidth <= 768;
+                            const projectName = item.title.toLowerCase().replace(/\[[\d.]+\]\s*/, '');
+                            const baseProject = baseProjects.find(p => p.title.toLowerCase().includes(projectName));
+                            
+                            if (baseProject) {
+                              if (isMobile && baseProject.link) {
+                                // On mobile, open the link directly
+                                window.open(baseProject.link, '_blank', 'noopener,noreferrer');
+                              } else {
+                                // On desktop, show project details
+                                setSelectedProject(baseProject);
+                              }
+                            }
+                          }}
+                        >
+                          {item.title}
+                        </a>
+                      </div>
+                    ))}
                   </div>
                 ))}
               </div>
