@@ -38,7 +38,7 @@
   justify-content: flex-start;
   position: relative;
   margin-bottom: 10rem;
-  margin-left: 16rem;
+  margin-left: 14rem;
 }
 
 .hero-grid-header h1 {
@@ -48,7 +48,7 @@
   font-weight: 600;
   display: flex;
   align-items: flex-start;
-  font-size: clamp(5rem, 10.5vw, 9.5rem);
+  font-size: clamp(4rem, 10.5vw, 9.5rem);
   mix-blend-mode: difference;
 }
 

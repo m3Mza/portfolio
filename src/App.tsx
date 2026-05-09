@@ -32,15 +32,24 @@ const baseProjects = [
     detailImages: "miyajlo", // Folder name to load images from
   },
   {
-    title: "macOS file sorter",
+    title: "MacOS file sorter for the downloads folder",
     year: "2026",
     link: "https://github.com/m3Mza/file-sorter-mac",
     img: "/m.png",
-    client: "miyajlo",
     clientYear: "2026",
     role: "solo project, made a simple c++ script for macOS that sorts the files in the downloads folder into smaller subfolders",
     detailImages: "filesorter",
   },
+  {
+    title: "Replication using Claude Code",
+    year: "2026",
+    link: "https://github.com/m3Mza/file-sorter-mac",
+    img: "/m.png",
+    clientYear: "2026",
+    role: "graduation thesis project, demonstration of claude code's capabilities by replicating the style from other websites",
+    detailImages: "...",
+  },
+  
 ];
 
 const menuSections = [
@@ -48,15 +57,12 @@ const menuSections = [
     header: "[1.0] selected projects",
     items: [
       { title: "[1.0.1] miyajlo", img: "/miyajlo/miyajlo.mov" },
-      { title: "[1.0.2] macOS file sorter", img: "/m.png" },
+      { title: "[1.0.2] MacOS file sorter for the downloads folder", img: "/m.png" },
+      { title: "[1.0.3] Replication using Claude Code", img: "/m.png" },
     ]
   },
   {
-    header: "[2.0] download resume",
-    items: []
-  },
-  {
-    header: "[3.0] information",
+    header: "[2.0] more information",
     items: []
   }
 ];
@@ -169,19 +175,19 @@ function App() {
                 <div className="project-detail-header">
                   <div className="project-info-grid">
                     <div className="project-info-item">
-                      <p className="project-info-label">(1.0) job/project</p>
+                      <p className="project-info-label">(1.0) Project</p>
                       <p className="project-info-value">{selectedProject.title}</p>
                     </div>
                     <div className="project-info-item">
-                      <p className="project-info-label">(2.0) what i did</p>
+                      <p className="project-info-label">(2.0) What I did</p>
                       <p className="project-info-value">{selectedProject.role}</p>
                     </div>
                     <div className="project-info-item">
-                      <p className="project-info-label">(3.0) year</p>
+                      <p className="project-info-label">(3.0) Year</p>
                       <p className="project-info-value">{selectedProject.year}</p>
                     </div>
                     <div className="project-info-item">
-                      <p className="project-info-label">(4.0) link</p>
+                      <p className="project-info-label">(4.0) Link</p>
                       {selectedProject.link ? (
                         <a href={selectedProject.link} target="_blank" rel="noopener noreferrer" className="project-info-link">
                           {selectedProject.link.replace(/^https?:\/\//, '')}
@@ -256,10 +262,10 @@ function App() {
             </div>
             <div className="hero-grid-description">
               {showInformation ? (
-                <p>i'm mirko, a developer who makes websites and apps, currently focusing on c++ and embedded programming, get in touch:</p>
+                <p>I'm Mirko, a developer who makes pretty much everything I deem interesting, get in touch:</p>
               ) : (
                 <>
-                  <p>i make websites occasionally,</p>
+                  <p>I develop stuff,</p>
                   <p>currently learning embedded engineering.</p>
                 </>
               )}
@@ -298,6 +304,22 @@ function App() {
                   />
                   linkedin
                 </a>
+                 <a className="hero-grid-small-text" href="https://github.com/m3Mza" target="_blank" rel="noopener noreferrer" style={{ marginTop: '0.5rem' }}>
+                  <img 
+                    src="/arrow-elbow-down-right.svg" 
+                    alt="arrow" 
+                    style={{
+                      width: '0.9rem',
+                      height: '0.9rem',
+                      marginRight: '4px',
+                      marginBottom: '2px',
+                      display: 'inline-block',
+                      verticalAlign: 'middle',
+                      filter: 'invert(1) brightness(2)',
+                    }}
+                  />
+                  github
+                </a>
               </>
             ) : (
               <a className="hero-grid-small-text" href="mailto:mirkomimap@gmail.com" target="_blank" rel="noopener noreferrer">
@@ -327,21 +349,7 @@ function App() {
               <div className="menu-list">
                 {menuItems.map((section) => (
                   <div key={section.id} className="menu-section">
-                    {section.header.toLowerCase().includes('resume') ? (
-                      <a 
-                        href="/mirko-popovic-resume.pdf" 
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="menu-header menu-header-link"
-                      >
-                        {section.header}
-                        <img 
-                          src="/download-simple.svg" 
-                          alt="download" 
-                          className="download-icon"
-                        />
-                      </a>
-                    ) : section.header.toLowerCase().includes('information') ? (
+                    {section.header.toLowerCase().includes('information') ? (
                       window.innerWidth <= 768 ? (
                         <a 
                           href="mailto:mirkomimap@gmail.com"
