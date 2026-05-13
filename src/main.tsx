@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
+import ReplicationPage from './pages/ReplicationPage.tsx'
 
 
 function MainRoutes() {
@@ -10,6 +11,7 @@ function MainRoutes() {
   return (
     <Routes location={location} key={location.pathname}>
       <Route path="/" element={<App />} />
+      <Route path="/replication" element={<ReplicationPage />} />
     </Routes>
   );
 }

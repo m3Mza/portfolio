@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./App.css";
 import "./responsive.css";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
@@ -68,6 +69,7 @@ const menuSections = [
 ];
 
 function App() {
+  const navigate = useNavigate();
   const heroContainerRef = useRef<HTMLDivElement>(null);
 
   useImageTrailEffect({ containerRef: heroContainerRef });
@@ -381,13 +383,13 @@ function App() {
                             const isMobile = window.innerWidth <= 768;
                             const projectName = item.title.toLowerCase().replace(/\[[\d.]+\]\s*/, '');
                             const baseProject = baseProjects.find(p => p.title.toLowerCase().includes(projectName));
-                            
+
                             if (baseProject) {
-                              if (isMobile && baseProject.link) {
-                                // On mobile, open the link directly
+                              if (baseProject.title === "Replication using Claude Code") {
+                                navigate('/replication');
+                              } else if (isMobile && baseProject.link) {
                                 window.open(baseProject.link, '_blank', 'noopener,noreferrer');
                               } else {
-                                // On desktop, show project details
                                 setSelectedProject(baseProject);
                               }
                             }
