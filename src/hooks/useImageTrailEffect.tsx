@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import type { RefObject } from "react";
 
 interface ImageTrailEffectProps {
-  containerRef: RefObject<HTMLDivElement | null>;
+  containerRef: RefObject<HTMLElement | null>;
 }
 
 function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
@@ -17,8 +17,8 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
 
     const config = {
       imageCount: 15,
-      imageLifespan: 750,
-      removalDelay: 50,
+      imageLifespan: 450,
+      removalDelay: 10,
       mouseThreshold: 100,
       scrollThreshold: 100,
       idleCursorinterval: 1000,
@@ -28,9 +28,7 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
       outEasing: "cubic-bezier(.8, 0, .15, 1)"
     };
 
-    const images = Array.from({ length: config.imageCount }, () => 
-      `/m.png`
-    );
+    const images = ['/m.png',];
 
     const trail: Array<{
       element: HTMLImageElement;
@@ -49,10 +47,7 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
 
     const isInContainer = (x: number, y: number): boolean => {
       const rect = container.getBoundingClientRect();
-      return (
-        x >= rect.left && x <= rect.right &&
-        y >= rect.top && y <= rect.bottom
-      );
+      return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
     };
 
     const setInitialMousePos = (event: MouseEvent) => {
@@ -73,10 +68,6 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
     };
 
     const createImage = () => {
-      // Don't create images in the right 40% of the viewport (where projects list is)
-      const viewportWidth = window.innerWidth;
-      if (mouseX > viewportWidth * 0.6) return;
-
       const img = document.createElement('img');
       img.classList.add("trail-img");
 
@@ -84,12 +75,8 @@ function useImageTrailEffect({ containerRef }: ImageTrailEffectProps) {
       const rotationImage = (Math.random() - 0.5) * 50;
       img.src = images[randomIndex];
 
-      const rect = container.getBoundingClientRect();
-      const relativeX = mouseX - rect.left;
-      const relativeY = mouseY - rect.top;
-
-      img.style.left = `${relativeX}px`;
-      img.style.top = `${relativeY - 100}px`;
+      img.style.left = `${mouseX}px`;
+      img.style.top = `${mouseY}px`;
       img.style.transform = `translate(-50%, -50%) rotate(${rotationImage}deg) scale(0)`;
       img.style.transition = `transform ${config.inDuration}ms ${config.inEasing}`;
 

@@ -1,75 +1,31 @@
 @media (max-width: 768px) {
-  
-  /* Container adjustments */
-  .hero-split-container {
-    flex-direction: column;
-    height: auto;
-  }
-  
-  /* Left side - hero section */
   .hero-left-side {
-    display: none !important;
+    padding: 1.5rem;
   }
-  
-  /* Right side - scrollable menu */
-  .projects-right-side {
-    width: 100%;
-    height: 100vh;
-    padding: 2rem 1.5rem;
-    align-items: flex-start;
-    justify-content: flex-start;
+
+  .hero-grid-header {
+    margin-left: 0;
+    margin-bottom: 4rem;
   }
-  
-  .projects-scroll-container {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-  }
-  
-  .menu-list {
-    width: 100%;
-  }
-  
-  .menu-section {
-    margin-bottom: 2.5rem;
-  }
-  
-  .menu-header {
-    font-size: 1.1rem;
-    margin-bottom: 0.75rem;
-    text-align: left;
-    color: var(--black);
-    mix-blend-mode: normal;
-  }
-  
-  .menu-header-link {
-    color: var(--black);
-    mix-blend-mode: normal;
-  }
-  
-  .menu-item {
-    padding: 0.5rem 0;
-    padding-left: 2rem;
-    text-align: left;
-  }
-  
-  .menu-link {
-    font-size: 1rem;
-    color: var(--black);
-    mix-blend-mode: normal;
-  }
-  
-  .download-icon {
-    filter: invert(0) brightness(1);
-  }
-  
-  /* Hide desktop-only elements */
-  .hover-preview-left {
-    display: none !important;
-  }
-  
+
   .trail-img {
     display: none !important;
   }
-  
+
+  .projects-section {
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  .project-row {
+    grid-template-columns: 36px 1fr 80px;
+    gap: 1rem;
+  }
+
+  .project-row-desc {
+    display: none;
+  }
+
+  .project-row-name {
+    font-size: 0.88rem;
+  }
 }

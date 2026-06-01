@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'blocked';
+  src: url('/font/blocked.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ── HERO ────────────────────────────────────────────────── */
 
 .hero-grid-section {
   min-height: 100vh;
@@ -18,8 +26,20 @@
   position: relative;
 }
 
+.hero-simplicity-label {
+  position: absolute;
+  right: 2rem;
+  font-family: 'blocked', sans-serif;
+  font-size: 3.2rem;
+  color: var(--white);
+  pointer-events: none;
+  z-index: 10000;
+  mix-blend-mode: difference;
+  letter-spacing: 0.02em;
+}
+
 .hero-left-side {
-  width: 70%;
+  width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -32,63 +52,6 @@
   box-sizing: border-box;
 }
 
-.hero-grid-header {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  position: relative;
-  margin-bottom: 10rem;
-  margin-left: 14rem;
-}
-
-.hero-grid-header h1 {
-  color: var(--white);
-  line-height: 0.85;
-  margin: 0;
-  font-weight: 600;
-  display: flex;
-  align-items: flex-start;
-  font-size: clamp(4rem, 10.5vw, 9.5rem);
-  mix-blend-mode: difference;
-}
-
-.hero-grid-header .mirk-text {
-  transform: translateX(40%);
-}
-
-
-.hero-grid-header .shared-o-wrapper {
-  display: inline-block;
-  position: relative;
-}
-
-.hero-grid-header .shared-o {
-  display: inline-block;
-  position: relative;
-  left: 120%;
-}
-
-.hero-grid-header .vertical-before,
-.hero-grid-header .vertical-after {
-  position: absolute;
-  left: 120%;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  font-size: 1em;
-  line-height: 0.85;
-  font-weight: 500;
-}
-
-.hero-grid-header .vertical-before {
-  bottom: 100%;
-  transform-origin: center bottom;
-}
-
-.hero-grid-header .vertical-after {
-  top: 100%;
-  transform-origin: center top;
-}
-
 .hero-grid-description {
   display: flex;
   flex-direction: column;
@@ -97,242 +60,39 @@
 }
 
 .hero-grid-description p {
+  position: relative;
+  z-index: 10000;
   color: var(--white);
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 600;
-  line-height: 1.4;
   mix-blend-mode: difference;
-  max-width: 700px;
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1.4;
+  max-width: 600px;
 }
 
 .hero-grid-small-text {
-  font-size: 0.9rem;
-  color: var(--white);
-  display: flex;
-  align-items: center;
-  mix-blend-mode: difference;
-  text-decoration: none;
-  transition: text-decoration 0s;
-}
-
-.hero-grid-small-text:hover {
-  text-decoration: underline;
-}
-
-
-
-
-/* PROJECTS ON THE RIGHT */
-
-
-
-
-.projects-right-side {
-  width: 30%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 4rem;
   position: relative;
-  z-index: 13;
-  background-color: var(--white);
-  box-sizing: border-box;
-}
-
-.projects-scroll-container {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.menu-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.menu-section {
-  margin-bottom: 2rem;
-}
-
-.menu-header {
+  z-index: 10000;
+  font-size: 1.2rem;
   color: var(--white);
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
   mix-blend-mode: difference;
-  text-transform: uppercase;
-}
-
-.menu-header-link {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.menu-header-link:hover {
   text-decoration: underline;
 }
+.hero-grid-small-text:hover { text-decoration: none; }
 
-.download-icon {
-  width: 1rem;
-  height: 1rem;
-  filter: invert(1) brightness(2);
-  margin-left: 0.5rem;
-}
-
-.menu-item {
-  padding-left: 2rem;
-  padding-top: 0.4rem;
-  padding-bottom: 0.4rem;
-}
-
-.menu-link {
-  display: inline-block;
-  text-decoration: none;
-  color: var(--white);
-  font-size: 0.9rem;
-  mix-blend-mode: difference;
-}
-
-.menu-link:hover {
-  text-decoration: underline;
-}
-
-.hover-preview-left {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 70vw;
-  height: 100vh;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.hover-preview-left video,
-.hover-preview-left img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+/* ── TRAIL ───────────────────────────────────────────────── */
 
 .trail-img {
-  position: absolute;
-  width: 120px;
-  height: 120px;
+  position: fixed;
+  width: 90px;
+  height: 90px;
   object-fit: cover;
   transform-origin: center;
   pointer-events: none;
   will-change: transform;
-  z-index: 10;
+  z-index: 9999;
 }
-
-.hero-split-container .trail-img {
-  clip-path: polygon(0 0, 70% 0, 70% 100%, 0 100%);
-}
-
-/* PROJECT DETAIL OVERLAY */
-
-.project-detail-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 70%;
-  height: 100vh;
-  background-color: var(--white);
-  z-index: 100;
-}
-
-.project-detail-scroll-container {
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  position: relative;
-}
-
-.project-detail-header {
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 2rem;
-  z-index: 101;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  color: var(--white);
-  mix-blend-mode: difference;
-}
-
-.project-info-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem 2rem;
-  max-width: 400px;
-}
-
-.project-info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.project-info-label {
-  font-size: 0.9rem;
-  color: var(--white);
-  margin: 0;
-  font-weight: 600;
-}
-
-.project-info-value {
-  font-size: 0.9rem;
-  color: var(--white);
-  margin: 0;
-  font-weight: 500;
-}
-
-.project-info-link {
-  font-size: 0.9rem;
-  color: var(--white);
-  text-decoration: underline;
-  font-weight: 500;
-}
-
-.project-detail-close-btn {
-  background: none;
-  border: none;
-  font-size: 0.9rem;
-  color: var(--white);
-  mix-blend-mode: difference;
-  cursor: pointer;
-  padding: 0;
-  font-family: inherit;
-}
-
-.project-detail-content {
-  position: relative;
-  width: 100%;
-  padding: 2rem;
-}
-
-.project-image {
-  position: absolute;
-  max-width: 500px;
-  overflow: hidden;
-  border-radius: 4px;
-}
-
-.project-image video,
-.project-image img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
 
 
