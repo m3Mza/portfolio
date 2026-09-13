@@ -1,65 +1,57 @@
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import "./App.css";
-import "./responsive.css";
 import useImageTrailEffect from "./hooks/useImageTrailEffect";
 import { useLenis } from "./hooks/useLenis";
 import 'lenis/dist/lenis.css';
-import FilmProjectsList from "./components/FilmProjectsList";
-import type { FilmProject } from "./components/FilmProjectsList";
 
-const baseProjects: FilmProject[] = [
+const projects: { title: string; type: string; date: string; link?: string }[] = [
   {
-    title: "File-sorting tool for MacOS",
-    subtitle: "C++ utility · 2026",
-    description: "A command-line tool that monitors your Downloads folder and automatically organizes files into typed subdirectories.",
-    link: "https://github.com/m3Mza/file-sorter-mac",
-    linkLabel: "GitHub link",
-    img: "/GitHub_Invertocat_Black_Clearspace.svg",
-    heroImg: "/GitHub_Invertocat_Black_Clearspace.svg",
-    xOffset: "2rem",
+    title: "graduation thesis",
+    type: "project",
+    date: "21/6/2026",
+    link: "/replication",
   },
   {
-    title: "Website replication with Claude Code",
-    subtitle: "Graduation thesis · 2026",
-    description: "Graduation thesis project exploring the use of Claude Code for accurate website replication.",
-    link: "/replication",
-    linkLabel: "Check out the project",
-    img: "/m.png",
-    heroImg: "/diplomski/claude4.png",
-    xOffset: "8rem",
+    title: "IWS internship @JTI",
+    type: "job",
+    date: "10/6/2026 -",
   },
 ];
 
+const EMPTY_ROWS = 12;
+
 function App() {
-  const heroContainerRef = useRef<HTMLElement>(null);
+  const pageRef = useRef<HTMLDivElement>(null);
 
   useLenis();
-  useImageTrailEffect({ containerRef: heroContainerRef });
+  useImageTrailEffect({ containerRef: pageRef as React.RefObject<HTMLElement> });
 
   return (
-    <div>
-      <section ref={heroContainerRef} className="hero-grid-section">
-        <div className="hero-split-container">
-          <span className="hero-simplicity-label">mirko</span>
+    <div ref={pageRef} className="page">
+      <span className="site-name">mirko</span>
 
-          <div className="hero-left-side">
-            <div className="hero-grid-description">
-              <p>I develop things I find interesting or helpful,</p>
-              <p>scroll down for more.</p>
-            </div>
-            <a className="hero-grid-small-text" href="mailto:mirkomimap@gmail.com" target="_blank" rel="noopener noreferrer">
-              <img
-                src="/arrow-elbow-down-right.svg"
-                alt="arrow"
-                style={{ width: '0.9rem', height: '0.9rem', marginRight: '4px', marginBottom: '2px', display: 'inline-block', verticalAlign: 'middle', filter: 'invert(1)' }}
-              />
-              contact: mirkomimap@gmail.com
-            </a>
+      <div className="spacer" />
+
+      <div className="projects-list">
+        {projects.map((p, i) => (
+          <div key={i} className="project-row">
+            {p.link ? (
+              <Link to={p.link} className="project-title">{p.title}</Link>
+            ) : (
+              <span className="project-title no-link">{p.title}</span>
+            )}
+            <span className="project-meta">{p.type}, {p.date}</span>
           </div>
-        </div>
-      </section>
+        ))}
+        {Array.from({ length: EMPTY_ROWS }).map((_, i) => (
+          <div key={`empty-${i}`} className="project-row empty" />
+        ))}
+      </div>
 
-      <FilmProjectsList projects={baseProjects} />
+      <footer className="site-footer">
+        <a href="mailto:mirkomimap@gmail.com">send me mail.</a>
+      </footer>
     </div>
   );
 }
